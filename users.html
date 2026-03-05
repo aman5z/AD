@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -545,7 +546,7 @@ td:last-child{border-right:none}
 </div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbwawnLRilBieBaJI6_91rAnPUkJhjikS_sbxM8_0likbH66kCseGgKLp179ubNVn-ZliA/exec"; // ← paste your Apps Script deployment URL here
+const API = "https://script.google.com/macros/s/AKfycbyCyRm34LDmDHmPqpDqECF6iUHpAgAuWgPOe0tdeJG-JIRdukg_gQI2fM8c3AXw-2GNow/exec"; // ← paste your Apps Script deployment URL here
 
 let tok = null, adminEmail = "", allUsers = [], allRoles = [];
 let curView = "all", selEmail = null, sortCol = "email", sortAsc = true;
@@ -939,8 +940,12 @@ async function loadDrive(folderId){
   spin(true);
   try{
     const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"listDriveFiles",token:tok,folderId})});
-    const d=await r.json();
-    if(d.error){toast("Drive error: "+d.error);spin(false);return;}
+    const txt=await r.text();
+    let d;
+    try{d=JSON.parse(txt);}catch{toast("Drive error: bad response");spin(false);return;}
+    if(!d||typeof d!=="object"||d.error){toast("Drive error: "+(d&&d.error?d.error:txt.substring(0,80)));spin(false);return;}
+    if(!Array.isArray(d.files))d.files=[];
+    if(!Array.isArray(d.folders))d.folders=[];
     curFolderId=folderId;
     renderDriveFiles(d);
   }catch(e){toast("Drive error: "+e);}
