@@ -416,7 +416,7 @@ td:last-child{border-right:none}
   <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">DARK</button>
   <div class="tl-win">
     <button onclick="void 0" title="Minimize">─</button>
-    <button onclick="void 0" title="Maximize">□</button>
+    <button onclick="toggleFullScreen()" title="Fullscreen">□</button>
     <button class="wx" onclick="doLogout()" title="Close">✕</button>
   </div>
 </div>
@@ -1294,6 +1294,19 @@ td:last-child{border-right:none}
 </div>
 
 <script>
+// ── FULLSCREEN ──
+function toggleFullScreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(err => {
+      toast(`Error attempting to enable full-screen mode: ${err.message}`);
+    });
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
+}
+
 // ── CONFIG ──
 const API = "https://script.google.com/macros/s/AKfycbyxhqVi3BPh_ksWRJ5n9TWLGBK8HbEhxqqwqV4Bfft7VJJlGxRWI9PPS4Zhw_aKN1TOQQ/exec";
 const ROOT_FOLDER = "1rgi0M0glLySObvzjVV5B1-NCPkpdul9p";
