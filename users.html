@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Management Console</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap');
+
+:root {
+  --win-blue: #003399;
+  --win-blue2: #0050c8;
+  --win-header: #1a3a6b;
+  --win-sidebar: #eef1f7;
+  --win-sidebar-sel: #cce4ff;
+  --win-sidebar-border: #b0c4de;
+  --win-bg: #f0f0f0;
+  --win-panel: #ffffff;
+  --win-border: #adadad;
+  --win-text: #000000;
+  --win-sub: #444;
+  --win-toolbar: #e8eaf0;
+  --win-toolbar-border: #b0b8c8;
+  --win-sel: #0078d7;
+  --win-sel-text: #ffffff;
+  --win-hover: #cce8ff;
+  --win-danger: #cc0000;
+  --win-success: #007a00;
+  --win-row-odd: #f8f9fc;
+  --win-row-even: #ffffff;
+  --status-bar: #1a3a6b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, sans-serif; }
+
+body { background: var(--win-bg); color: var(--win-text); font-size: 13px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+/* ── TITLE BAR ── */
+.titlebar {
+  background: linear-gradient(180deg, #1e4fa0 0%, #0f3580 100%);
+  color: #fff;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 2px solid #0a2560;
+  flex-shrink: 0;
+}
+.titlebar-icon { font-size: 18px; }
+.titlebar-title { font-size: 13px; font-weight: 600; letter-spacing: .2px; flex: 1; }
+.titlebar-btns { display: flex; gap: 2px; }
+.titlebar-btns span {
+  width: 22px; height: 18px; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; cursor: pointer; border-radius: 2px; color: #fff;
+}
+.titlebar-btns span:hover { background: rgba(255,255,255,0.2); }
+.titlebar-btns .close:hover { background: #c42b1c; }
+
+/* ── MENUBAR ── */
+.menubar {
+  background: var(--win-toolbar);
+  border-bottom: 1px solid var(--win-toolbar-border);
+  padding: 2px 4px;
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.menu-item {
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 13px;
+  color: var(--win-text);
+  border: 1px solid transparent;
+}
+.menu-item:hover { background: var(--win-hover); border-color: var(--win-sel); }
+
+/* ── TOOLBAR ── */
+.toolbar {
+  background: var(--win-toolbar);
+  border-bottom: 1px solid var(--win-toolbar-border);
+  padding: 4px 8px;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.tb-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--win-text);
+  font-size: 11px;
+  gap: 2px;
+  min-width: 52px;
+  width: auto;
+  margin: 0;
+}
+.tb-btn:hover { background: var(--win-hover); border-color: var(--win-sel); }
+.tb-btn:active { background: #aad4f0; transform: none; }
+.tb-btn .tb-icon { font-size: 20px; line-height: 1; }
+.tb-sep { width: 1px; background: var(--win-border); height: 36px; margin: 0 4px; }
+
+/* ── MAIN LAYOUT ── */
+.main-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 220px;
+  background: var(--win-sidebar);
+  border-right: 1px solid var(--win-sidebar-border);
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.sidebar-header {
+  background: linear-gradient(180deg, #2255b0 0%, #1a3a80 100%);
+  color: #fff;
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .3px;
+}
+.tree-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  margin: 1px 4px;
+  color: var(--win-text);
+  font-size: 12px;
+}
+.tree-item:hover { background: var(--win-hover); }
+.tree-item.active { background: var(--win-sidebar-sel); border-color: #7db8e8; }
+.tree-item .tree-icon { font-size: 14px; flex-shrink: 0; }
+.tree-child { padding-left: 24px; }
+.tree-section {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: #666;
+  padding: 10px 12px 4px;
+}
+
+/* ── CONTENT PANEL ── */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--win-panel);
+}
+.content-header {
+  background: linear-gradient(180deg, #e8edf8 0%, #d8e0f0 100%);
+  border-bottom: 1px solid var(--win-toolbar-border);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.content-header h2 { font-size: 14px; font-weight: 600; color: #1a3a6b; }
+.content-header span { color: var(--win-sub); font-size: 12px; }
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--win-toolbar);
+  border-bottom: 1px solid var(--win-toolbar-border);
+  flex-shrink: 0;
+}
+.search-bar input {
+  padding: 4px 8px;
+  border: 1px solid var(--win-border);
+  border-radius: 2px;
+  font-size: 12px;
+  width: 260px;
+  background: #fff;
+  color: var(--win-text);
+}
+.search-bar input:focus { outline: none; border-color: var(--win-sel); }
+.col-label { font-size: 12px; color: var(--win-sub); }
+
+/* ── USER TABLE ── */
+.table-wrap { flex: 1; overflow-y: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  background: linear-gradient(180deg, #dde5f0 0%, #c8d4e8 100%);
+  border-right: 1px solid var(--win-border);
+  border-bottom: 2px solid var(--win-sel);
+  padding: 6px 10px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a3a6b;
+  position: sticky;
+  top: 0;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+thead th:hover { background: linear-gradient(180deg, #ccd8ee 0%, #b8c8e0 100%); }
+thead th:last-child { border-right: none; }
+tbody tr { border-bottom: 1px solid #e8edf5; }
+tbody tr:nth-child(odd) { background: var(--win-row-odd); }
+tbody tr:nth-child(even) { background: var(--win-row-even); }
+tbody tr:hover { background: var(--win-hover); cursor: pointer; }
+tbody tr.selected { background: var(--win-sel) !important; color: var(--win-sel-text); }
+tbody tr.selected td { color: #fff; }
+td { padding: 5px 10px; font-size: 12px; border-right: 1px solid #e8edf5; }
+td:last-child { border-right: none; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid;
+}
+.badge-admin { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
+.badge-tech  { background: #dcfce7; color: #166534; border-color: #86efac; }
+.badge-user  { background: #f3f4f6; color: #374151; border-color: #d1d5db; }
+
+/* ── STATUS BAR ── */
+.statusbar {
+  background: var(--status-bar);
+  color: #c8d8f0;
+  padding: 3px 12px;
+  font-size: 11px;
+  display: flex;
+  gap: 24px;
+  flex-shrink: 0;
+}
+.statusbar span { display: flex; align-items: center; gap: 4px; }
+
+/* ── DETAILS PANEL ── */
+.details-panel {
+  width: 260px;
+  border-left: 1px solid var(--win-sidebar-border);
+  background: var(--win-sidebar);
+  overflow-y: auto;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+.details-header {
+  background: linear-gradient(180deg, #2255b0 0%, #1a3a80 100%);
+  color: #fff;
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.detail-avatar {
+  text-align: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--win-sidebar-border);
+}
+.detail-avatar .avatar {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a3a80, #0078d7);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  color: #fff;
+  margin: 0 auto 8px;
+  border: 3px solid #7db8e8;
+}
+.detail-avatar .d-name { font-weight: 700; font-size: 14px; color: #1a3a6b; }
+.detail-avatar .d-email { font-size: 11px; color: var(--win-sub); margin-top: 2px; }
+.detail-row { padding: 6px 12px; border-bottom: 1px solid #dde5f0; font-size: 12px; }
+.detail-row label { color: var(--win-sub); display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 1px; }
+.detail-row span { color: var(--win-text); font-weight: 500; }
+.detail-actions { padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; }
+.d-btn {
+  padding: 5px 10px;
+  border: 1px solid var(--win-border);
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 12px;
+  background: linear-gradient(180deg, #f5f7fc 0%, #e0e8f0 100%);
+  color: var(--win-text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  margin: 0;
+}
+.d-btn:hover { background: var(--win-hover); border-color: var(--win-sel); }
+.d-btn.danger { color: var(--win-danger); border-color: #e8a0a0; }
+.d-btn.danger:hover { background: #fee2e2; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal-win {
+  background: #f0f0f0;
+  border: 1px solid #888;
+  border-radius: 4px;
+  box-shadow: 4px 4px 20px rgba(0,0,0,0.5);
+  width: 420px;
+  max-width: 95vw;
+  overflow: hidden;
+}
+.modal-titlebar {
+  background: linear-gradient(180deg, #1e4fa0 0%, #0f3580 100%);
+  color: #fff;
+  padding: 7px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.modal-close {
+  margin-left: auto;
+  width: 20px; height: 16px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+  border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0; width: auto; margin-left: auto;
+}
+.modal-close:hover { background: #c42b1c; border-color: #c42b1c; }
+.modal-body { padding: 18px; }
+.modal-body label { display: block; font-size: 12px; color: var(--win-sub); margin: 10px 0 3px; }
+.modal-body label:first-child { margin-top: 0; }
+.modal-body input, .modal-body select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--win-border);
+  border-radius: 2px;
+  font-size: 13px;
+  background: #fff;
+  color: var(--win-text);
+}
+.modal-body input:focus, .modal-body select:focus { outline: none; border-color: var(--win-sel); }
+.modal-footer {
+  background: var(--win-toolbar);
+  border-top: 1px solid var(--win-border);
+  padding: 10px 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.win-btn {
+  padding: 5px 18px;
+  border: 1px solid var(--win-border);
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 12px;
+  background: linear-gradient(180deg, #f5f7fc 0%, #dde5f0 100%);
+  color: var(--win-text);
+  min-width: 75px;
+  text-align: center;
+  width: auto;
+  margin: 0;
+}
+.win-btn:hover { background: var(--win-hover); border-color: var(--win-sel); }
+.win-btn.primary {
+  background: linear-gradient(180deg, #0e84e8 0%, #0060c0 100%);
+  border-color: #004a9f;
+  color: #fff;
+}
+.win-btn.primary:hover { background: linear-gradient(180deg, #1990f0 0%, #006fd0 100%); }
+.win-btn.danger-btn {
+  background: linear-gradient(180deg, #f56060 0%, #cc0000 100%);
+  border-color: #a00000;
+  color: #fff;
+}
+
+/* ── LOGIN OVERLAY ── */
+.login-screen {
+  position: fixed; inset: 0;
+  background: #1a3a6b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  flex-direction: column;
+  gap: 0;
+}
+.login-win {
+  background: #f0f0f0;
+  border: 1px solid #888;
+  border-radius: 4px;
+  box-shadow: 4px 4px 30px rgba(0,0,0,0.6);
+  width: 380px;
+  overflow: hidden;
+}
+.login-brand {
+  background: linear-gradient(135deg, #1e4fa0 0%, #0f3580 100%);
+  padding: 24px;
+  text-align: center;
+  color: #fff;
+}
+.login-brand .brand-icon { font-size: 48px; margin-bottom: 8px; }
+.login-brand h2 { font-size: 16px; font-weight: 700; letter-spacing: .5px; }
+.login-brand p { font-size: 11px; color: #a8c4f0; margin-top: 4px; }
+.login-form { padding: 20px; }
+.login-form label { display: block; font-size: 12px; color: var(--win-sub); margin-bottom: 3px; }
+.login-form input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--win-border);
+  border-radius: 2px;
+  font-size: 13px;
+  background: #fff;
+  margin-bottom: 12px;
+}
+.login-form input:focus { outline: none; border-color: var(--win-sel); }
+.login-submit {
+  width: 100%;
+  padding: 8px;
+  background: linear-gradient(180deg, #0e84e8 0%, #0060c0 100%);
+  color: #fff;
+  border: 1px solid #004a9f;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+.login-submit:hover { background: linear-gradient(180deg, #1990f0 0%, #006fd0 100%); }
+.login-err { color: #cc0000; font-size: 12px; margin-top: 6px; min-height: 16px; }
+.login-footer {
+  background: var(--win-toolbar);
+  border-top: 1px solid var(--win-border);
+  padding: 8px 20px;
+  font-size: 11px;
+  color: var(--win-sub);
+  text-align: center;
+}
+.win-bg-text {
+  color: rgba(255,255,255,0.08);
+  font-size: 120px;
+  font-weight: 900;
+  position: absolute;
+  bottom: -20px;
+  right: 20px;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: -8px;
+}
+
+/* ── SPINNER ── */
+.spinner-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4); z-index: 3000;
+  align-items: center; justify-content: center;
+}
+.spinner-overlay.show { display: flex; }
+.spinner {
+  width: 44px; height: 44px;
+  border: 4px solid rgba(255,255,255,0.2);
+  border-top-color: #0078d7;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  background: #1a3a6b; color: #fff;
+  padding: 8px 20px; border-radius: 3px;
+  font-size: 13px; opacity: 0; pointer-events: none;
+  transition: opacity .3s; z-index: 5000; border: 1px solid #0078d7;
+}
+.toast.show { opacity: 1; }
+
+/* ── PW WRAP ── */
+.pw-wrap { position: relative; }
+.pw-wrap input { padding-right: 32px; }
+.pw-eye {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; font-size: 14px;
+  color: #666; padding: 0; width: auto; margin: 0;
+}
+.pw-eye:hover { background: none; color: var(--win-sel); }
+
+@media(max-width: 900px) {
+  .details-panel { display: none; }
+  .sidebar { width: 160px; }
+}
+@media(max-width: 600px) {
+  .sidebar { display: none; }
+  .search-bar input { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="loginScreen">
+  <div class="win-bg-text">AD</div>
+  <div class="login-win">
+    <div class="login-brand">
+      <div class="brand-icon">🏢</div>
+      <h2>User Management Console</h2>
+      <p>Active Directory · Administrator Access Only</p>
+    </div>
+    <div class="login-form">
+      <label>Administrator Email</label>
+      <input type="text" id="loginEmail" placeholder="admin@domain.com" value="admin@aman5z.in">
+      <label>Password</label>
+      <div class="pw-wrap">
+        <input type="password" id="loginPass" placeholder="Password" onkeydown="if(event.key==='Enter')doAdminLogin()">
+        <button class="pw-eye" onclick="toggleLoginPw()">👁</button>
+      </div>
+      <button class="login-submit" onclick="doAdminLogin()">Sign In →</button>
+      <div class="login-err" id="loginErr"></div>
+    </div>
+    <div class="login-footer">🔒 Administrators only · All actions are logged</div>
+  </div>
+</div>
+
+<!-- SPINNER -->
+<div class="spinner-overlay" id="spinner"><div class="spinner"></div></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ════ MAIN APP ════ -->
+<div class="titlebar">
+  <span class="titlebar-icon">🏢</span>
+  <span class="titlebar-title">Active Directory Users and Computers — [aman5z.in]</span>
+  <div class="titlebar-btns">
+    <span>─</span><span>□</span><span class="close">✕</span>
+  </div>
+</div>
+
+<div class="menubar">
+  <div class="menu-item">File</div>
+  <div class="menu-item">Action</div>
+  <div class="menu-item">View</div>
+  <div class="menu-item" onclick="doAdminLogout()">Sign Out</div>
+  <div class="menu-item" onclick="openChangeMyPw()">🔑 Change My Password</div>
+</div>
+
+<div class="toolbar">
+  <button class="tb-btn" onclick="openAddUser()">
+    <span class="tb-icon">👤➕</span>
+    <span>New User</span>
+  </button>
+  <div class="tb-sep"></div>
+  <button class="tb-btn" onclick="editSelected()">
+    <span class="tb-icon">✏️</span>
+    <span>Properties</span>
+  </button>
+  <button class="tb-btn" onclick="resetPwSelected()">
+    <span class="tb-icon">🔑</span>
+    <span>Reset PW</span>
+  </button>
+  <button class="tb-btn" onclick="deleteSelected()">
+    <span class="tb-icon">🗑️</span>
+    <span>Delete</span>
+  </button>
+  <div class="tb-sep"></div>
+  <button class="tb-btn" onclick="loadUsers()">
+    <span class="tb-icon">🔄</span>
+    <span>Refresh</span>
+  </button>
+</div>
+
+<div class="main-layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">🌐 aman5z.in</div>
+    <div class="tree-section">Domain</div>
+    <div class="tree-item active" onclick="setView('all')">
+      <span class="tree-icon">📁</span> All Users
+    </div>
+    <div class="tree-section">Roles</div>
+    <div class="tree-item tree-child" onclick="setView('Admin')">
+      <span class="tree-icon">🔴</span> Admins
+    </div>
+    <div class="tree-item tree-child" onclick="setView('Technician')">
+      <span class="tree-icon">🟢</span> Technicians
+    </div>
+    <div class="tree-item tree-child" onclick="setView('User')">
+      <span class="tree-icon">🔵</span> Users
+    </div>
+    <div class="tree-section">Tools</div>
+    <div class="tree-item" onclick="openAddUser()">
+      <span class="tree-icon">➕</span> New User
+    </div>
+    <div class="tree-item" onclick="loadUsers()">
+      <span class="tree-icon">🔄</span> Refresh
+    </div>
+    <div class="tree-item" onclick="openChangeMyPw()">
+      <span class="tree-icon">🔑</span> Change My PW
+    </div>
+    <div class="tree-item" onclick="doAdminLogout()">
+      <span class="tree-icon">🚪</span> Sign Out
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="content-header">
+      <span>📁</span>
+      <h2 id="viewTitle">All Users</h2>
+      <span id="userCount">— users</span>
+    </div>
+    <div class="search-bar">
+      <span class="col-label">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search by name, email, role..." oninput="renderTable()">
+      <span class="col-label" id="filteredCount"></span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th onclick="sortBy('email')">📧 Email / Username ↕</th>
+            <th onclick="sortBy('role')">🏷️ Role ↕</th>
+            <th>🔒 Password Hash</th>
+            <th>📅 Added</th>
+          </tr>
+        </thead>
+        <tbody id="userTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DETAILS PANEL -->
+  <div class="details-panel">
+    <div class="details-header">👤 User Properties</div>
+    <div id="detailsContent">
+      <div style="padding:20px;color:#888;font-size:12px;text-align:center;">
+        <div style="font-size:40px;margin-bottom:8px;">👤</div>
+        Select a user to view properties
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATUS BAR -->
+<div class="statusbar">
+  <span>🟢 Connected to: aman5z.in</span>
+  <span id="sb-count">📋 0 objects</span>
+  <span id="sb-admin">👤 Signed in as: —</span>
+  <span id="sb-time"></span>
+</div>
+
+<!-- ════ MODALS ════ -->
+
+<!-- ADD USER -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal-win">
+    <div class="modal-titlebar">
+      👤 New User Object
+      <button class="modal-close" onclick="closeModal('addModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <label>Email / Username *</label>
+      <input type="text" id="newEmail" placeholder="user@aman5z.in">
+      <label>Password *</label>
+      <div class="pw-wrap">
+        <input type="password" id="newPass" placeholder="Minimum 6 characters">
+        <button class="pw-eye" onclick="togglePw('newPass',this)">👁</button>
+      </div>
+      <label>Confirm Password *</label>
+      <div class="pw-wrap">
+        <input type="password" id="newPassConf" placeholder="Re-enter password">
+        <button class="pw-eye" onclick="togglePw('newPassConf',this)">👁</button>
+      </div>
+      <label>Role *</label>
+      <select id="newRole">
+        <option value="User">User</option>
+        <option value="Technician">Technician</option>
+        <option value="Admin">Admin</option>
+      </select>
+      <div class="login-err" id="addErr"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="win-btn" onclick="closeModal('addModal')">Cancel</button>
+      <button class="win-btn primary" onclick="submitAddUser()">Create User</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT USER -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal-win">
+    <div class="modal-titlebar">
+      ✏️ User Properties
+      <button class="modal-close" onclick="closeModal('editModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <label>Email / Username</label>
+      <input type="text" id="editEmail" readonly style="background:#e8edf5;color:#666;">
+      <label>Role</label>
+      <select id="editRole">
+        <option value="User">User</option>
+        <option value="Technician">Technician</option>
+        <option value="Admin">Admin</option>
+      </select>
+      <div class="login-err" id="editErr"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="win-btn" onclick="closeModal('editModal')">Cancel</button>
+      <button class="win-btn primary" onclick="submitEditUser()">Apply</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESET PASSWORD -->
+<div class="modal-overlay" id="pwModal">
+  <div class="modal-win">
+    <div class="modal-titlebar">
+      🔑 Reset Password
+      <button class="modal-close" onclick="closeModal('pwModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <label>Resetting password for</label>
+      <input type="text" id="pwTarget" readonly style="background:#e8edf5;color:#666;font-weight:bold;">
+      <label>New Password *</label>
+      <div class="pw-wrap">
+        <input type="password" id="pwNew" placeholder="New password">
+        <button class="pw-eye" onclick="togglePw('pwNew',this)">👁</button>
+      </div>
+      <label>Confirm New Password *</label>
+      <div class="pw-wrap">
+        <input type="password" id="pwNewConf" placeholder="Confirm password">
+        <button class="pw-eye" onclick="togglePw('pwNewConf',this)">👁</button>
+      </div>
+      <div class="login-err" id="pwErr"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="win-btn" onclick="closeModal('pwModal')">Cancel</button>
+      <button class="win-btn primary" onclick="submitResetPw()">Reset Password</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHANGE MY PW -->
+<div class="modal-overlay" id="myPwModal">
+  <div class="modal-win">
+    <div class="modal-titlebar">
+      🔑 Change My Password
+      <button class="modal-close" onclick="closeModal('myPwModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <label>Current Password</label>
+      <div class="pw-wrap">
+        <input type="password" id="myPwCurrent" placeholder="Current password">
+        <button class="pw-eye" onclick="togglePw('myPwCurrent',this)">👁</button>
+      </div>
+      <label>New Password</label>
+      <div class="pw-wrap">
+        <input type="password" id="myPwNew" placeholder="New password">
+        <button class="pw-eye" onclick="togglePw('myPwNew',this)">👁</button>
+      </div>
+      <label>Confirm New Password</label>
+      <div class="pw-wrap">
+        <input type="password" id="myPwConf" placeholder="Confirm new password">
+        <button class="pw-eye" onclick="togglePw('myPwConf',this)">👁</button>
+      </div>
+      <div class="login-err" id="myPwErr"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="win-btn" onclick="closeModal('myPwModal')">Cancel</button>
+      <button class="win-btn primary" onclick="submitChangeMyPw()">Change Password</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM -->
+<div class="modal-overlay" id="delModal">
+  <div class="modal-win" style="width:360px;">
+    <div class="modal-titlebar">
+      ⚠️ Confirm Delete
+      <button class="modal-close" onclick="closeModal('delModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;line-height:1.6;">Are you sure you want to delete user:</p>
+      <p style="font-weight:700;font-size:14px;margin:10px 0;color:#cc0000;" id="delTarget"></p>
+      <p style="font-size:12px;color:#666;">This action cannot be undone. The user will immediately lose access to all systems.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="win-btn" onclick="closeModal('delModal')">Cancel</button>
+      <button class="win-btn danger-btn" onclick="submitDelete()">Delete User</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbyDi1LDTZ92wJsDVj2eiwmlKUFeyRuS2zpWpaCwqh_U-Z1CqCuRn9arcTi7-7RfxnAc/exec";
+
+let adminToken = null;
+let adminEmail = "";
+let allUsers   = [];
+let currentView = "all";
+let selectedEmail = null;
+let sortCol = "email", sortAsc = true;
+
+/* ── STATUS CLOCK ── */
+setInterval(()=>{
+  const n=new Date();
+  document.getElementById("sb-time").textContent =
+    "🕐 "+String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0")+":"+String(n.getSeconds()).padStart(2,"0");
+},1000);
+
+/* ── LOGIN ── */
+function toggleLoginPw(){
+  const i=document.getElementById("loginPass");
+  i.type=i.type==="password"?"text":"password";
+}
+
+async function doAdminLogin(){
+  const em=document.getElementById("loginEmail").value.trim();
+  const pw=document.getElementById("loginPass").value;
+  if(!em||!pw){document.getElementById("loginErr").textContent="Enter email and password.";return;}
+  spin(true);
+  try {
+    const res  = await fetch(API,{method:"POST",body:new URLSearchParams({action:"login",email:em,password:pw})});
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); } catch(e) {
+      // Plain text response means wrong credentials or script not deployed
+      document.getElementById("loginErr").textContent =
+        text.includes("Invalid") ? "Invalid email or password." :
+        text.includes("Unauthorized") ? "Access denied." :
+        "Script error — check deployment: " + text.substring(0,60);
+      spin(false); return;
+    }
+    if(!data.token){
+      document.getElementById("loginErr").textContent="Login failed — no token returned.";
+      spin(false); return;
+    }
+    if(data.role!=="Admin"){
+      document.getElementById("loginErr").textContent="Access denied. Admin accounts only.";
+      spin(false); return;
+    }
+    adminToken = data.token;
+    adminEmail = em;
+    document.getElementById("loginScreen").style.display="none";
+    document.getElementById("sb-admin").textContent="👤 "+adminEmail;
+    await loadUsers();
+  } catch(e) {
+    document.getElementById("loginErr").textContent="Network error — check your internet connection.";
+  }
+  spin(false);
+}
+
+function doAdminLogout(){
+  adminToken=null; adminEmail=""; allUsers=[];
+  document.getElementById("loginScreen").style.display="flex";
+  document.getElementById("loginPass").value="";
+  document.getElementById("loginErr").textContent="";
+}
+
+/* ── LOAD USERS ── */
+async function loadUsers(){
+  spin(true);
+  try {
+    const res  = await fetch(API,{method:"POST",body:new URLSearchParams({action:"getUsers",token:adminToken})});
+    const data = await res.json();
+    // data = array of rows: [email, hash, role]
+    allUsers = (Array.isArray(data)?data:[]).slice(1).map(r=>({
+      email: r[0]||"", hash: r[1]||"", role: r[2]||"User"
+    })).filter(u=>u.email);
+    document.getElementById("userCount").textContent = allUsers.length+" users";
+    document.getElementById("sb-count").textContent  = "📋 "+allUsers.length+" objects";
+    renderTable();
+  } catch(e){ toast("Failed to load users"); }
+  spin(false);
+}
+
+/* ── FILTER / RENDER ── */
+function setView(v){
+  currentView=v;
+  selectedEmail=null;
+  document.querySelectorAll(".tree-item").forEach(el=>el.classList.remove("active"));
+  event.currentTarget.classList.add("active");
+  const titles={all:"All Users",Admin:"Admins",Technician:"Technicians",User:"Users"};
+  document.getElementById("viewTitle").textContent=titles[v]||"All Users";
+  renderTable();
+}
+
+function sortBy(col){
+  if(sortCol===col) sortAsc=!sortAsc; else { sortCol=col; sortAsc=true; }
+  renderTable();
+}
+
+function renderTable(){
+  const q = document.getElementById("searchInput").value.toLowerCase();
+  let users = allUsers.filter(u=>{
+    const matchView = currentView==="all" || u.role===currentView;
+    const matchQ = !q || u.email.toLowerCase().includes(q) || u.role.toLowerCase().includes(q);
+    return matchView && matchQ;
+  });
+
+  users.sort((a,b)=>{
+    const va=a[sortCol]||"", vb=b[sortCol]||"";
+    return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+  });
+
+  document.getElementById("filteredCount").textContent = users.length+" object(s)";
+
+  const body = document.getElementById("userTableBody");
+  if(!users.length){
+    body.innerHTML=`<tr><td colspan="4" style="text-align:center;padding:30px;color:#888;">No users found</td></tr>`;
+    return;
+  }
+
+  body.innerHTML = users.map(u=>{
+    const badgeClass = u.role==="Admin"?"badge-admin":u.role==="Technician"?"badge-tech":"badge-user";
+    const initial = (u.email[0]||"?").toUpperCase();
+    const sel = selectedEmail===u.email ? "selected" : "";
+    const shortHash = u.hash.substring(0,16)+"...";
+    return `<tr class="${sel}" onclick="selectUser('${u.email.replace(/'/g,"\\'")}')">
+      <td>👤 ${u.email}</td>
+      <td><span class="badge ${badgeClass}">${u.role}</span></td>
+      <td style="font-family:monospace;font-size:11px;color:#888;">${shortHash}</td>
+      <td style="color:#888;">—</td>
+    </tr>`;
+  }).join("");
+}
+
+/* ── SELECT ── */
+function selectUser(email){
+  selectedEmail = email;
+  renderTable();
+  const u = allUsers.find(x=>x.email===email);
+  if(!u) return;
+  const initial=(u.email[0]||"?").toUpperCase();
+  const badgeClass=u.role==="Admin"?"badge-admin":u.role==="Technician"?"badge-tech":"badge-user";
+  document.getElementById("detailsContent").innerHTML=`
+    <div class="detail-avatar">
+      <div class="avatar">${initial}</div>
+      <div class="d-name">${u.email}</div>
+      <div class="d-email">${u.role}</div>
+    </div>
+    <div class="detail-row"><label>Account</label><span>${u.email}</span></div>
+    <div class="detail-row"><label>Role</label><span><span class="badge ${badgeClass}">${u.role}</span></span></div>
+    <div class="detail-row"><label>Hash (first 16)</label><span style="font-family:monospace;font-size:10px;">${u.hash.substring(0,16)}...</span></div>
+    <div class="detail-row"><label>Domain</label><span>aman5z.in</span></div>
+    <div class="detail-actions">
+      <button class="d-btn" onclick="openEditUser('${u.email.replace(/'/g,"\\'")}')">✏️ Properties / Edit Role</button>
+      <button class="d-btn" onclick="openResetPw('${u.email.replace(/'/g,"\\'")}')">🔑 Reset Password</button>
+      <button class="d-btn danger" onclick="openDelete('${u.email.replace(/'/g,"\\'")}')">🗑️ Delete User</button>
+    </div>`;
+}
+
+/* ── TOOLBAR ACTIONS ── */
+function editSelected(){
+  if(!selectedEmail){toast("Select a user first");return;}
+  openEditUser(selectedEmail);
+}
+function resetPwSelected(){
+  if(!selectedEmail){toast("Select a user first");return;}
+  openResetPw(selectedEmail);
+}
+function deleteSelected(){
+  if(!selectedEmail){toast("Select a user first");return;}
+  openDelete(selectedEmail);
+}
+
+/* ── ADD USER ── */
+function openAddUser(){
+  document.getElementById("newEmail").value="";
+  document.getElementById("newPass").value="";
+  document.getElementById("newPassConf").value="";
+  document.getElementById("newRole").value="User";
+  document.getElementById("addErr").textContent="";
+  openModal("addModal");
+}
+async function submitAddUser(){
+  const em=document.getElementById("newEmail").value.trim();
+  const pw=document.getElementById("newPass").value;
+  const pc=document.getElementById("newPassConf").value;
+  const role=document.getElementById("newRole").value;
+  if(!em||!pw){document.getElementById("addErr").textContent="Email and password required.";return;}
+  if(pw!==pc){document.getElementById("addErr").textContent="Passwords do not match.";return;}
+  if(pw.length<6){document.getElementById("addErr").textContent="Password must be at least 6 characters.";return;}
+  spin(true);
+  try{
+    const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"addUser",token:adminToken,email:em,password:pw,role})});
+    const t=await r.text();
+    if(t.includes("exists")){document.getElementById("addErr").textContent="User already exists.";spin(false);return;}
+    closeModal("addModal"); toast("✅ User created: "+em); await loadUsers();
+  }catch(e){document.getElementById("addErr").textContent="Error: "+e;}
+  spin(false);
+}
+
+/* ── EDIT USER ── */
+function openEditUser(email){
+  const u=allUsers.find(x=>x.email===email);
+  if(!u) return;
+  document.getElementById("editEmail").value=u.email;
+  document.getElementById("editRole").value=u.role;
+  document.getElementById("editErr").textContent="";
+  openModal("editModal");
+}
+async function submitEditUser(){
+  const em=document.getElementById("editEmail").value;
+  const role=document.getElementById("editRole").value;
+  spin(true);
+  try{
+    await fetch(API,{method:"POST",body:new URLSearchParams({action:"updateUserRole",token:adminToken,email:em,role})});
+    closeModal("editModal"); toast("✅ Role updated for "+em); await loadUsers();
+  }catch(e){document.getElementById("editErr").textContent="Error: "+e;}
+  spin(false);
+}
+
+/* ── RESET PW ── */
+function openResetPw(email){
+  document.getElementById("pwTarget").value=email;
+  document.getElementById("pwNew").value="";
+  document.getElementById("pwNewConf").value="";
+  document.getElementById("pwErr").textContent="";
+  openModal("pwModal");
+}
+async function submitResetPw(){
+  const em=document.getElementById("pwTarget").value;
+  const pw=document.getElementById("pwNew").value;
+  const pc=document.getElementById("pwNewConf").value;
+  if(!pw){document.getElementById("pwErr").textContent="Enter a new password.";return;}
+  if(pw!==pc){document.getElementById("pwErr").textContent="Passwords do not match.";return;}
+  if(pw.length<6){document.getElementById("pwErr").textContent="Minimum 6 characters.";return;}
+  spin(true);
+  try{
+    await fetch(API,{method:"POST",body:new URLSearchParams({action:"resetPassword",token:adminToken,email:em,password:pw})});
+    closeModal("pwModal"); toast("✅ Password reset for "+em);
+  }catch(e){document.getElementById("pwErr").textContent="Error: "+e;}
+  spin(false);
+}
+
+/* ── CHANGE MY PW ── */
+function openChangeMyPw(){
+  if(!adminToken){toast("Not signed in");return;}
+  document.getElementById("myPwCurrent").value="";
+  document.getElementById("myPwNew").value="";
+  document.getElementById("myPwConf").value="";
+  document.getElementById("myPwErr").textContent="";
+  openModal("myPwModal");
+}
+async function submitChangeMyPw(){
+  const cur=document.getElementById("myPwCurrent").value;
+  const pw=document.getElementById("myPwNew").value;
+  const pc=document.getElementById("myPwConf").value;
+  if(!cur||!pw){document.getElementById("myPwErr").textContent="Fill all fields.";return;}
+  if(pw!==pc){document.getElementById("myPwErr").textContent="Passwords do not match.";return;}
+  if(pw.length<6){document.getElementById("myPwErr").textContent="Minimum 6 characters.";return;}
+  spin(true);
+  try{
+    // Verify current pw by re-logging in, then reset
+    const check=await fetch(API,{method:"POST",body:new URLSearchParams({action:"login",email:adminEmail,password:cur})});
+    const cd=await check.json();
+    if(!cd.token){document.getElementById("myPwErr").textContent="Current password incorrect.";spin(false);return;}
+    await fetch(API,{method:"POST",body:new URLSearchParams({action:"resetPassword",token:adminToken,email:adminEmail,password:pw})});
+    closeModal("myPwModal"); toast("✅ Password changed successfully");
+  }catch(e){document.getElementById("myPwErr").textContent="Error: "+e;}
+  spin(false);
+}
+
+/* ── DELETE ── */
+function openDelete(email){
+  document.getElementById("delTarget").textContent=email;
+  openModal("delModal");
+}
+async function submitDelete(){
+  const em=document.getElementById("delTarget").textContent;
+  if(em===adminEmail){toast("⚠️ You cannot delete your own account.");closeModal("delModal");return;}
+  spin(true);
+  try{
+    await fetch(API,{method:"POST",body:new URLSearchParams({action:"deleteUser",token:adminToken,email:em})});
+    closeModal("delModal"); selectedEmail=null; toast("🗑️ User deleted: "+em); await loadUsers();
+  }catch(e){toast("Error: "+e);}
+  spin(false);
+}
+
+/* ── HELPERS ── */
+function openModal(id){ document.getElementById(id).classList.add("show"); }
+function closeModal(id){ document.getElementById(id).classList.remove("show"); }
+function spin(on){ document.getElementById("spinner").classList.toggle("show",on); }
+function toast(msg,dur=2500){
+  const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),dur);
+}
+function togglePw(id,btn){
+  const i=document.getElementById(id);
+  i.type=i.type==="password"?"text":"password";
+  btn.textContent=i.type==="password"?"👁":"🙈";
+}
+</script>
+</body>
+</html>
