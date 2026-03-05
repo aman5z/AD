@@ -1,1119 +1,1188 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User Management Console</title>
+<title>Active Directory — aman5z.in</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='5' y='5' width='42' height='42' rx='4' fill='%23F25022'/%3E%3Crect x='53' y='5' width='42' height='42' rx='4' fill='%2380BA01'/%3E%3Crect x='5' y='53' width='42' height='42' rx='4' fill='%2300A4EF'/%3E%3Crect x='53' y='53' width='42' height='42' rx='4' fill='%23FFB900'/%3E%3C/svg%3E">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap');
+:root{
+  --blue:#0a3281;--blue2:#1a4fa0;--blue3:#0f3580;
+  --toolbar:#e8eaf0;--toolbar-b:#b0b8c8;
+  --sidebar:#eef1f7;--sidebar-b:#b0c4de;--sidebar-sel:#cce4ff;
+  --panel:#fff;--bg:#f0f0f0;
+  --border:#adadad;--text:#000;--sub:#555;
+  --sel:#0078d7;--sel-t:#fff;--hover:#cce8ff;
+  --odd:#f8f9fc;--even:#fff;
+  --danger:#cc0000;--success:#007a00;
+  --status:#0f3580;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,sans-serif}
+body{background:var(--bg);color:var(--text);font-size:13px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
-:root {
-  --win-blue: #003399;
-  --win-blue2: #0050c8;
-  --win-header: #1a3a6b;
-  --win-sidebar: #eef1f7;
-  --win-sidebar-sel: #cce4ff;
-  --win-sidebar-border: #b0c4de;
-  --win-bg: #f0f0f0;
-  --win-panel: #ffffff;
-  --win-border: #adadad;
-  --win-text: #000000;
-  --win-sub: #444;
-  --win-toolbar: #e8eaf0;
-  --win-toolbar-border: #b0b8c8;
-  --win-sel: #0078d7;
-  --win-sel-text: #ffffff;
-  --win-hover: #cce8ff;
-  --win-danger: #cc0000;
-  --win-success: #007a00;
-  --win-row-odd: #f8f9fc;
-  --win-row-even: #ffffff;
-  --status-bar: #1a3a6b;
-}
+/* TITLEBAR */
+.titlebar{background:linear-gradient(180deg,#1e4fa0,#0f3580);color:#fff;padding:5px 12px;display:flex;align-items:center;gap:8px;border-bottom:2px solid #0a2560;flex-shrink:0}
+.tb-icon{font-size:16px}.tb-title{font-size:12px;font-weight:600;flex:1;letter-spacing:.2px}
+.tb-win{display:flex;gap:2px}
+.tb-win span{width:20px;height:16px;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;border-radius:2px;color:#fff}
+.tb-win span:hover{background:rgba(255,255,255,.2)}.tb-win .x:hover{background:#c42b1c}
 
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, sans-serif; }
+/* MENUBAR */
+.menubar{background:var(--toolbar);border-bottom:1px solid var(--toolbar-b);padding:1px 4px;display:flex;gap:1px;flex-shrink:0}
+.mi{padding:4px 10px;cursor:pointer;border-radius:3px;font-size:12px;border:1px solid transparent}
+.mi:hover{background:var(--hover);border-color:var(--sel)}
 
-body { background: var(--win-bg); color: var(--win-text); font-size: 13px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+/* TOOLBAR */
+.toolbar{background:var(--toolbar);border-bottom:1px solid var(--toolbar-b);padding:3px 6px;display:flex;gap:1px;align-items:center;flex-shrink:0;flex-wrap:wrap}
+.tbb{display:flex;flex-direction:column;align-items:center;padding:3px 7px;border:1px solid transparent;border-radius:3px;cursor:pointer;background:transparent;color:var(--text);font-size:10px;gap:1px;min-width:46px;width:auto;margin:0}
+.tbb:hover{background:var(--hover);border-color:var(--sel)}.tbb:active{background:#aad4f0}
+.tbb .ti{font-size:18px;line-height:1}
+.tsep{width:1px;background:var(--border);height:32px;margin:0 3px}
 
-/* ── TITLE BAR ── */
-.titlebar {
-  background: linear-gradient(180deg, #1e4fa0 0%, #0f3580 100%);
-  color: #fff;
-  padding: 6px 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border-bottom: 2px solid #0a2560;
-  flex-shrink: 0;
-}
-.titlebar-icon { font-size: 18px; }
-.titlebar-title { font-size: 13px; font-weight: 600; letter-spacing: .2px; flex: 1; }
-.titlebar-btns { display: flex; gap: 2px; }
-.titlebar-btns span {
-  width: 22px; height: 18px; display: flex; align-items: center; justify-content: center;
-  font-size: 11px; cursor: pointer; border-radius: 2px; color: #fff;
-}
-.titlebar-btns span:hover { background: rgba(255,255,255,0.2); }
-.titlebar-btns .close:hover { background: #c42b1c; }
+/* LAYOUT */
+.layout{display:flex;flex:1;overflow:hidden}
 
-/* ── MENUBAR ── */
-.menubar {
-  background: var(--win-toolbar);
-  border-bottom: 1px solid var(--win-toolbar-border);
-  padding: 2px 4px;
-  display: flex;
-  gap: 2px;
-  flex-shrink: 0;
-}
-.menu-item {
-  padding: 4px 10px;
-  cursor: pointer;
-  border-radius: 3px;
-  font-size: 13px;
-  color: var(--win-text);
-  border: 1px solid transparent;
-}
-.menu-item:hover { background: var(--win-hover); border-color: var(--win-sel); }
+/* SIDEBAR */
+.sidebar{width:210px;background:var(--sidebar);border-right:1px solid var(--sidebar-b);overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column}
+.sb-head{background:linear-gradient(180deg,#2255b0,#1a3a80);color:#fff;padding:8px 12px;font-size:11px;font-weight:600;letter-spacing:.3px;flex-shrink:0}
+.sb-sec{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#666;padding:8px 12px 3px}
+.si{display:flex;align-items:center;gap:5px;padding:4px 10px;cursor:pointer;border:1px solid transparent;border-radius:2px;margin:1px 3px;color:var(--text);font-size:11px}
+.si:hover{background:var(--hover)}.si.act{background:var(--sidebar-sel);border-color:#7db8e8}
+.si .sic{font-size:13px;flex-shrink:0}
+.si-child{padding-left:22px}
 
-/* ── TOOLBAR ── */
-.toolbar {
-  background: var(--win-toolbar);
-  border-bottom: 1px solid var(--win-toolbar-border);
-  padding: 4px 8px;
-  display: flex;
-  gap: 2px;
-  align-items: center;
-  flex-shrink: 0;
-  flex-wrap: wrap;
-}
-.tb-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 4px 8px;
-  border: 1px solid transparent;
-  border-radius: 3px;
-  cursor: pointer;
-  background: transparent;
-  color: var(--win-text);
-  font-size: 11px;
-  gap: 2px;
-  min-width: 52px;
-  width: auto;
-  margin: 0;
-}
-.tb-btn:hover { background: var(--win-hover); border-color: var(--win-sel); }
-.tb-btn:active { background: #aad4f0; transform: none; }
-.tb-btn .tb-icon { font-size: 20px; line-height: 1; }
-.tb-sep { width: 1px; background: var(--win-border); height: 36px; margin: 0 4px; }
+/* CONTENT */
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--panel)}
+.ch{background:linear-gradient(180deg,#e8edf8,#d8e0f0);border-bottom:1px solid var(--toolbar-b);padding:6px 14px;display:flex;align-items:center;gap:6px}
+.ch h2{font-size:13px;font-weight:600;color:#1a3a6b}.ch span{color:var(--sub);font-size:11px}
+.sbar{display:flex;align-items:center;gap:5px;padding:5px 14px;background:var(--toolbar);border-bottom:1px solid var(--toolbar-b);flex-shrink:0}
+.sbar input{padding:3px 7px;border:1px solid var(--border);border-radius:2px;font-size:11px;width:240px;background:#fff}
+.sbar input:focus{outline:none;border-color:var(--sel)}
+.tw{flex:1;overflow-y:auto}
+table{width:100%;border-collapse:collapse}
+thead th{background:linear-gradient(180deg,#dde5f0,#c8d4e8);border-right:1px solid var(--border);border-bottom:2px solid var(--sel);padding:5px 10px;text-align:left;font-size:11px;font-weight:600;color:#1a3a6b;position:sticky;top:0;cursor:pointer;user-select:none;white-space:nowrap}
+thead th:hover{background:linear-gradient(180deg,#ccd8ee,#b8c8e0)}
+thead th:last-child{border-right:none}
+tbody tr{border-bottom:1px solid #e8edf5}
+tbody tr:nth-child(odd){background:var(--odd)}
+tbody tr:nth-child(even){background:var(--even)}
+tbody tr:hover{background:var(--hover);cursor:pointer}
+tbody tr.sel{background:var(--sel)!important}
+tbody tr.sel td{color:#fff}
+td{padding:4px 10px;font-size:11px;border-right:1px solid #e8edf5}
+td:last-child{border-right:none}
 
-/* ── MAIN LAYOUT ── */
-.main-layout {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:1px 7px;border-radius:2px;font-size:10px;font-weight:600;border:1px solid}
+.b-admin{background:#dbeafe;color:#1e40af;border-color:#93c5fd}
+.b-tech{background:#dcfce7;color:#166534;border-color:#86efac}
+.b-user{background:#f3f4f6;color:#374151;border-color:#d1d5db}
+.b-custom{background:#fef3c7;color:#92400e;border-color:#fcd34d}
+.b-dis{background:#fee2e2;color:#991b1b;border-color:#fca5a5}
 
-/* ── SIDEBAR ── */
-.sidebar {
-  width: 220px;
-  background: var(--win-sidebar);
-  border-right: 1px solid var(--win-sidebar-border);
-  overflow-y: auto;
-  flex-shrink: 0;
-}
-.sidebar-header {
-  background: linear-gradient(180deg, #2255b0 0%, #1a3a80 100%);
-  color: #fff;
-  padding: 10px 12px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .3px;
-}
-.tree-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
-  cursor: pointer;
-  border: 1px solid transparent;
-  border-radius: 2px;
-  margin: 1px 4px;
-  color: var(--win-text);
-  font-size: 12px;
-}
-.tree-item:hover { background: var(--win-hover); }
-.tree-item.active { background: var(--win-sidebar-sel); border-color: #7db8e8; }
-.tree-item .tree-icon { font-size: 14px; flex-shrink: 0; }
-.tree-child { padding-left: 24px; }
-.tree-section {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .8px;
-  color: #666;
-  padding: 10px 12px 4px;
-}
+/* DETAILS */
+.details{width:248px;border-left:1px solid var(--sidebar-b);background:var(--sidebar);overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column}
+.dh{background:linear-gradient(180deg,#2255b0,#1a3a80);color:#fff;padding:8px 12px;font-size:11px;font-weight:600;flex-shrink:0}
+.davatar{text-align:center;padding:16px 12px;border-bottom:1px solid var(--sidebar-b)}
+.av{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1a3a80,#0078d7);display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;margin:0 auto 6px;border:2px solid #7db8e8}
+.av.dis{background:linear-gradient(135deg,#666,#999)}
+.dn{font-weight:700;font-size:13px;color:#1a3a6b}.de{font-size:10px;color:var(--sub);margin-top:1px}
+.dr{padding:5px 10px;border-bottom:1px solid #dde5f0;font-size:11px}
+.dr label{color:var(--sub);display:block;font-size:9px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1px}
+.dr span{color:var(--text);font-weight:500}
+.dact{padding:8px 10px;display:flex;flex-direction:column;gap:3px}
+.db{padding:4px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;font-size:11px;background:linear-gradient(180deg,#f5f7fc,#e0e8f0);color:var(--text);display:flex;align-items:center;gap:5px;width:100%;margin:0}
+.db:hover{background:var(--hover);border-color:var(--sel)}.db.dang{color:var(--danger);border-color:#e8a0a0}.db.dang:hover{background:#fee2e2}
 
-/* ── CONTENT PANEL ── */
-.content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: var(--win-panel);
-}
-.content-header {
-  background: linear-gradient(180deg, #e8edf8 0%, #d8e0f0 100%);
-  border-bottom: 1px solid var(--win-toolbar-border);
-  padding: 8px 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.content-header h2 { font-size: 14px; font-weight: 600; color: #1a3a6b; }
-.content-header span { color: var(--win-sub); font-size: 12px; }
+/* STATUS */
+.statusbar{background:var(--status);color:#c8d8f0;padding:2px 10px;font-size:10px;display:flex;gap:20px;flex-shrink:0}
+.statusbar span{display:flex;align-items:center;gap:3px}
 
-.search-bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  background: var(--win-toolbar);
-  border-bottom: 1px solid var(--win-toolbar-border);
-  flex-shrink: 0;
-}
-.search-bar input {
-  padding: 4px 8px;
-  border: 1px solid var(--win-border);
-  border-radius: 2px;
-  font-size: 12px;
-  width: 260px;
-  background: #fff;
-  color: var(--win-text);
-}
-.search-bar input:focus { outline: none; border-color: var(--win-sel); }
-.col-label { font-size: 12px; color: var(--win-sub); }
+/* TERMINAL PANEL */
+.terminal-panel{height:200px;background:#0c0c0c;border-top:2px solid var(--sel);flex-shrink:0;display:none;flex-direction:column}
+.terminal-panel.show{display:flex}
+.term-head{background:#1e1e1e;color:#c8c8c8;padding:3px 10px;font-size:10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #333}
+.term-body{flex:1;overflow-y:auto;padding:6px 10px;font-family:'Consolas','Courier New',monospace;font-size:12px;color:#cccccc}
+.term-line{margin:1px 0;white-space:pre-wrap;word-break:break-all}
+.term-line.cmd{color:#4fc1ff}.term-line.out{color:#cccccc}.term-line.err{color:#f44747}.term-line.ok{color:#4ec9b0}
+.term-input-row{display:flex;align-items:center;padding:4px 10px;border-top:1px solid #333;background:#1e1e1e}
+.term-prompt{color:#4ec9b0;font-family:monospace;font-size:12px;margin-right:6px;white-space:nowrap}
+.term-input{flex:1;background:transparent;border:none;outline:none;color:#cccccc;font-family:monospace;font-size:12px}
 
-/* ── USER TABLE ── */
-.table-wrap { flex: 1; overflow-y: auto; }
-table { width: 100%; border-collapse: collapse; }
-thead th {
-  background: linear-gradient(180deg, #dde5f0 0%, #c8d4e8 100%);
-  border-right: 1px solid var(--win-border);
-  border-bottom: 2px solid var(--win-sel);
-  padding: 6px 10px;
-  text-align: left;
-  font-size: 12px;
-  font-weight: 600;
-  color: #1a3a6b;
-  position: sticky;
-  top: 0;
-  cursor: pointer;
-  user-select: none;
-  white-space: nowrap;
-}
-thead th:hover { background: linear-gradient(180deg, #ccd8ee 0%, #b8c8e0 100%); }
-thead th:last-child { border-right: none; }
-tbody tr { border-bottom: 1px solid #e8edf5; }
-tbody tr:nth-child(odd) { background: var(--win-row-odd); }
-tbody tr:nth-child(even) { background: var(--win-row-even); }
-tbody tr:hover { background: var(--win-hover); cursor: pointer; }
-tbody tr.selected { background: var(--win-sel) !important; color: var(--win-sel-text); }
-tbody tr.selected td { color: #fff; }
-td { padding: 5px 10px; font-size: 12px; border-right: 1px solid #e8edf5; }
-td:last-child { border-right: none; }
+/* STORAGE PANEL */
+.storage-panel{padding:10px;font-size:11px;flex-shrink:0}
+.stor-bar-wrap{background:#dde5f0;border-radius:2px;height:14px;margin:6px 0 4px;border:1px solid var(--border);overflow:hidden}
+.stor-bar{height:100%;background:linear-gradient(90deg,#0078d7,#1a90ff);transition:width .5s}
+.stor-bar.warn{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.stor-bar.crit{background:linear-gradient(90deg,#ef4444,#f87171)}
+.file-list{margin-top:6px;max-height:120px;overflow-y:auto;border:1px solid var(--border);border-radius:2px}
+.fi{display:flex;align-items:center;gap:4px;padding:3px 6px;border-bottom:1px solid #eee;font-size:10px;cursor:pointer}
+.fi:hover{background:var(--hover)}.fi:last-child{border-bottom:none}
+.fi-icon{font-size:12px;flex-shrink:0}.fi-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fi-size{color:var(--sub);font-size:9px;white-space:nowrap}
 
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  border-radius: 2px;
-  font-size: 11px;
-  font-weight: 600;
-  border: 1px solid;
-}
-.badge-admin { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
-.badge-tech  { background: #dcfce7; color: #166534; border-color: #86efac; }
-.badge-user  { background: #f3f4f6; color: #374151; border-color: #d1d5db; }
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.mo.show{display:flex}
+.mw{background:#f0f0f0;border:1px solid #888;border-radius:4px;box-shadow:4px 4px 20px rgba(0,0,0,.5);width:440px;max-width:95vw;max-height:90vh;overflow:hidden;display:flex;flex-direction:column}
+.mw.wide{width:580px}
+.mt{background:linear-gradient(180deg,#1e4fa0,#0f3580);color:#fff;padding:6px 12px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;flex-shrink:0}
+.mc{margin-left:auto;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:10px;cursor:pointer;border-radius:2px;width:auto;margin-left:auto;padding:1px 5px}
+.mc:hover{background:#c42b1c;border-color:#c42b1c}
+.mb{padding:16px;overflow-y:auto}
+.mb label{display:block;font-size:11px;color:var(--sub);margin:8px 0 2px}
+.mb label:first-child{margin-top:0}
+.mb input,.mb select,.mb textarea{width:100%;padding:5px 7px;border:1px solid var(--border);border-radius:2px;font-size:12px;background:#fff;color:var(--text)}
+.mb input:focus,.mb select:focus,.mb textarea:focus{outline:none;border-color:var(--sel)}
+.mb textarea{resize:vertical;height:60px;font-family:inherit}
+.mf{background:var(--toolbar);border-top:1px solid var(--border);padding:8px 14px;display:flex;justify-content:flex-end;gap:6px;flex-shrink:0}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.wbtn{padding:4px 16px;border:1px solid var(--border);border-radius:2px;cursor:pointer;font-size:11px;background:linear-gradient(180deg,#f5f7fc,#dde5f0);color:var(--text);min-width:70px;text-align:center;width:auto;margin:0}
+.wbtn:hover{background:var(--hover);border-color:var(--sel)}
+.wbtn.pri{background:linear-gradient(180deg,#0e84e8,#0060c0);border-color:#004a9f;color:#fff}
+.wbtn.pri:hover{background:linear-gradient(180deg,#1990f0,#006fd0)}
+.wbtn.dng{background:linear-gradient(180deg,#f56060,#cc0000);border-color:#a00000;color:#fff}
+.err-msg{color:#cc0000;font-size:11px;margin-top:5px;min-height:14px}
 
-/* ── STATUS BAR ── */
-.statusbar {
-  background: var(--status-bar);
-  color: #c8d8f0;
-  padding: 3px 12px;
-  font-size: 11px;
-  display: flex;
-  gap: 24px;
-  flex-shrink: 0;
-}
-.statusbar span { display: flex; align-items: center; gap: 4px; }
+/* LOGIN */
+.login-screen{position:fixed;inset:0;background:#1a3a6b;display:flex;align-items:center;justify-content:center;z-index:2000;flex-direction:column}
+.lw{background:#f0f0f0;border:1px solid #888;border-radius:4px;box-shadow:4px 4px 30px rgba(0,0,0,.6);width:360px;overflow:hidden}
+.lb{background:linear-gradient(135deg,#1e4fa0,#0f3580);padding:22px;text-align:center;color:#fff}
+.lb .li{font-size:44px;margin-bottom:6px}.lb h2{font-size:15px;font-weight:700;letter-spacing:.4px}.lb p{font-size:10px;color:#a8c4f0;margin-top:3px}
+.lf{padding:18px}.lf label{display:block;font-size:11px;color:var(--sub);margin-bottom:2px}
+.lf input{width:100%;padding:6px 9px;border:1px solid var(--border);border-radius:2px;font-size:12px;background:#fff;margin-bottom:10px}
+.lf input:focus{outline:none;border-color:var(--sel)}
+.ls{width:100%;padding:7px;background:linear-gradient(180deg,#0e84e8,#0060c0);color:#fff;border:1px solid #004a9f;border-radius:2px;cursor:pointer;font-size:12px;font-weight:600;margin-top:3px}
+.ls:hover{background:linear-gradient(180deg,#1990f0,#006fd0)}
+.le{color:#cc0000;font-size:11px;margin-top:5px;min-height:14px}
+.lfoot{background:var(--toolbar);border-top:1px solid var(--border);padding:7px 18px;font-size:10px;color:var(--sub);text-align:center}
+.win-bg{color:rgba(255,255,255,.06);font-size:110px;font-weight:900;position:absolute;bottom:-15px;right:15px;pointer-events:none;user-select:none;letter-spacing:-6px}
 
-/* ── DETAILS PANEL ── */
-.details-panel {
-  width: 260px;
-  border-left: 1px solid var(--win-sidebar-border);
-  background: var(--win-sidebar);
-  overflow-y: auto;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-}
-.details-header {
-  background: linear-gradient(180deg, #2255b0 0%, #1a3a80 100%);
-  color: #fff;
-  padding: 10px 12px;
-  font-size: 12px;
-  font-weight: 600;
-}
-.detail-avatar {
-  text-align: center;
-  padding: 20px;
-  border-bottom: 1px solid var(--win-sidebar-border);
-}
-.detail-avatar .avatar {
-  width: 64px; height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #1a3a80, #0078d7);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 28px;
-  color: #fff;
-  margin: 0 auto 8px;
-  border: 3px solid #7db8e8;
-}
-.detail-avatar .d-name { font-weight: 700; font-size: 14px; color: #1a3a6b; }
-.detail-avatar .d-email { font-size: 11px; color: var(--win-sub); margin-top: 2px; }
-.detail-row { padding: 6px 12px; border-bottom: 1px solid #dde5f0; font-size: 12px; }
-.detail-row label { color: var(--win-sub); display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 1px; }
-.detail-row span { color: var(--win-text); font-weight: 500; }
-.detail-actions { padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; }
-.d-btn {
-  padding: 5px 10px;
-  border: 1px solid var(--win-border);
-  border-radius: 2px;
-  cursor: pointer;
-  font-size: 12px;
-  background: linear-gradient(180deg, #f5f7fc 0%, #e0e8f0 100%);
-  color: var(--win-text);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
-  margin: 0;
-}
-.d-btn:hover { background: var(--win-hover); border-color: var(--win-sel); }
-.d-btn.danger { color: var(--win-danger); border-color: #e8a0a0; }
-.d-btn.danger:hover { background: #fee2e2; }
+/* PW WRAP */
+.pw-w{position:relative}.pw-w input{padding-right:30px}
+.eye{position:absolute;right:5px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:13px;color:#666;padding:0;width:auto;margin:0}
+.eye:hover{color:var(--sel)}
 
-/* ── MODAL ── */
-.modal-overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-}
-.modal-overlay.show { display: flex; }
-.modal-win {
-  background: #f0f0f0;
-  border: 1px solid #888;
-  border-radius: 4px;
-  box-shadow: 4px 4px 20px rgba(0,0,0,0.5);
-  width: 420px;
-  max-width: 95vw;
-  overflow: hidden;
-}
-.modal-titlebar {
-  background: linear-gradient(180deg, #1e4fa0 0%, #0f3580 100%);
-  color: #fff;
-  padding: 7px 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 600;
-}
-.modal-close {
-  margin-left: auto;
-  width: 20px; height: 16px;
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.3);
-  color: #fff;
-  font-size: 11px;
-  cursor: pointer;
-  border-radius: 2px;
-  display: flex; align-items: center; justify-content: center;
-  padding: 0; width: auto; margin-left: auto;
-}
-.modal-close:hover { background: #c42b1c; border-color: #c42b1c; }
-.modal-body { padding: 18px; }
-.modal-body label { display: block; font-size: 12px; color: var(--win-sub); margin: 10px 0 3px; }
-.modal-body label:first-child { margin-top: 0; }
-.modal-body input, .modal-body select {
-  width: 100%;
-  padding: 6px 8px;
-  border: 1px solid var(--win-border);
-  border-radius: 2px;
-  font-size: 13px;
-  background: #fff;
-  color: var(--win-text);
-}
-.modal-body input:focus, .modal-body select:focus { outline: none; border-color: var(--win-sel); }
-.modal-footer {
-  background: var(--win-toolbar);
-  border-top: 1px solid var(--win-border);
-  padding: 10px 16px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-.win-btn {
-  padding: 5px 18px;
-  border: 1px solid var(--win-border);
-  border-radius: 2px;
-  cursor: pointer;
-  font-size: 12px;
-  background: linear-gradient(180deg, #f5f7fc 0%, #dde5f0 100%);
-  color: var(--win-text);
-  min-width: 75px;
-  text-align: center;
-  width: auto;
-  margin: 0;
-}
-.win-btn:hover { background: var(--win-hover); border-color: var(--win-sel); }
-.win-btn.primary {
-  background: linear-gradient(180deg, #0e84e8 0%, #0060c0 100%);
-  border-color: #004a9f;
-  color: #fff;
-}
-.win-btn.primary:hover { background: linear-gradient(180deg, #1990f0 0%, #006fd0 100%); }
-.win-btn.danger-btn {
-  background: linear-gradient(180deg, #f56060 0%, #cc0000 100%);
-  border-color: #a00000;
-  color: #fff;
-}
+/* SPINNER */
+.spin-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:3000;align-items:center;justify-content:center}
+.spin-ov.show{display:flex}
+.spin{width:40px;height:40px;border:4px solid rgba(255,255,255,.2);border-top-color:#0078d7;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── LOGIN OVERLAY ── */
-.login-screen {
-  position: fixed; inset: 0;
-  background: #1a3a6b;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-  flex-direction: column;
-  gap: 0;
-}
-.login-win {
-  background: #f0f0f0;
-  border: 1px solid #888;
-  border-radius: 4px;
-  box-shadow: 4px 4px 30px rgba(0,0,0,0.6);
-  width: 380px;
-  overflow: hidden;
-}
-.login-brand {
-  background: linear-gradient(135deg, #1e4fa0 0%, #0f3580 100%);
-  padding: 24px;
-  text-align: center;
-  color: #fff;
-}
-.login-brand .brand-icon { font-size: 48px; margin-bottom: 8px; }
-.login-brand h2 { font-size: 16px; font-weight: 700; letter-spacing: .5px; }
-.login-brand p { font-size: 11px; color: #a8c4f0; margin-top: 4px; }
-.login-form { padding: 20px; }
-.login-form label { display: block; font-size: 12px; color: var(--win-sub); margin-bottom: 3px; }
-.login-form input {
-  width: 100%;
-  padding: 7px 10px;
-  border: 1px solid var(--win-border);
-  border-radius: 2px;
-  font-size: 13px;
-  background: #fff;
-  margin-bottom: 12px;
-}
-.login-form input:focus { outline: none; border-color: var(--win-sel); }
-.login-submit {
-  width: 100%;
-  padding: 8px;
-  background: linear-gradient(180deg, #0e84e8 0%, #0060c0 100%);
-  color: #fff;
-  border: 1px solid #004a9f;
-  border-radius: 2px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  margin-top: 4px;
-}
-.login-submit:hover { background: linear-gradient(180deg, #1990f0 0%, #006fd0 100%); }
-.login-err { color: #cc0000; font-size: 12px; margin-top: 6px; min-height: 16px; }
-.login-footer {
-  background: var(--win-toolbar);
-  border-top: 1px solid var(--win-border);
-  padding: 8px 20px;
-  font-size: 11px;
-  color: var(--win-sub);
-  text-align: center;
-}
-.win-bg-text {
-  color: rgba(255,255,255,0.08);
-  font-size: 120px;
-  font-weight: 900;
-  position: absolute;
-  bottom: -20px;
-  right: 20px;
-  pointer-events: none;
-  user-select: none;
-  letter-spacing: -8px;
-}
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#1a3a6b;color:#fff;padding:7px 18px;border-radius:3px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .3s;z-index:5000;border:1px solid #0078d7}
+.toast.show{opacity:1}
 
-/* ── SPINNER ── */
-.spinner-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.4); z-index: 3000;
-  align-items: center; justify-content: center;
-}
-.spinner-overlay.show { display: flex; }
-.spinner {
-  width: 44px; height: 44px;
-  border: 4px solid rgba(255,255,255,0.2);
-  border-top-color: #0078d7;
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+/* TABS in modal */
+.tab-bar{display:flex;border-bottom:1px solid var(--border);background:#e8edf5;padding:0 14px;gap:0;flex-shrink:0}
+.tab{padding:6px 14px;font-size:11px;cursor:pointer;border:1px solid transparent;border-bottom:none;border-radius:3px 3px 0 0;color:var(--sub);margin-bottom:-1px}
+.tab.act{background:#fff;border-color:var(--border);color:var(--text);font-weight:600}
+.tab-body{display:none;padding:14px}.tab-body.act{display:block}
 
-/* ── TOAST ── */
-.toast {
-  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-  background: #1a3a6b; color: #fff;
-  padding: 8px 20px; border-radius: 3px;
-  font-size: 13px; opacity: 0; pointer-events: none;
-  transition: opacity .3s; z-index: 5000; border: 1px solid #0078d7;
-}
-.toast.show { opacity: 1; }
+/* ROLES TABLE */
+.roles-table{width:100%;border-collapse:collapse;font-size:11px}
+.roles-table th{background:#e8edf5;padding:4px 8px;text-align:left;font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+.roles-table td{padding:5px 8px;border-bottom:1px solid #eee}
+.role-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}
 
-/* ── PW WRAP ── */
-.pw-wrap { position: relative; }
-.pw-wrap input { padding-right: 32px; }
-.pw-eye {
-  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
-  background: none; border: none; cursor: pointer; font-size: 14px;
-  color: #666; padding: 0; width: auto; margin: 0;
-}
-.pw-eye:hover { background: none; color: var(--win-sel); }
+/* TABS IN MAIN CONTENT */
+.main-tabs{display:flex;border-bottom:2px solid var(--sel);background:var(--toolbar);padding:0 10px;gap:0;flex-shrink:0}
+.main-tab{padding:5px 14px;font-size:11px;cursor:pointer;border:1px solid transparent;border-bottom:none;border-radius:3px 3px 0 0;color:var(--sub);margin-bottom:-2px}
+.main-tab.act{background:#fff;border-color:var(--border);border-bottom-color:#fff;color:var(--text);font-weight:600}
+.tab-content{display:none;flex:1;overflow:hidden;flex-direction:column}
+.tab-content.act{display:flex}
 
-@media(max-width: 900px) {
-  .details-panel { display: none; }
-  .sidebar { width: 160px; }
-}
-@media(max-width: 600px) {
-  .sidebar { display: none; }
-  .search-bar input { width: 100%; }
-}
+/* DRIVE PANEL */
+.drive-header{background:linear-gradient(180deg,#e8edf8,#d8e0f0);border-bottom:1px solid var(--toolbar-b);padding:6px 14px;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.breadcrumb{display:flex;align-items:center;gap:4px;font-size:11px;flex:1}
+.bc-item{cursor:pointer;color:var(--sel)}.bc-item:hover{text-decoration:underline}
+.bc-sep{color:var(--sub)}
+.drive-toolbar{display:flex;align-items:center;gap:4px;padding:4px 10px;background:var(--toolbar);border-bottom:1px solid var(--toolbar-b);flex-shrink:0}
+.dfile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;padding:10px;overflow-y:auto;flex:1;align-content:start}
+.dfile{display:flex;flex-direction:column;align-items:center;padding:8px 4px;border:1px solid transparent;border-radius:3px;cursor:pointer;text-align:center;font-size:10px}
+.dfile:hover{background:var(--hover);border-color:var(--sel)}
+.dfile.sel-f{background:var(--sidebar-sel);border-color:var(--sel)}
+.dfile-icon{font-size:28px;margin-bottom:4px}
+.dfile-name{word-break:break-word;max-width:90px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.dfile-size{color:var(--sub);font-size:9px;margin-top:2px}
+.drive-list{display:none;flex-direction:column;flex:1;overflow-y:auto}
+.drive-list.show{display:flex}
+.dl-item{display:flex;align-items:center;gap:8px;padding:5px 12px;border-bottom:1px solid #eee;font-size:11px;cursor:pointer}
+.dl-item:hover{background:var(--hover)}
+.dl-icon{font-size:16px;flex-shrink:0}
+.dl-name{flex:1}
+.dl-size{color:var(--sub);font-size:10px;white-space:nowrap}
+.dl-date{color:var(--sub);font-size:10px;white-space:nowrap}
+.drive-empty{padding:30px;text-align:center;color:var(--sub)}
+.view-toggle{display:flex;gap:2px}
+.vt-btn{padding:2px 6px;border:1px solid var(--border);border-radius:2px;cursor:pointer;background:var(--toolbar);font-size:11px}
+.vt-btn.act{background:var(--sidebar-sel);border-color:var(--sel)}
+
+/* ACCOUNT STATUS */
+.status-chip{display:inline-flex;align-items:center;gap:3px;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:600}
+.chip-on{background:#dcfce7;color:#166534;border:1px solid #86efac}
+.chip-off{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+
+@media(max-width:1000px){.details{display:none}}
+@media(max-width:680px){.sidebar{display:none}.sbar input{width:100%}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
-  <div class="win-bg-text">AD</div>
-  <div class="login-win">
-    <div class="login-brand">
-      <div class="brand-icon">🏢</div>
+  <div class="win-bg">AD</div>
+  <div class="lw">
+    <div class="lb">
+      <div class="li">🏢</div>
       <h2>User Management Console</h2>
-      <p>Active Directory · Administrator Access Only</p>
+      <p>Active Directory — Administrator Access Only</p>
     </div>
-    <div class="login-form">
+    <div class="lf">
       <label>Administrator Email</label>
-      <input type="text" id="loginEmail" placeholder="admin@domain.com" value="admin@aman5z.in">
+      <input type="text" id="lEmail" value="admin@aman5z.in" placeholder="admin@domain.com">
       <label>Password</label>
-      <div class="pw-wrap">
-        <input type="password" id="loginPass" placeholder="Password" onkeydown="if(event.key==='Enter')doAdminLogin()">
-        <button class="pw-eye" onclick="toggleLoginPw()">👁</button>
+      <div class="pw-w">
+        <input type="password" id="lPass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="eye" onclick="toggleEye('lPass',this)">👁</button>
       </div>
-      <button class="login-submit" onclick="doAdminLogin()">Sign In →</button>
-      <div class="login-err" id="loginErr"></div>
+      <button class="ls" onclick="doLogin()">Sign In →</button>
+      <div class="le" id="lErr"></div>
     </div>
-    <div class="login-footer">🔒 Administrators only · All actions are logged</div>
+    <div class="lfoot">🔒 Administrators only · All actions are logged</div>
   </div>
 </div>
 
 <!-- SPINNER -->
-<div class="spinner-overlay" id="spinner"><div class="spinner"></div></div>
-
-<!-- TOAST -->
+<div class="spin-ov" id="spinner"><div class="spin"></div></div>
 <div class="toast" id="toast"></div>
 
-<!-- ════ MAIN APP ════ -->
+<!-- APP -->
 <div class="titlebar">
-  <span class="titlebar-icon">🏢</span>
-  <span class="titlebar-title">Active Directory Users and Computers — [aman5z.in]</span>
-  <div class="titlebar-btns">
-    <span>─</span><span>□</span><span class="close">✕</span>
-  </div>
+  <span class="tb-icon">🏢</span>
+  <span class="tb-title">Active Directory Users and Computers — [aman5z.in]</span>
+  <div class="tb-win"><span>─</span><span>□</span><span class="x">✕</span></div>
 </div>
 
 <div class="menubar">
-  <div class="menu-item">File</div>
-  <div class="menu-item">Action</div>
-  <div class="menu-item">View</div>
-  <div class="menu-item" onclick="doAdminLogout()">Sign Out</div>
-  <div class="menu-item" onclick="openChangeMyPw()">🔑 Change My Password</div>
+  <div class="mi" onclick="openAddUser()">File</div>
+  <div class="mi">Action</div>
+  <div class="mi">View</div>
+  <div class="mi" onclick="toggleTerminal()">⬛ Terminal</div>
+  <div class="mi" onclick="openChangeMyPw()">🔑 Change My PW</div>
+  <div class="mi" onclick="doLogout()">Sign Out</div>
 </div>
 
 <div class="toolbar">
-  <button class="tb-btn" onclick="openAddUser()">
-    <span class="tb-icon">👤➕</span>
-    <span>New User</span>
-  </button>
-  <div class="tb-sep"></div>
-  <button class="tb-btn" onclick="editSelected()">
-    <span class="tb-icon">✏️</span>
-    <span>Properties</span>
-  </button>
-  <button class="tb-btn" onclick="resetPwSelected()">
-    <span class="tb-icon">🔑</span>
-    <span>Reset PW</span>
-  </button>
-  <button class="tb-btn" onclick="deleteSelected()">
-    <span class="tb-icon">🗑️</span>
-    <span>Delete</span>
-  </button>
-  <div class="tb-sep"></div>
-  <button class="tb-btn" onclick="loadUsers()">
-    <span class="tb-icon">🔄</span>
-    <span>Refresh</span>
-  </button>
+  <button class="tbb" onclick="openAddUser()"><span class="ti">👤➕</span><span>New User</span></button>
+  <div class="tsep"></div>
+  <button class="tbb" onclick="editSel()"><span class="ti">✏️</span><span>Properties</span></button>
+  <button class="tbb" onclick="pwSel()"><span class="ti">🔑</span><span>Reset PW</span></button>
+  <button class="tbb" onclick="toggleAccSel()"><span class="ti">🔒</span><span>En/Disable</span></button>
+  <button class="tbb" onclick="delSel()"><span class="ti">🗑️</span><span>Delete</span></button>
+  <div class="tsep"></div>
+  <button class="tbb" onclick="openRoles()"><span class="ti">🏷️</span><span>Roles</span></button>
+  <button class="tbb" onclick="loadUsers()"><span class="ti">🔄</span><span>Refresh</span></button>
+  <div class="tsep"></div>
+  <button class="tbb" onclick="switchTab('drive')"><span class="ti">💾</span><span>Storage</span></button>
+  <button class="tbb" onclick="toggleTerminal()"><span class="ti">⬛</span><span>Terminal</span></button>
 </div>
 
-<div class="main-layout">
-
+<div class="layout">
   <!-- SIDEBAR -->
   <div class="sidebar">
-    <div class="sidebar-header">🌐 aman5z.in</div>
-    <div class="tree-section">Domain</div>
-    <div class="tree-item active" onclick="setView('all')">
-      <span class="tree-icon">📁</span> All Users
+    <div class="sb-head">🌐 aman5z.in</div>
+    <div class="sb-sec">Domain</div>
+    <div class="si act" onclick="filterView('all',this)"><span class="sic">📁</span>All Users</div>
+    <div class="sb-sec">Roles</div>
+    <div class="si si-child" id="sb-roles-wrap">
+      <span class="sic">🔴</span>Admin
     </div>
-    <div class="tree-section">Roles</div>
-    <div class="tree-item tree-child" onclick="setView('Admin')">
-      <span class="tree-icon">🔴</span> Admins
-    </div>
-    <div class="tree-item tree-child" onclick="setView('Technician')">
-      <span class="tree-icon">🟢</span> Technicians
-    </div>
-    <div class="tree-item tree-child" onclick="setView('User')">
-      <span class="tree-icon">🔵</span> Users
-    </div>
-    <div class="tree-section">Tools</div>
-    <div class="tree-item" onclick="openAddUser()">
-      <span class="tree-icon">➕</span> New User
-    </div>
-    <div class="tree-item" onclick="loadUsers()">
-      <span class="tree-icon">🔄</span> Refresh
-    </div>
-    <div class="tree-item" onclick="openChangeMyPw()">
-      <span class="tree-icon">🔑</span> Change My PW
-    </div>
-    <div class="tree-item" onclick="doAdminLogout()">
-      <span class="tree-icon">🚪</span> Sign Out
-    </div>
+    <!-- dynamic role filters injected here -->
+    <div class="sb-sec">Tools</div>
+    <div class="si" onclick="openAddUser()"><span class="sic">➕</span>New User</div>
+    <div class="si" onclick="openRoles()"><span class="sic">🏷️</span>Manage Roles</div>
+    <div class="si" onclick="loadUsers()"><span class="sic">🔄</span>Refresh</div>
+    <div class="si" onclick="switchTab('drive')"><span class="sic">💾</span>Storage Mgr</div>
+    <div class="si" onclick="toggleTerminal()"><span class="sic">⬛</span>Terminal</div>
+    <div class="sb-sec">Account</div>
+    <div class="si" onclick="openChangeMyPw()"><span class="sic">🔑</span>Change My PW</div>
+    <div class="si" onclick="doLogout()"><span class="sic">🚪</span>Sign Out</div>
   </div>
 
   <!-- CONTENT -->
   <div class="content">
-    <div class="content-header">
-      <span>📁</span>
-      <h2 id="viewTitle">All Users</h2>
-      <span id="userCount">— users</span>
+    <div class="main-tabs">
+      <div class="main-tab act" onclick="switchTab('users',this)" id="tab-users">👥 Users</div>
+      <div class="main-tab" onclick="switchTab('drive',this)" id="tab-drive">💾 Storage Manager</div>
     </div>
-    <div class="search-bar">
-      <span class="col-label">🔍</span>
-      <input type="text" id="searchInput" placeholder="Search by name, email, role..." oninput="renderTable()">
-      <span class="col-label" id="filteredCount"></span>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th onclick="sortBy('email')">📧 Email / Username ↕</th>
+
+    <!-- USERS TAB -->
+    <div class="tab-content act" id="tc-users">
+      <div class="ch">
+        <span>📁</span><h2 id="viewTitle">All Users</h2>
+        <span id="uCount">— users</span>
+      </div>
+      <div class="sbar">
+        <span style="color:var(--sub);font-size:11px">🔍</span>
+        <input type="text" id="srch" placeholder="Search by name, email, role, phone, department..." oninput="renderTable()">
+        <span style="color:var(--sub);font-size:11px" id="fCount"></span>
+      </div>
+      <div class="tw">
+        <table>
+          <thead><tr>
+            <th onclick="sortBy('email')">📧 Email / Account ↕</th>
+            <th onclick="sortBy('displayName')">👤 Display Name ↕</th>
             <th onclick="sortBy('role')">🏷️ Role ↕</th>
-            <th>🔒 Password Hash</th>
-            <th>📅 Added</th>
-          </tr>
-        </thead>
-        <tbody id="userTableBody"></tbody>
-      </table>
+            <th onclick="sortBy('department')">🏢 Department ↕</th>
+            <th>📱 Phone</th>
+            <th onclick="sortBy('enabled')">🔒 Status ↕</th>
+          </tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- DRIVE TAB -->
+    <div class="tab-content" id="tc-drive">
+      <div class="drive-header">
+        <span>💾</span>
+        <div class="breadcrumb" id="breadcrumb">
+          <span class="bc-item" onclick="navToRoot()">📁 My Drive</span>
+        </div>
+        <div style="font-size:10px;color:var(--sub)" id="storLabel">Loading...</div>
+      </div>
+      <div style="padding:8px 14px;background:var(--toolbar);border-bottom:1px solid var(--toolbar-b)">
+        <div class="stor-bar-wrap"><div class="stor-bar" id="storBar" style="width:0%"></div></div>
+        <div style="font-size:10px;color:var(--sub)" id="storDetail">—</div>
+      </div>
+      <div class="drive-toolbar">
+        <button class="tbb" style="font-size:10px;min-width:auto;padding:2px 8px" onclick="loadDrive()">🔄 Refresh</button>
+        <button class="tbb" style="font-size:10px;min-width:auto;padding:2px 8px" onclick="uploadFile()">⬆️ Upload</button>
+        <button class="tbb" style="font-size:10px;min-width:auto;padding:2px 8px" id="delFileBtn" onclick="deleteSelFile()" style="display:none">🗑️ Delete</button>
+        <input type="file" id="fileInput" style="display:none" onchange="doUpload(this)">
+        <div style="flex:1"></div>
+        <div class="view-toggle">
+          <button class="vt-btn act" id="vgrid" onclick="setView('grid')">⊞</button>
+          <button class="vt-btn" id="vlist" onclick="setView('list')">☰</button>
+        </div>
+      </div>
+      <div id="driveGrid" class="dfile-grid"></div>
+      <div id="driveList" class="drive-list"></div>
     </div>
   </div>
 
   <!-- DETAILS PANEL -->
-  <div class="details-panel">
-    <div class="details-header">👤 User Properties</div>
-    <div id="detailsContent">
-      <div style="padding:20px;color:#888;font-size:12px;text-align:center;">
-        <div style="font-size:40px;margin-bottom:8px;">👤</div>
+  <div class="details">
+    <div class="dh">👤 User Properties</div>
+    <div id="detailPane">
+      <div style="padding:20px;color:#888;font-size:11px;text-align:center">
+        <div style="font-size:36px;margin-bottom:6px">👤</div>
         Select a user to view properties
       </div>
     </div>
   </div>
 </div>
 
+<!-- TERMINAL -->
+<div class="terminal-panel" id="termPanel">
+  <div class="term-head">
+    <span>⬛ Administrator: Command Prompt — aman5z.in</span>
+    <button onclick="toggleTerminal()" style="background:none;border:none;color:#999;cursor:pointer;font-size:12px;padding:0;width:auto;margin:0">✕</button>
+  </div>
+  <div class="term-body" id="termBody">
+    <div class="term-line ok">Active Directory Command Prompt v1.0 [aman5z.in]</div>
+    <div class="term-line ok">Type 'help' for available commands.</div>
+    <div class="term-line out"> </div>
+  </div>
+  <div class="term-input-row">
+    <span class="term-prompt">AD\admin&gt;</span>
+    <input class="term-input" id="termInput" placeholder="Type a command..." onkeydown="termKey(event)" autocomplete="off" spellcheck="false">
+  </div>
+</div>
+
 <!-- STATUS BAR -->
 <div class="statusbar">
-  <span>🟢 Connected to: aman5z.in</span>
-  <span id="sb-count">📋 0 objects</span>
-  <span id="sb-admin">👤 Signed in as: —</span>
-  <span id="sb-time"></span>
+  <span>🟢 aman5z.in</span>
+  <span id="sbCount">📋 0 objects</span>
+  <span id="sbAdmin">👤 —</span>
+  <span id="sbStore">💾 —</span>
+  <span id="sbTime"></span>
 </div>
 
-<!-- ════ MODALS ════ -->
+<!-- ═══ MODALS ═══ -->
 
-<!-- ADD USER -->
-<div class="modal-overlay" id="addModal">
-  <div class="modal-win">
-    <div class="modal-titlebar">
-      👤 New User Object
-      <button class="modal-close" onclick="closeModal('addModal')">✕</button>
+<!-- ADD/EDIT USER -->
+<div class="mo" id="userModal">
+  <div class="mw wide">
+    <div class="mt">
+      <span id="userModalTitle">👤 New User Object</span>
+      <button class="mc" onclick="closeModal('userModal')">✕</button>
     </div>
-    <div class="modal-body">
-      <label>Email / Username *</label>
-      <input type="text" id="newEmail" placeholder="user@aman5z.in">
-      <label>Password *</label>
-      <div class="pw-wrap">
-        <input type="password" id="newPass" placeholder="Minimum 6 characters">
-        <button class="pw-eye" onclick="togglePw('newPass',this)">👁</button>
-      </div>
-      <label>Confirm Password *</label>
-      <div class="pw-wrap">
-        <input type="password" id="newPassConf" placeholder="Re-enter password">
-        <button class="pw-eye" onclick="togglePw('newPassConf',this)">👁</button>
-      </div>
-      <label>Role *</label>
-      <select id="newRole">
-        <option value="User">User</option>
-        <option value="Technician">Technician</option>
-        <option value="Admin">Admin</option>
-      </select>
-      <div class="login-err" id="addErr"></div>
+    <div class="tab-bar">
+      <div class="tab act" onclick="switchMTab(0,this)">General</div>
+      <div class="tab" onclick="switchMTab(1,this)">Account</div>
+      <div class="tab" onclick="switchMTab(2,this)">Contact</div>
     </div>
-    <div class="modal-footer">
-      <button class="win-btn" onclick="closeModal('addModal')">Cancel</button>
-      <button class="win-btn primary" onclick="submitAddUser()">Create User</button>
+    <!-- General -->
+    <div class="tab-body act" id="mt0">
+      <div class="row2">
+        <div><label>Display Name</label><input type="text" id="uDisplayName" placeholder="Full Name"></div>
+        <div><label>Email / Username *</label><input type="text" id="uEmail" placeholder="user@aman5z.in"></div>
+      </div>
+      <div class="row2">
+        <div><label>Department</label><input type="text" id="uDept" placeholder="IT, HR, Finance..."></div>
+        <div><label>Role *</label><select id="uRole"></select></div>
+      </div>
+    </div>
+    <!-- Account -->
+    <div class="tab-body" id="mt1">
+      <div class="row2">
+        <div><label>Password *</label>
+          <div class="pw-w"><input type="password" id="uPass" placeholder="Min 6 characters"><button class="eye" onclick="toggleEye('uPass',this)">👁</button></div>
+        </div>
+        <div><label>Confirm Password *</label>
+          <div class="pw-w"><input type="password" id="uPassC" placeholder="Re-enter"><button class="eye" onclick="toggleEye('uPassC',this)">👁</button></div>
+        </div>
+      </div>
+      <label style="display:flex;align-items:center;gap:6px;margin-top:10px;cursor:pointer">
+        <input type="checkbox" id="uEnabled" checked style="width:auto;margin:0"> Account is enabled
+      </label>
+    </div>
+    <!-- Contact -->
+    <div class="tab-body" id="mt2">
+      <label>Phone Number</label>
+      <input type="text" id="uPhone" placeholder="+971 50 000 0000">
+      <label>Notes</label>
+      <textarea id="uNotes" placeholder="Additional notes..."></textarea>
+    </div>
+    <div class="err-msg" id="userErr" style="padding:0 16px"></div>
+    <div class="mf">
+      <button class="wbtn" onclick="closeModal('userModal')">Cancel</button>
+      <button class="wbtn pri" id="userSubmitBtn" onclick="submitUser()">Create User</button>
     </div>
   </div>
 </div>
 
-<!-- EDIT USER -->
-<div class="modal-overlay" id="editModal">
-  <div class="modal-win">
-    <div class="modal-titlebar">
-      ✏️ User Properties
-      <button class="modal-close" onclick="closeModal('editModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <label>Email / Username</label>
-      <input type="text" id="editEmail" readonly style="background:#e8edf5;color:#666;">
-      <label>Role</label>
-      <select id="editRole">
-        <option value="User">User</option>
-        <option value="Technician">Technician</option>
-        <option value="Admin">Admin</option>
-      </select>
-      <div class="login-err" id="editErr"></div>
-    </div>
-    <div class="modal-footer">
-      <button class="win-btn" onclick="closeModal('editModal')">Cancel</button>
-      <button class="win-btn primary" onclick="submitEditUser()">Apply</button>
-    </div>
-  </div>
-</div>
-
-<!-- RESET PASSWORD -->
-<div class="modal-overlay" id="pwModal">
-  <div class="modal-win">
-    <div class="modal-titlebar">
-      🔑 Reset Password
-      <button class="modal-close" onclick="closeModal('pwModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <label>Resetting password for</label>
-      <input type="text" id="pwTarget" readonly style="background:#e8edf5;color:#666;font-weight:bold;">
+<!-- RESET PW -->
+<div class="mo" id="pwModal">
+  <div class="mw">
+    <div class="mt">🔑 Reset Password<button class="mc" onclick="closeModal('pwModal')">✕</button></div>
+    <div class="mb">
+      <label>Account</label>
+      <input type="text" id="pwTarget" readonly style="background:#e8edf5;color:#666;font-weight:bold">
       <label>New Password *</label>
-      <div class="pw-wrap">
-        <input type="password" id="pwNew" placeholder="New password">
-        <button class="pw-eye" onclick="togglePw('pwNew',this)">👁</button>
-      </div>
-      <label>Confirm New Password *</label>
-      <div class="pw-wrap">
-        <input type="password" id="pwNewConf" placeholder="Confirm password">
-        <button class="pw-eye" onclick="togglePw('pwNewConf',this)">👁</button>
-      </div>
-      <div class="login-err" id="pwErr"></div>
+      <div class="pw-w"><input type="password" id="pwNew"><button class="eye" onclick="toggleEye('pwNew',this)">👁</button></div>
+      <label>Confirm *</label>
+      <div class="pw-w"><input type="password" id="pwConf"><button class="eye" onclick="toggleEye('pwConf',this)">👁</button></div>
+      <div class="err-msg" id="pwErr"></div>
     </div>
-    <div class="modal-footer">
-      <button class="win-btn" onclick="closeModal('pwModal')">Cancel</button>
-      <button class="win-btn primary" onclick="submitResetPw()">Reset Password</button>
+    <div class="mf">
+      <button class="wbtn" onclick="closeModal('pwModal')">Cancel</button>
+      <button class="wbtn pri" onclick="submitPw()">Reset Password</button>
     </div>
   </div>
 </div>
 
 <!-- CHANGE MY PW -->
-<div class="modal-overlay" id="myPwModal">
-  <div class="modal-win">
-    <div class="modal-titlebar">
-      🔑 Change My Password
-      <button class="modal-close" onclick="closeModal('myPwModal')">✕</button>
-    </div>
-    <div class="modal-body">
+<div class="mo" id="myPwModal">
+  <div class="mw">
+    <div class="mt">🔑 Change My Password<button class="mc" onclick="closeModal('myPwModal')">✕</button></div>
+    <div class="mb">
       <label>Current Password</label>
-      <div class="pw-wrap">
-        <input type="password" id="myPwCurrent" placeholder="Current password">
-        <button class="pw-eye" onclick="togglePw('myPwCurrent',this)">👁</button>
-      </div>
+      <div class="pw-w"><input type="password" id="myPwCur"><button class="eye" onclick="toggleEye('myPwCur',this)">👁</button></div>
       <label>New Password</label>
-      <div class="pw-wrap">
-        <input type="password" id="myPwNew" placeholder="New password">
-        <button class="pw-eye" onclick="togglePw('myPwNew',this)">👁</button>
-      </div>
-      <label>Confirm New Password</label>
-      <div class="pw-wrap">
-        <input type="password" id="myPwConf" placeholder="Confirm new password">
-        <button class="pw-eye" onclick="togglePw('myPwConf',this)">👁</button>
-      </div>
-      <div class="login-err" id="myPwErr"></div>
+      <div class="pw-w"><input type="password" id="myPwNew"><button class="eye" onclick="toggleEye('myPwNew',this)">👁</button></div>
+      <label>Confirm</label>
+      <div class="pw-w"><input type="password" id="myPwConf"><button class="eye" onclick="toggleEye('myPwConf',this)">👁</button></div>
+      <div class="err-msg" id="myPwErr"></div>
     </div>
-    <div class="modal-footer">
-      <button class="win-btn" onclick="closeModal('myPwModal')">Cancel</button>
-      <button class="win-btn primary" onclick="submitChangeMyPw()">Change Password</button>
+    <div class="mf">
+      <button class="wbtn" onclick="closeModal('myPwModal')">Cancel</button>
+      <button class="wbtn pri" onclick="submitMyPw()">Change Password</button>
+    </div>
+  </div>
+</div>
+
+<!-- ROLES MANAGER -->
+<div class="mo" id="rolesModal">
+  <div class="mw wide">
+    <div class="mt">🏷️ Role Management<button class="mc" onclick="closeModal('rolesModal')">✕</button></div>
+    <div class="mb">
+      <table class="roles-table" id="rolesTable"></table>
+      <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
+        <div style="font-size:11px;font-weight:600;margin-bottom:8px;color:var(--sub)">ADD NEW ROLE</div>
+        <div class="row3">
+          <div><label>Role Name *</label><input type="text" id="newRoleName" placeholder="e.g. Viewer"></div>
+          <div><label>Color</label><input type="color" id="newRoleColor" value="#6366f1" style="height:30px;padding:2px"></div>
+          <div><label>Description</label><input type="text" id="newRoleDesc" placeholder="Brief description"></div>
+        </div>
+        <div class="err-msg" id="roleErr"></div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="wbtn" onclick="closeModal('rolesModal')">Close</button>
+      <button class="wbtn pri" onclick="submitRole()">Add Role</button>
     </div>
   </div>
 </div>
 
 <!-- DELETE CONFIRM -->
-<div class="modal-overlay" id="delModal">
-  <div class="modal-win" style="width:360px;">
-    <div class="modal-titlebar">
-      ⚠️ Confirm Delete
-      <button class="modal-close" onclick="closeModal('delModal')">✕</button>
+<div class="mo" id="delModal">
+  <div class="mw" style="width:340px">
+    <div class="mt">⚠️ Confirm Delete<button class="mc" onclick="closeModal('delModal')">✕</button></div>
+    <div class="mb">
+      <p style="font-size:12px;line-height:1.6">Are you sure you want to delete:</p>
+      <p style="font-weight:700;font-size:13px;margin:8px 0;color:#cc0000" id="delTarget"></p>
+      <p style="font-size:11px;color:#666">This action cannot be undone. The user will immediately lose all access.</p>
     </div>
-    <div class="modal-body">
-      <p style="font-size:13px;line-height:1.6;">Are you sure you want to delete user:</p>
-      <p style="font-weight:700;font-size:14px;margin:10px 0;color:#cc0000;" id="delTarget"></p>
-      <p style="font-size:12px;color:#666;">This action cannot be undone. The user will immediately lose access to all systems.</p>
-    </div>
-    <div class="modal-footer">
-      <button class="win-btn" onclick="closeModal('delModal')">Cancel</button>
-      <button class="win-btn danger-btn" onclick="submitDelete()">Delete User</button>
+    <div class="mf">
+      <button class="wbtn" onclick="closeModal('delModal')">Cancel</button>
+      <button class="wbtn dng" onclick="submitDel()">Delete User</button>
     </div>
   </div>
 </div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbwMqaZ_jXq_XE6n7aHEZtIpU9CN2900_PnhsuuNpDCVnDkSUUHCglJTC5N-UtVxXrMDJg/exec";
+const API = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec"; // ← paste your Apps Script deployment URL here
 
-let adminToken = null;
-let adminEmail = "";
-let allUsers   = [];
-let currentView = "all";
-let selectedEmail = null;
-let sortCol = "email", sortAsc = true;
+let tok = null, adminEmail = "", allUsers = [], allRoles = [];
+let curView = "all", selEmail = null, sortCol = "email", sortAsc = true;
+let isEditMode = false, curFolderId = "1rgi0M0glLySObvzjVV5B1-NCPkpdul9p";
+let breadcrumbs = [{id:"1rgi0M0glLySObvzjVV5B1-NCPkpdul9p", name:"Shared Drive"}];
+let selFileId = null, driveViewMode = "grid", termHistory = [], termHIdx = -1;
 
-/* ── STATUS CLOCK ── */
+/* ── CLOCK ── */
 setInterval(()=>{
   const n=new Date();
-  document.getElementById("sb-time").textContent =
-    "🕐 "+String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0")+":"+String(n.getSeconds()).padStart(2,"0");
+  document.getElementById("sbTime").textContent="🕐 "+String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0")+":"+String(n.getSeconds()).padStart(2,"0");
 },1000);
 
 /* ── LOGIN ── */
-function toggleLoginPw(){
-  const i=document.getElementById("loginPass");
-  i.type=i.type==="password"?"text":"password";
-}
-
-async function doAdminLogin(){
-  const em=document.getElementById("loginEmail").value.trim();
-  const pw=document.getElementById("loginPass").value;
-  if(!em||!pw){document.getElementById("loginErr").textContent="Enter email and password.";return;}
+async function doLogin(){
+  const em=document.getElementById("lEmail").value.trim();
+  const pw=document.getElementById("lPass").value;
+  if(!em||!pw){document.getElementById("lErr").textContent="Enter email and password.";return;}
   spin(true);
-  try {
-    const res  = await fetch(API,{method:"POST",body:new URLSearchParams({action:"login",email:em,password:pw})});
-    const text = await res.text();
-    let data;
-    try { data = JSON.parse(text); } catch(e) {
-      // Plain text response means wrong credentials or script not deployed
-      document.getElementById("loginErr").textContent =
-        text.includes("Invalid") ? "Invalid email or password." :
-        text.includes("Unauthorized") ? "Access denied." :
-        "Script error — check deployment: " + text.substring(0,60);
-      spin(false); return;
+  try{
+    const res=await fetch(API,{method:"POST",body:new URLSearchParams({action:"login",email:em,password:pw})});
+    const txt=await res.text();
+    let data; try{data=JSON.parse(txt);}catch{
+      document.getElementById("lErr").textContent=txt.includes("Invalid")?"Invalid credentials.":txt.includes("disabled")?"Account is disabled.":"Error: "+txt.substring(0,60);
+      spin(false);return;
     }
-    if(!data.token){
-      document.getElementById("loginErr").textContent="Login failed — no token returned.";
-      spin(false); return;
-    }
-    if(data.role!=="Admin"){
-      document.getElementById("loginErr").textContent="Access denied. Admin accounts only.";
-      spin(false); return;
-    }
-    adminToken = data.token;
-    adminEmail = em;
+    if(!data.token){document.getElementById("lErr").textContent="Login failed.";spin(false);return;}
+    if(data.role!=="Admin"){document.getElementById("lErr").textContent="Admin accounts only.";spin(false);return;}
+    tok=data.token; adminEmail=em;
     document.getElementById("loginScreen").style.display="none";
-    document.getElementById("sb-admin").textContent="👤 "+adminEmail;
+    document.getElementById("sbAdmin").textContent="👤 "+adminEmail;
+    await loadRoles();
     await loadUsers();
-  } catch(e) {
-    document.getElementById("loginErr").textContent="Network error — check your internet connection.";
-  }
+    loadStorage();
+  }catch(e){document.getElementById("lErr").textContent="Network error.";}
   spin(false);
 }
 
-function doAdminLogout(){
-  adminToken=null; adminEmail=""; allUsers=[];
+function doLogout(){
+  tok=null;adminEmail="";allUsers=[];
   document.getElementById("loginScreen").style.display="flex";
-  document.getElementById("loginPass").value="";
-  document.getElementById("loginErr").textContent="";
+  document.getElementById("lPass").value="";
+  document.getElementById("lErr").textContent="";
+}
+
+/* ── LOAD ROLES ── */
+async function loadRoles(){
+  try{
+    const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"getRoles",token:tok})});
+    const d=await r.json();
+    if(!Array.isArray(d)){return;}
+    allRoles=d.slice(1).map(r=>({name:r[0]||"",color:r[1]||"#6b7280",desc:r[2]||""}));
+    populateRoleSelect();
+    buildSidebarRoles();
+  }catch{}
+}
+
+function populateRoleSelect(){
+  const sel=document.getElementById("uRole");
+  sel.innerHTML=allRoles.map(r=>`<option value="${r.name}">${r.name}</option>`).join("");
+}
+
+function buildSidebarRoles(){
+  const wrap=document.getElementById("sb-roles-wrap");
+  const parent=wrap.parentElement;
+  // Remove old role items
+  document.querySelectorAll(".sb-role-item").forEach(e=>e.remove());
+  allRoles.forEach(r=>{
+    const d=document.createElement("div");
+    d.className="si si-child sb-role-item";
+    d.innerHTML=`<span class="sic" style="color:${r.color}">●</span>${r.name}`;
+    d.onclick=function(){filterView(r.name,this);};
+    parent.insertBefore(d,wrap.nextSibling);
+  });
+  wrap.remove(); // remove placeholder
 }
 
 /* ── LOAD USERS ── */
 async function loadUsers(){
   spin(true);
-  try {
-    const res  = await fetch(API,{method:"POST",body:new URLSearchParams({action:"getUsers",token:adminToken})});
-    const data = await res.json();
-    // data = array of rows: [email, hash, role]
-    allUsers = (Array.isArray(data)?data:[]).slice(1).map(r=>({
-      email: r[0]||"", hash: r[1]||"", role: r[2]||"User"
+  try{
+    const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"getUsers",token:tok})});
+    const d=await r.json();
+    allUsers=(Array.isArray(d)?d:[]).slice(1).map(r=>({
+      email:r[0]||"",hash:r[1]||"",role:r[2]||"User",phone:r[3]||"",
+      displayName:r[4]||"",department:r[5]||"",enabled:r[6]!==false,
+      modified:r[7]||"",lastLogon:r[8]||""
     })).filter(u=>u.email);
-    document.getElementById("userCount").textContent = allUsers.length+" users";
-    document.getElementById("sb-count").textContent  = "📋 "+allUsers.length+" objects";
+    document.getElementById("uCount").textContent=allUsers.length+" users";
+    document.getElementById("sbCount").textContent="📋 "+allUsers.length+" objects";
     renderTable();
-  } catch(e){ toast("Failed to load users"); }
+  }catch{toast("Failed to load users");}
   spin(false);
 }
 
-/* ── FILTER / RENDER ── */
-function setView(v){
-  currentView=v;
-  selectedEmail=null;
-  document.querySelectorAll(".tree-item").forEach(el=>el.classList.remove("active"));
-  event.currentTarget.classList.add("active");
-  const titles={all:"All Users",Admin:"Admins",Technician:"Technicians",User:"Users"};
-  document.getElementById("viewTitle").textContent=titles[v]||"All Users";
+/* ── RENDER ── */
+function filterView(v,el){
+  curView=v; selEmail=null;
+  document.querySelectorAll(".si").forEach(e=>e.classList.remove("act"));
+  if(el)el.classList.add("act");
+  const titles={all:"All Users"};
+  document.getElementById("viewTitle").textContent=titles[v]||v+" Users";
   renderTable();
 }
 
-function sortBy(col){
-  if(sortCol===col) sortAsc=!sortAsc; else { sortCol=col; sortAsc=true; }
-  renderTable();
-}
+function sortBy(col){sortCol===col?sortAsc=!sortAsc:(sortCol=col,sortAsc=true);renderTable();}
 
 function renderTable(){
-  const q = document.getElementById("searchInput").value.toLowerCase();
-  let users = allUsers.filter(u=>{
-    const matchView = currentView==="all" || u.role===currentView;
-    const matchQ = !q || u.email.toLowerCase().includes(q) || u.role.toLowerCase().includes(q);
-    return matchView && matchQ;
+  const q=document.getElementById("srch").value.toLowerCase();
+  let users=allUsers.filter(u=>{
+    const vm=curView==="all"||u.role===curView;
+    const qm=!q||u.email.toLowerCase().includes(q)||u.role.toLowerCase().includes(q)||
+      u.displayName.toLowerCase().includes(q)||u.department.toLowerCase().includes(q)||u.phone.includes(q);
+    return vm&&qm;
   });
-
-  users.sort((a,b)=>{
-    const va=a[sortCol]||"", vb=b[sortCol]||"";
-    return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
-  });
-
-  document.getElementById("filteredCount").textContent = users.length+" object(s)";
-
-  const body = document.getElementById("userTableBody");
-  if(!users.length){
-    body.innerHTML=`<tr><td colspan="4" style="text-align:center;padding:30px;color:#888;">No users found</td></tr>`;
-    return;
-  }
-
-  body.innerHTML = users.map(u=>{
-    const badgeClass = u.role==="Admin"?"badge-admin":u.role==="Technician"?"badge-tech":"badge-user";
-    const initial = (u.email[0]||"?").toUpperCase();
-    const sel = selectedEmail===u.email ? "selected" : "";
-    const shortHash = u.hash.substring(0,16)+"...";
-    return `<tr class="${sel}" onclick="selectUser('${u.email.replace(/'/g,"\\'")}')">
+  users.sort((a,b)=>{const va=String(a[sortCol]||""),vb=String(b[sortCol]||"");return sortAsc?va.localeCompare(vb):vb.localeCompare(va);});
+  document.getElementById("fCount").textContent=users.length+" object(s)";
+  const body=document.getElementById("tbody");
+  if(!users.length){body.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:28px;color:#888">No users found</td></tr>`;return;}
+  body.innerHTML=users.map(u=>{
+    const bc=getBadgeClass(u.role);
+    const sc=selEmail===u.email?"sel":"";
+    const chip=u.enabled?`<span class="status-chip chip-on">✔ Enabled</span>`:`<span class="status-chip chip-off">✖ Disabled</span>`;
+    return `<tr class="${sc}" onclick="selectUser('${esc(u.email)}')">
       <td>👤 ${u.email}</td>
-      <td><span class="badge ${badgeClass}">${u.role}</span></td>
-      <td style="font-family:monospace;font-size:11px;color:#888;">${shortHash}</td>
-      <td style="color:#888;">—</td>
+      <td>${u.displayName||"—"}</td>
+      <td><span class="badge ${bc}">${u.role}</span></td>
+      <td>${u.department||"—"}</td>
+      <td>${u.phone||"—"}</td>
+      <td>${chip}</td>
     </tr>`;
   }).join("");
 }
 
-/* ── SELECT ── */
+function getBadgeClass(role){
+  if(role==="Admin")return "b-admin";
+  if(role==="Technician")return "b-tech";
+  if(role==="User")return "b-user";
+  return "b-custom";
+}
+
+/* ── SELECT USER ── */
 function selectUser(email){
-  selectedEmail = email;
-  renderTable();
-  const u = allUsers.find(x=>x.email===email);
-  if(!u) return;
-  const initial=(u.email[0]||"?").toUpperCase();
-  const badgeClass=u.role==="Admin"?"badge-admin":u.role==="Technician"?"badge-tech":"badge-user";
-  document.getElementById("detailsContent").innerHTML=`
-    <div class="detail-avatar">
-      <div class="avatar">${initial}</div>
-      <div class="d-name">${u.email}</div>
-      <div class="d-email">${u.role}</div>
+  selEmail=email; renderTable();
+  const u=allUsers.find(x=>x.email===email); if(!u)return;
+  const bc=getBadgeClass(u.role);
+  const chip=u.enabled?`<span class="status-chip chip-on">✔ Enabled</span>`:`<span class="status-chip chip-off">✖ Disabled</span>`;
+  const modDate=u.modified?new Date(u.modified).toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}):"—";
+  const logDate=u.lastLogon?new Date(u.lastLogon).toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}):"Never";
+  document.getElementById("detailPane").innerHTML=`
+    <div class="davatar">
+      <div class="av ${u.enabled?"":"dis"}">${(u.email[0]||"?").toUpperCase()}</div>
+      <div class="dn">${u.displayName||u.email}</div>
+      <div class="de">${u.role} • aman5z.in</div>
     </div>
-    <div class="detail-row"><label>Account</label><span>${u.email}</span></div>
-    <div class="detail-row"><label>Role</label><span><span class="badge ${badgeClass}">${u.role}</span></span></div>
-    <div class="detail-row"><label>Hash (first 16)</label><span style="font-family:monospace;font-size:10px;">${u.hash.substring(0,16)}...</span></div>
-    <div class="detail-row"><label>Domain</label><span>aman5z.in</span></div>
-    <div class="detail-actions">
-      <button class="d-btn" onclick="openEditUser('${u.email.replace(/'/g,"\\'")}')">✏️ Properties / Edit Role</button>
-      <button class="d-btn" onclick="openResetPw('${u.email.replace(/'/g,"\\'")}')">🔑 Reset Password</button>
-      <button class="d-btn danger" onclick="openDelete('${u.email.replace(/'/g,"\\'")}')">🗑️ Delete User</button>
+    <div class="dr"><label>Email / Account</label><span>${u.email}</span></div>
+    <div class="dr"><label>Role</label><span><span class="badge ${bc}">${u.role}</span></span></div>
+    <div class="dr"><label>Display Name</label><span>${u.displayName||"—"}</span></div>
+    <div class="dr"><label>Department</label><span>${u.department||"—"}</span></div>
+    <div class="dr"><label>Phone</label><span>${u.phone||"—"}</span></div>
+    <div class="dr"><label>Account Status</label><span>${chip}</span></div>
+    <div class="dr"><label>Last Modified</label><span>${modDate}</span></div>
+    <div class="dr"><label>Last Logon</label><span>${logDate}</span></div>
+    <div class="dr"><label>Hash (first 16)</label><span style="font-family:monospace;font-size:9px">${u.hash.substring(0,16)}…</span></div>
+    <div class="dact">
+      <button class="db" onclick="openEditUser('${esc(email)}')">✏️ Properties / Edit</button>
+      <button class="db" onclick="openPw('${esc(email)}')">🔑 Reset Password</button>
+      <button class="db" onclick="toggleAcc('${esc(email)}')">${u.enabled?"🔒 Disable Account":"🔓 Enable Account"}</button>
+      <button class="db dang" onclick="openDel('${esc(email)}')">🗑️ Delete Account</button>
     </div>`;
 }
 
-/* ── TOOLBAR ACTIONS ── */
-function editSelected(){
-  if(!selectedEmail){toast("Select a user first");return;}
-  openEditUser(selectedEmail);
-}
-function resetPwSelected(){
-  if(!selectedEmail){toast("Select a user first");return;}
-  openResetPw(selectedEmail);
-}
-function deleteSelected(){
-  if(!selectedEmail){toast("Select a user first");return;}
-  openDelete(selectedEmail);
-}
+/* ── TOOLBAR SHORTCUTS ── */
+function editSel(){if(!selEmail){toast("Select a user first");return;}openEditUser(selEmail);}
+function pwSel(){if(!selEmail){toast("Select a user first");return;}openPw(selEmail);}
+function delSel(){if(!selEmail){toast("Select a user first");return;}openDel(selEmail);}
+function toggleAccSel(){if(!selEmail){toast("Select a user first");return;}toggleAcc(selEmail);}
 
 /* ── ADD USER ── */
 function openAddUser(){
-  document.getElementById("newEmail").value="";
-  document.getElementById("newPass").value="";
-  document.getElementById("newPassConf").value="";
-  document.getElementById("newRole").value="User";
-  document.getElementById("addErr").textContent="";
-  openModal("addModal");
-}
-async function submitAddUser(){
-  const em=document.getElementById("newEmail").value.trim();
-  const pw=document.getElementById("newPass").value;
-  const pc=document.getElementById("newPassConf").value;
-  const role=document.getElementById("newRole").value;
-  if(!em||!pw){document.getElementById("addErr").textContent="Email and password required.";return;}
-  if(pw!==pc){document.getElementById("addErr").textContent="Passwords do not match.";return;}
-  if(pw.length<6){document.getElementById("addErr").textContent="Password must be at least 6 characters.";return;}
-  spin(true);
-  try{
-    const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"addUser",token:adminToken,email:em,password:pw,role})});
-    const t=await r.text();
-    if(t.includes("exists")){document.getElementById("addErr").textContent="User already exists.";spin(false);return;}
-    closeModal("addModal"); toast("✅ User created: "+em); await loadUsers();
-  }catch(e){document.getElementById("addErr").textContent="Error: "+e;}
-  spin(false);
+  isEditMode=false;
+  document.getElementById("userModalTitle").textContent="👤 New User Object";
+  document.getElementById("userSubmitBtn").textContent="Create User";
+  document.getElementById("uEmail").readOnly=false;
+  document.getElementById("uEmail").style.background="";
+  ["uEmail","uDisplayName","uDept","uPhone","uNotes","uPass","uPassC"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("uEnabled").checked=true;
+  document.getElementById("uRole").value="User";
+  document.getElementById("userErr").textContent="";
+  switchMTab(0, document.querySelector(".tab-bar .tab"));
+  openModal("userModal");
 }
 
 /* ── EDIT USER ── */
 function openEditUser(email){
-  const u=allUsers.find(x=>x.email===email);
-  if(!u) return;
-  document.getElementById("editEmail").value=u.email;
-  document.getElementById("editRole").value=u.role;
-  document.getElementById("editErr").textContent="";
-  openModal("editModal");
+  isEditMode=true;
+  const u=allUsers.find(x=>x.email===email); if(!u)return;
+  document.getElementById("userModalTitle").textContent="✏️ User Properties — "+email;
+  document.getElementById("userSubmitBtn").textContent="Apply Changes";
+  document.getElementById("uEmail").value=email;
+  document.getElementById("uEmail").readOnly=true;
+  document.getElementById("uEmail").style.background="#e8edf5";
+  document.getElementById("uDisplayName").value=u.displayName||"";
+  document.getElementById("uDept").value=u.department||"";
+  document.getElementById("uPhone").value=u.phone||"";
+  document.getElementById("uEnabled").checked=u.enabled!==false;
+  document.getElementById("uRole").value=u.role;
+  document.getElementById("uPass").value="";
+  document.getElementById("uPassC").value="";
+  document.getElementById("userErr").textContent="";
+  switchMTab(0, document.querySelector(".tab-bar .tab"));
+  openModal("userModal");
 }
-async function submitEditUser(){
-  const em=document.getElementById("editEmail").value;
-  const role=document.getElementById("editRole").value;
+
+async function submitUser(){
+  const email=document.getElementById("uEmail").value.trim();
+  const pw=document.getElementById("uPass").value;
+  const pc=document.getElementById("uPassC").value;
+  const role=document.getElementById("uRole").value;
+  const displayName=document.getElementById("uDisplayName").value.trim();
+  const dept=document.getElementById("uDept").value.trim();
+  const phone=document.getElementById("uPhone").value.trim();
+  const enabled=document.getElementById("uEnabled").checked;
+  const err=document.getElementById("userErr");
+
+  if(!email){err.textContent="Email is required.";return;}
+  if(!isEditMode){
+    if(!pw){err.textContent="Password is required.";return;}
+    if(pw!==pc){err.textContent="Passwords do not match.";return;}
+    if(pw.length<6){err.textContent="Password must be at least 6 characters.";return;}
+  }
   spin(true);
   try{
-    await fetch(API,{method:"POST",body:new URLSearchParams({action:"updateUserRole",token:adminToken,email:em,role})});
-    closeModal("editModal"); toast("✅ Role updated for "+em); await loadUsers();
-  }catch(e){document.getElementById("editErr").textContent="Error: "+e;}
+    if(!isEditMode){
+      const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"addUser",token:tok,email,password:pw,role,phone,displayName,department:dept,enabled:String(enabled)})});
+      const t=await r.text();
+      if(t.includes("exists")){err.textContent="User already exists.";spin(false);return;}
+    } else {
+      const params={action:"updateUserProfile",token:tok,email,role,phone,displayName,department:dept,enabled:String(enabled)};
+      await fetch(API,{method:"POST",body:new URLSearchParams(params)});
+    }
+    closeModal("userModal"); toast(isEditMode?"✅ User updated.":"✅ User created: "+email); await loadUsers();
+  }catch(e){err.textContent="Error: "+e;}
   spin(false);
 }
 
 /* ── RESET PW ── */
-function openResetPw(email){
+function openPw(email){
   document.getElementById("pwTarget").value=email;
   document.getElementById("pwNew").value="";
-  document.getElementById("pwNewConf").value="";
+  document.getElementById("pwConf").value="";
   document.getElementById("pwErr").textContent="";
   openModal("pwModal");
 }
-async function submitResetPw(){
-  const em=document.getElementById("pwTarget").value;
+async function submitPw(){
+  const email=document.getElementById("pwTarget").value;
   const pw=document.getElementById("pwNew").value;
-  const pc=document.getElementById("pwNewConf").value;
-  if(!pw){document.getElementById("pwErr").textContent="Enter a new password.";return;}
-  if(pw!==pc){document.getElementById("pwErr").textContent="Passwords do not match.";return;}
-  if(pw.length<6){document.getElementById("pwErr").textContent="Minimum 6 characters.";return;}
+  const pc=document.getElementById("pwConf").value;
+  const err=document.getElementById("pwErr");
+  if(!pw){err.textContent="Enter a password.";return;}
+  if(pw!==pc){err.textContent="Passwords do not match.";return;}
+  if(pw.length<6){err.textContent="Minimum 6 characters.";return;}
   spin(true);
   try{
-    await fetch(API,{method:"POST",body:new URLSearchParams({action:"resetPassword",token:adminToken,email:em,password:pw})});
-    closeModal("pwModal"); toast("✅ Password reset for "+em);
-  }catch(e){document.getElementById("pwErr").textContent="Error: "+e;}
+    await fetch(API,{method:"POST",body:new URLSearchParams({action:"resetPassword",token:tok,email,password:pw})});
+    closeModal("pwModal"); toast("✅ Password reset for "+email);
+  }catch(e){err.textContent="Error: "+e;}
+  spin(false);
+}
+
+/* ── TOGGLE ACCOUNT ── */
+async function toggleAcc(email){
+  const u=allUsers.find(x=>x.email===email); if(!u)return;
+  spin(true);
+  try{
+    await fetch(API,{method:"POST",body:new URLSearchParams({action:"updateUserProfile",token:tok,email,enabled:String(!u.enabled)})});
+    toast(u.enabled?"🔒 Account disabled.":"🔓 Account enabled.");
+    await loadUsers();
+    if(selEmail===email)selectUser(email);
+  }catch{}
+  spin(false);
+}
+
+/* ── DELETE ── */
+function openDel(email){
+  document.getElementById("delTarget").textContent=email;
+  openModal("delModal");
+}
+async function submitDel(){
+  const email=document.getElementById("delTarget").textContent;
+  if(email===adminEmail){toast("⚠️ Cannot delete your own account.");closeModal("delModal");return;}
+  spin(true);
+  try{
+    await fetch(API,{method:"POST",body:new URLSearchParams({action:"deleteUser",token:tok,email})});
+    closeModal("delModal"); selEmail=null; toast("🗑️ Deleted: "+email); await loadUsers();
+  }catch(e){toast("Error: "+e);}
   spin(false);
 }
 
 /* ── CHANGE MY PW ── */
 function openChangeMyPw(){
-  if(!adminToken){toast("Not signed in");return;}
-  document.getElementById("myPwCurrent").value="";
-  document.getElementById("myPwNew").value="";
-  document.getElementById("myPwConf").value="";
+  if(!tok){toast("Not signed in");return;}
+  ["myPwCur","myPwNew","myPwConf"].forEach(id=>document.getElementById(id).value="");
   document.getElementById("myPwErr").textContent="";
   openModal("myPwModal");
 }
-async function submitChangeMyPw(){
-  const cur=document.getElementById("myPwCurrent").value;
+async function submitMyPw(){
+  const cur=document.getElementById("myPwCur").value;
   const pw=document.getElementById("myPwNew").value;
   const pc=document.getElementById("myPwConf").value;
-  if(!cur||!pw){document.getElementById("myPwErr").textContent="Fill all fields.";return;}
-  if(pw!==pc){document.getElementById("myPwErr").textContent="Passwords do not match.";return;}
-  if(pw.length<6){document.getElementById("myPwErr").textContent="Minimum 6 characters.";return;}
+  const err=document.getElementById("myPwErr");
+  if(!cur||!pw){err.textContent="Fill all fields.";return;}
+  if(pw!==pc){err.textContent="Passwords do not match.";return;}
+  if(pw.length<6){err.textContent="Min 6 characters.";return;}
   spin(true);
   try{
-    // Verify current pw by re-logging in, then reset
-    const check=await fetch(API,{method:"POST",body:new URLSearchParams({action:"login",email:adminEmail,password:cur})});
-    const cd=await check.json();
-    if(!cd.token){document.getElementById("myPwErr").textContent="Current password incorrect.";spin(false);return;}
-    await fetch(API,{method:"POST",body:new URLSearchParams({action:"resetPassword",token:adminToken,email:adminEmail,password:pw})});
-    closeModal("myPwModal"); toast("✅ Password changed successfully");
-  }catch(e){document.getElementById("myPwErr").textContent="Error: "+e;}
+    const chk=await fetch(API,{method:"POST",body:new URLSearchParams({action:"login",email:adminEmail,password:cur})});
+    const cd=await chk.json();
+    if(!cd.token){err.textContent="Current password incorrect.";spin(false);return;}
+    await fetch(API,{method:"POST",body:new URLSearchParams({action:"resetPassword",token:tok,email:adminEmail,password:pw})});
+    closeModal("myPwModal"); toast("✅ Password changed.");
+  }catch(e){err.textContent="Error: "+e;}
   spin(false);
 }
 
-/* ── DELETE ── */
-function openDelete(email){
-  document.getElementById("delTarget").textContent=email;
-  openModal("delModal");
+/* ── ROLES ── */
+async function openRoles(){
+  await loadRoles();
+  renderRolesTable();
+  document.getElementById("roleErr").textContent="";
+  openModal("rolesModal");
 }
-async function submitDelete(){
-  const em=document.getElementById("delTarget").textContent;
-  if(em===adminEmail){toast("⚠️ You cannot delete your own account.");closeModal("delModal");return;}
+function renderRolesTable(){
+  const t=document.getElementById("rolesTable");
+  const builtin=["Admin","Technician","User"];
+  t.innerHTML=`<tr><th>Role Name</th><th>Color</th><th>Description</th><th>Action</th></tr>`+
+    allRoles.map(r=>`<tr>
+      <td><span class="role-dot" style="background:${r.color}"></span>${r.name}</td>
+      <td><span style="font-family:monospace;font-size:10px">${r.color}</span></td>
+      <td>${r.desc||"—"}</td>
+      <td>${builtin.includes(r.name)?"<span style='color:#999;font-size:10px'>Built-in</span>":`<button class="wbtn dng" onclick="delRole('${r.name}')" style="padding:2px 8px;font-size:10px">Delete</button>`}</td>
+    </tr>`).join("");
+}
+async function submitRole(){
+  const name=document.getElementById("newRoleName").value.trim();
+  const color=document.getElementById("newRoleColor").value;
+  const desc=document.getElementById("newRoleDesc").value.trim();
+  const err=document.getElementById("roleErr");
+  if(!name){err.textContent="Role name required.";return;}
   spin(true);
   try{
-    await fetch(API,{method:"POST",body:new URLSearchParams({action:"deleteUser",token:adminToken,email:em})});
-    closeModal("delModal"); selectedEmail=null; toast("🗑️ User deleted: "+em); await loadUsers();
+    const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"addRole",token:tok,name,color,description:desc})});
+    const t=await r.text();
+    if(t.includes("exists")){err.textContent="Role already exists.";spin(false);return;}
+    document.getElementById("newRoleName").value="";
+    document.getElementById("newRoleDesc").value="";
+    toast("✅ Role created: "+name);
+    await loadRoles(); renderRolesTable();
+  }catch(e){err.textContent="Error: "+e;}
+  spin(false);
+}
+async function delRole(name){
+  if(!confirm("Delete role '"+name+"'?"))return;
+  spin(true);
+  try{
+    await fetch(API,{method:"POST",body:new URLSearchParams({action:"deleteRole",token:tok,name})});
+    toast("🗑️ Role deleted."); await loadRoles(); renderRolesTable();
+  }catch{}
+  spin(false);
+}
+
+/* ── STORAGE / DRIVE ── */
+async function loadStorage(){
+  try{
+    const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"getStorageInfo",token:tok})});
+    const d=await r.json();
+    if(d.usedGB){
+      const pct=parseFloat(d.percent);
+      const bar=document.getElementById("storBar");
+      bar.style.width=Math.min(pct,100)+"%";
+      bar.className="stor-bar"+(pct>90?" crit":pct>70?" warn":"");
+      document.getElementById("storLabel").textContent=d.usedGB+" GB used of 2 TB ("+d.percent+"%)";
+      document.getElementById("storDetail").textContent="Used: "+d.usedGB+" GB  |  Free: "+((2048-parseFloat(d.usedGB)).toFixed(2))+" GB  |  Total: 2 TB";
+      document.getElementById("sbStore").textContent="💾 "+d.usedGB+"GB";
+    }
+  }catch{}
+}
+
+async function loadDrive(folderId){
+  folderId=folderId||curFolderId;
+  spin(true);
+  try{
+    const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"listDriveFiles",token:tok,folderId})});
+    const d=await r.json();
+    if(d.error){toast("Drive error: "+d.error);spin(false);return;}
+    curFolderId=folderId;
+    renderDriveFiles(d);
+  }catch(e){toast("Drive error: "+e);}
+  spin(false);
+}
+
+function renderDriveFiles(data){
+  const grid=document.getElementById("driveGrid");
+  const list=document.getElementById("driveList");
+  grid.innerHTML=""; list.innerHTML="";
+  selFileId=null;
+  document.getElementById("delFileBtn").style.display="none";
+
+  const allItems=[
+    ...data.folders.map(f=>({...f,isFolder:true})),
+    ...data.files.map(f=>({...f,isFolder:false}))
+  ];
+
+  if(!allItems.length){
+    grid.innerHTML=`<div class="drive-empty" style="grid-column:1/-1">📂 Folder is empty</div>`;
+    list.innerHTML=`<div class="drive-empty">📂 Folder is empty</div>`;
+    return;
+  }
+
+  allItems.forEach(item=>{
+    const icon=item.isFolder?"📁":getMimeIcon(item.mimeType);
+    const size=item.isFolder?"":formatSize(item.size);
+    const name=item.name;
+    const date=item.modified?new Date(item.modified).toLocaleDateString("en-GB"):"";
+
+    // Grid
+    const g=document.createElement("div");
+    g.className="dfile"; g.dataset.id=item.id;
+    g.innerHTML=`<div class="dfile-icon">${icon}</div><div class="dfile-name" title="${name}">${name}</div><div class="dfile-size">${size}</div>`;
+    g.ondblclick=()=>item.isFolder?driveNav(item.id,item.name):window.open(item.url,"_blank");
+    g.onclick=()=>selectFile(item.id, item.isFolder);
+    grid.appendChild(g);
+
+    // List
+    const l=document.createElement("div");
+    l.className="dl-item"; l.dataset.id=item.id;
+    l.innerHTML=`<span class="dl-icon">${icon}</span><span class="dl-name">${name}</span><span class="dl-size">${size}</span><span class="dl-date">${date}</span>`;
+    l.ondblclick=()=>item.isFolder?driveNav(item.id,item.name):window.open(item.url,"_blank");
+    l.onclick=()=>selectFile(item.id, item.isFolder);
+    list.appendChild(l);
+  });
+}
+
+function driveNav(folderId, name){
+  breadcrumbs.push({id:folderId,name});
+  updateBreadcrumb();
+  loadDrive(folderId);
+}
+
+function navToRoot(){
+  breadcrumbs=[{id:"1rgi0M0glLySObvzjVV5B1-NCPkpdul9p",name:"Shared Drive"}];
+  updateBreadcrumb();
+  loadDrive("1rgi0M0glLySObvzjVV5B1-NCPkpdul9p");
+}
+
+function updateBreadcrumb(){
+  const bc=document.getElementById("breadcrumb");
+  bc.innerHTML=breadcrumbs.map((b,i)=>{
+    const isLast=i===breadcrumbs.length-1;
+    return isLast
+      ?`<span>${b.name}</span>`
+      :`<span class="bc-item" onclick="navToBc(${i})">${b.name}</span><span class="bc-sep">›</span>`;
+  }).join("");
+}
+
+function navToBc(idx){
+  breadcrumbs=breadcrumbs.slice(0,idx+1);
+  updateBreadcrumb();
+  loadDrive(breadcrumbs[idx].id);
+}
+
+function selectFile(id, isFolder){
+  if(isFolder){selFileId=null;document.getElementById("delFileBtn").style.display="none";return;}
+  selFileId=id;
+  document.getElementById("delFileBtn").style.display="";
+  document.querySelectorAll(".dfile, .dl-item").forEach(el=>{
+    el.classList.toggle("sel-f",el.dataset.id===id);
+  });
+}
+
+async function deleteSelFile(){
+  if(!selFileId){toast("Select a file first");return;}
+  if(!confirm("Move this file to trash?"))return;
+  spin(true);
+  try{
+    await fetch(API,{method:"POST",body:new URLSearchParams({action:"deleteDriveFile",token:tok,fileId:selFileId})});
+    toast("🗑️ File moved to trash."); selFileId=null; await loadDrive(); await loadStorage();
   }catch(e){toast("Error: "+e);}
   spin(false);
 }
 
+function uploadFile(){
+  document.getElementById("fileInput").click();
+}
+
+async function doUpload(input){
+  const file=input.files[0]; if(!file)return;
+  spin(true);
+  try{
+    const b64=await fileToBase64(file);
+    const r=await fetch(API,{method:"POST",body:new URLSearchParams({
+      action:"uploadDriveFile",token:tok,
+      fileName:file.name,fileData:b64,mimeType:file.type||"application/octet-stream",
+      folderId:curFolderId
+    })});
+    const d=await r.json();
+    if(d.error){toast("Upload failed: "+d.error);}else{toast("✅ Uploaded: "+file.name);await loadDrive();await loadStorage();}
+  }catch(e){toast("Upload error: "+e);}
+  input.value=""; spin(false);
+}
+
+function fileToBase64(file){
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=()=>res(r.result.split(",")[1]);
+    r.onerror=rej;
+    r.readAsDataURL(file);
+  });
+}
+
+function setView(mode){
+  driveViewMode=mode;
+  document.getElementById("driveGrid").style.display=mode==="grid"?"grid":"none";
+  const dl=document.getElementById("driveList");
+  dl.style.display=mode==="list"?"flex":"none";
+  if(mode==="list")dl.classList.add("show");
+  document.getElementById("vgrid").className="vt-btn"+(mode==="grid"?" act":"");
+  document.getElementById("vlist").className="vt-btn"+(mode==="list"?" act":"");
+}
+
+function getMimeIcon(mime){
+  if(!mime)return "📄";
+  if(mime.includes("pdf"))return "📕";
+  if(mime.includes("spreadsheet")||mime.includes("excel"))return "📊";
+  if(mime.includes("document")||mime.includes("word"))return "📝";
+  if(mime.includes("presentation")||mime.includes("powerpoint"))return "📊";
+  if(mime.includes("image"))return "🖼️";
+  if(mime.includes("video"))return "🎬";
+  if(mime.includes("audio"))return "🎵";
+  if(mime.includes("zip")||mime.includes("compressed"))return "📦";
+  if(mime.includes("folder"))return "📁";
+  return "📄";
+}
+
+function formatSize(bytes){
+  if(!bytes||bytes===0)return "";
+  if(bytes<1024)return bytes+"B";
+  if(bytes<1048576)return (bytes/1024).toFixed(1)+"KB";
+  if(bytes<1073741824)return (bytes/1048576).toFixed(1)+"MB";
+  return (bytes/1073741824).toFixed(2)+"GB";
+}
+
+/* ── TERMINAL ── */
+function toggleTerminal(){
+  const p=document.getElementById("termPanel");
+  p.classList.toggle("show");
+  if(p.classList.contains("show"))document.getElementById("termInput").focus();
+}
+
+async function termKey(e){
+  const input=document.getElementById("termInput");
+  if(e.key==="ArrowUp"){
+    termHIdx=Math.max(0,termHIdx-1);
+    input.value=termHistory[termHIdx]||"";
+    return;
+  }
+  if(e.key==="ArrowDown"){
+    termHIdx=Math.min(termHistory.length,termHIdx+1);
+    input.value=termHistory[termHIdx]||"";
+    return;
+  }
+  if(e.key!=="Enter")return;
+  const cmd=input.value.trim();
+  if(!cmd)return;
+  termHistory.push(cmd); termHIdx=termHistory.length;
+  input.value="";
+  termPrint("AD\\admin> "+cmd,"cmd");
+  if(cmd.toLowerCase()==="clear"){clearTerm();return;}
+  try{
+    const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"terminal",token:tok,command:cmd})});
+    const txt=await r.text();
+    let val; try{val=JSON.parse(txt);}catch{val=txt;}
+    if(val==="__clear__"){clearTerm();}
+    else{termPrint(String(val),"out");}
+  }catch(e){termPrint("Error: "+e,"err");}
+  const body=document.getElementById("termBody");
+  body.scrollTop=body.scrollHeight;
+}
+
+function termPrint(text,cls="out"){
+  const body=document.getElementById("termBody");
+  const d=document.createElement("div");
+  d.className="term-line "+cls;
+  d.textContent=text;
+  body.appendChild(d);
+  body.scrollTop=body.scrollHeight;
+}
+
+function clearTerm(){
+  const b=document.getElementById("termBody");
+  b.innerHTML=`<div class="term-line ok">Screen cleared.</div>`;
+}
+
+/* ── TABS ── */
+function switchTab(tab){
+  document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("act"));
+  document.querySelectorAll(".main-tab").forEach(t=>t.classList.remove("act"));
+  document.getElementById("tc-"+tab).classList.add("act");
+  document.getElementById("tab-"+tab).classList.add("act");
+  if(tab==="drive"&&!document.getElementById("driveGrid").children.length){
+    loadDrive(); loadStorage();
+  }
+}
+
+function switchMTab(idx, el){
+  document.querySelectorAll(".tab-bar .tab").forEach((t,i)=>{
+    t.classList.toggle("act",i===idx);
+  });
+  document.querySelectorAll(".tab-body").forEach((t,i)=>{
+    t.classList.toggle("act",i===idx);
+  });
+}
+
 /* ── HELPERS ── */
-function openModal(id){ document.getElementById(id).classList.add("show"); }
-function closeModal(id){ document.getElementById(id).classList.remove("show"); }
-function spin(on){ document.getElementById("spinner").classList.toggle("show",on); }
+function openModal(id){document.getElementById(id).classList.add("show");}
+function closeModal(id){document.getElementById(id).classList.remove("show");}
+function spin(on){document.getElementById("spinner").classList.toggle("show",on);}
 function toast(msg,dur=2500){
-  const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show");
+  const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
   setTimeout(()=>t.classList.remove("show"),dur);
 }
-function togglePw(id,btn){
+function toggleEye(id,btn){
   const i=document.getElementById(id);
   i.type=i.type==="password"?"text":"password";
   btn.textContent=i.type==="password"?"👁":"🙈";
 }
+function esc(s){return s.replace(/'/g,"\\'");}
 </script>
 </body>
 </html>
-
-
