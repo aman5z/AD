@@ -351,7 +351,6 @@ td:last-child{border-right:none}
 </head>
 <body>
 
-<!-- ═══ LOGIN SCREEN ═══ -->
 <div class="lscreen" id="loginScreen">
   <div class="lbox">
     <div class="lhd"><div class="lic">🏢</div><h2>Active Directory Console</h2><p>aman5z.in — Secure Access Portal</p></div>
@@ -368,12 +367,10 @@ td:last-child{border-right:none}
   </div>
 </div>
 
-<!-- ═══ SPINNER / TOAST ═══ -->
 <div class="sov" id="spinner"><div class="spin"></div></div>
 <div class="toast" id="toast"></div>
 <div class="sb-ov" id="sbOv" onclick="closeSb()"></div>
 
-<!-- ═══ TITLE BAR ═══ -->
 <div class="titlebar">
   <button class="hamburger" onclick="toggleSb()" type="button">☰</button>
   <span class="tl-icon">🏢</span>
@@ -386,7 +383,6 @@ td:last-child{border-right:none}
   </div>
 </div>
 
-<!-- ═══ MENU BAR ═══ -->
 <div class="menubar" id="menubar">
   <div class="mb-item">
     <div class="mb-btn" onclick="toggleDD('ddFile')">File</div>
@@ -459,7 +455,6 @@ td:last-child{border-right:none}
   </div>
 </div>
 
-<!-- ═══ TOOLBAR ═══ -->
 <div class="toolbar">
   <button class="tbtn" id="tb-newuser" onclick="openAddUser()" type="button"><span class="ti">👤</span><span>New User</span></button>
   <div class="tsep"></div>
@@ -480,10 +475,8 @@ td:last-child{border-right:none}
   <button class="tbtn" onclick="toggleTerminal()" type="button"><span class="ti">⬛</span><span>Terminal</span></button>
 </div>
 
-<!-- ═══ MAIN LAYOUT ═══ -->
 <div class="layout">
 
-  <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <div class="sbh">🌐 aman5z.in</div>
     <div class="sbs">My Computer</div>
@@ -507,9 +500,7 @@ td:last-child{border-right:none}
     <div class="si" onclick="doLogout()"><span class="sic">🚪</span>Sign Out</div>
   </div>
 
-  <!-- CONTENT -->
   <div class="content">
-    <!-- MAIN TABS -->
     <div class="mtabs">
       <div class="mtab act" id="tab-users"   onclick="switchTab('users')">👥 Users</div>
       <div class="mtab"     id="tab-dash"    onclick="switchTab('dash')">📊 Dashboard</div>
@@ -519,7 +510,6 @@ td:last-child{border-right:none}
       <div class="mtab"     id="tab-tickets" onclick="switchTab('tickets')">🎫 Tickets</div>
     </div>
 
-    <!-- ── USERS ── -->
     <div class="tpane act" id="tp-users">
       <div class="ch"><span>📁</span><h2 id="viewTitle">All Users</h2><span class="chsub" id="uCount">—</span></div>
       <div class="sbar">
@@ -539,7 +529,6 @@ td:last-child{border-right:none}
       </div>
     </div>
 
-    <!-- ── DASHBOARD ── -->
     <div class="tpane" id="tp-dash">
       <div class="ch"><span>📊</span><h2>System Dashboard</h2><span class="chsub" onclick="loadDashboard()">🔄 Refresh</span></div>
       <div style="flex:1;overflow-y:auto">
@@ -550,7 +539,6 @@ td:last-child{border-right:none}
       </div>
     </div>
 
-    <!-- ── AUDIT LOG ── -->
     <div class="tpane" id="tp-audit">
       <div class="ch"><span>📋</span><h2>Audit Log</h2><span class="chsub" onclick="loadAudit()">🔄 Refresh</span></div>
       <div class="af">
@@ -575,7 +563,6 @@ td:last-child{border-right:none}
       </div>
     </div>
 
-    <!-- ── DRIVE ── -->
     <div class="tpane" id="tp-drive">
       <div class="drive-hdr">
         <svg class="hdd-svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--sel)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -606,11 +593,11 @@ td:last-child{border-right:none}
       <div id="driveList" class="dlist"></div>
     </div>
 
-    <!-- ── TOKENS ── -->
     <div class="tpane" id="tp-tokens">
       <div class="ch"><span>🔢</span><h2>Token Counter System</h2><span class="chsub" id="tokCount">—</span></div>
       <div class="toolbar" style="border-bottom:1px solid var(--tb-b);min-height:32px">
         <button class="tbtn" id="tb-addctr" onclick="openAddCounter()" type="button"><span class="ti">➕</span><span>Add Counter</span></button>
+        <button class="tbtn" onclick="window.open('https://aman5z.github.io/Token_System/TokenDisplay.html', '_blank')" type="button"><span class="ti">🖥️</span><span>Display</span></button>
         <div class="tsep"></div>
         <button class="tbtn" onclick="nextTokSel()" type="button"><span class="ti">▶</span><span>Next</span></button>
         <button class="tbtn" id="tb-prev" onclick="prevTokSel()" type="button"><span class="ti">⏮</span><span>Previous</span></button>
@@ -632,7 +619,6 @@ td:last-child{border-right:none}
       </div>
     </div>
 
-    <!-- ── TICKETS ── -->
     <div class="tpane" id="tp-tickets">
       <div class="ch"><span>🎫</span><h2>IT Ticket System</h2><span class="chsub" id="tickCount">—</span></div>
       <div class="tick-tb">
@@ -657,10 +643,7 @@ td:last-child{border-right:none}
         </tr></thead><tbody id="tickBody"></tbody></table>
       </div>
     </div>
-  </div><!-- /content -->
-
-  <!-- DETAILS PANEL -->
-  <div class="details" id="details">
+  </div><div class="details" id="details">
     <div class="dh" id="detailHdr">Properties</div>
     <div id="detailPane">
       <div style="padding:18px;color:var(--sub);font-size:11px;text-align:center">
@@ -669,10 +652,7 @@ td:last-child{border-right:none}
     </div>
   </div>
 
-</div><!-- /layout -->
-
-<!-- ═══ TERMINAL ═══ -->
-<div class="term-panel" id="termPanel">
+</div><div class="term-panel" id="termPanel">
   <div class="term-hd">
     <span>Administrator: Command Prompt  ─  aman5z.in</span>
     <button onclick="toggleTerminal()" type="button">✕ Close</button>
@@ -686,7 +666,6 @@ td:last-child{border-right:none}
   </div>
 </div>
 
-<!-- ═══ STATUS BAR ═══ -->
 <div class="statusbar">
   <span id="sbSite">🟢 aman5z.in</span>
   <span id="sbCount">📋 0 objects</span>
@@ -696,9 +675,6 @@ td:last-child{border-right:none}
   <span id="sbTime" style="margin-left:auto"></span>
 </div>
 
-<!-- ═══ MODALS ═══ -->
-
-<!-- ADD / EDIT USER -->
 <div class="mo" id="userModal">
   <div class="mw wide">
     <div class="mt"><span id="uMTitle">👤 New User Object</span><button class="mclose" onclick="closeModal('userModal')" type="button">✕</button></div>
@@ -748,7 +724,6 @@ td:last-child{border-right:none}
   </div>
 </div>
 
-<!-- RESET PASSWORD -->
 <div class="mo" id="pwModal">
   <div class="mw sm">
     <div class="mt">🔑 Reset Password<button class="mclose" onclick="closeModal('pwModal')" type="button">✕</button></div>
@@ -768,7 +743,6 @@ td:last-child{border-right:none}
   </div>
 </div>
 
-<!-- CHANGE MY PASSWORD -->
 <div class="mo" id="myPwModal">
   <div class="mw sm">
     <div class="mt">🔑 Change My Password<button class="mclose" onclick="closeModal('myPwModal')" type="button">✕</button></div>
@@ -788,7 +762,6 @@ td:last-child{border-right:none}
   </div>
 </div>
 
-<!-- EDIT PERMISSIONS -->
 <div class="mo" id="permModal">
   <div class="mw">
     <div class="mt">🔐 Edit Permissions — <span id="permTarget"></span><button class="mclose" onclick="closeModal('permModal')" type="button">✕</button></div>
@@ -805,7 +778,6 @@ td:last-child{border-right:none}
   </div>
 </div>
 
-<!-- ROLES -->
 <div class="mo" id="rolesModal">
   <div class="mw wide">
     <div class="mt">🏷️ Role Management<button class="mclose" onclick="closeModal('rolesModal')" type="button">✕</button></div>
@@ -828,7 +800,6 @@ td:last-child{border-right:none}
   </div>
 </div>
 
-<!-- ADD COUNTER -->
 <div class="mo" id="addCtrModal">
   <div class="mw sm">
     <div class="mt">🔢 New Token Counter<button class="mclose" onclick="closeModal('addCtrModal')" type="button">✕</button></div>
@@ -844,7 +815,6 @@ td:last-child{border-right:none}
   </div>
 </div>
 
-<!-- RENAME COUNTER -->
 <div class="mo" id="renCtrModal">
   <div class="mw sm">
     <div class="mt">✏️ Rename Counter<button class="mclose" onclick="closeModal('renCtrModal')" type="button">✕</button></div>
@@ -860,7 +830,6 @@ td:last-child{border-right:none}
   </div>
 </div>
 
-<!-- NEW TICKET -->
 <div class="mo" id="ticketModal">
   <div class="mw wide">
     <div class="mt">🎫 New IT Support Ticket<button class="mclose" onclick="closeModal('ticketModal')" type="button">✕</button></div>
@@ -888,7 +857,6 @@ td:last-child{border-right:none}
   </div>
 </div>
 
-<!-- UPDATE TICKET -->
 <div class="mo" id="updTicketModal">
   <div class="mw sm">
     <div class="mt">✏️ Update Ticket<button class="mclose" onclick="closeModal('updTicketModal')" type="button">✕</button></div>
@@ -908,7 +876,6 @@ td:last-child{border-right:none}
   </div>
 </div>
 
-<!-- DELETE USER -->
 <div class="mo" id="delModal">
   <div class="mw sm">
     <div class="mt">⚠️ Confirm Delete<button class="mclose" onclick="closeModal('delModal')" type="button">✕</button></div>
@@ -934,7 +901,7 @@ const PERM_DEFS = [
   {id:"audit",          label:"Audit Log",              icon:"📋", group:"Administration"},
   {id:"storage",        label:"Storage / Drive",        icon:"🖴",  group:"Features"},
   {id:"tokens",         label:"Token Counters (view)",  icon:"🔢", group:"Features"},
-  {id:"tokens.manage",  label:"Token Admin (add/edit)",  icon:"⚙️", group:"Features"},
+  {id:"tokens.manage",  label:"Token Admin (add/edit)", icon:"⚙️", group:"Features"},
   {id:"tickets",        label:"IT Tickets (view/create)",icon:"🎫", group:"Features"},
   {id:"tickets.manage", label:"Ticket Admin (close/edit)",icon:"🔒",group:"Features"},
 ];
