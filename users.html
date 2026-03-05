@@ -2,627 +2,805 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Active Directory — aman5z.in</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='5' y='5' width='42' height='42' rx='4' fill='%23F25022'/%3E%3Crect x='53' y='5' width='42' height='42' rx='4' fill='%2380BA01'/%3E%3Crect x='5' y='53' width='42' height='42' rx='4' fill='%2300A4EF'/%3E%3Crect x='53' y='53' width='42' height='42' rx='4' fill='%23FFB900'/%3E%3C/svg%3E">
 <style>
-/* ═══ THEME VARIABLES ═══ */
-[data-theme="light"] {
-  --bg:#f0f0f0; --panel:#fff; --card:#fff;
-  --toolbar:#e8eaf0; --toolbar-b:#b0b8c8;
-  --sidebar:#eef1f7; --sidebar-b:#b0c4de; --sidebar-sel:#cce4ff;
-  --border:#adadad; --text:#000; --sub:#555; --subtext:#666;
-  --sel:#0078d7; --sel-t:#fff; --hover:#cce8ff;
-  --odd:#f8f9fc; --even:#fff;
-  --danger:#cc0000; --success:#007a00;
-  --status:#0f3580; --status-t:#c8d8f0;
-  --th-bg:linear-gradient(180deg,#dde5f0,#c8d4e8);
-  --th-bg-h:linear-gradient(180deg,#ccd8ee,#b8c8e0);
-  --ch-bg:linear-gradient(180deg,#e8edf8,#d8e0f0);
-  --title-bg:linear-gradient(180deg,#1e4fa0,#0f3580);
-  --sb-head:linear-gradient(180deg,#2255b0,#1a3a80);
-  --login-bg:#1a3a6b;
-  --term-bg:#0c0c0c; --term-head:#1e1e1e; --term-inp:#1e1e1e;
-  --inp-bg:#fff; --inp-bg-ro:#e8edf5;
-  --modal-bg:#f0f0f0; --modal-foot:var(--toolbar);
-  --chart-bg:#f8f9fc;
+/* ─── CSS VARIABLES ─── */
+[data-theme="light"]{
+  --bg:#f0f0f0;--panel:#fff;--card:#fff;
+  --tb:#e8eaf0;--tb-b:#b0b8c8;
+  --sb:#eef1f7;--sb-b:#b0c4de;--sb-sel:#cce4ff;
+  --bdr:#adadad;--txt:#000;--sub:#555;
+  --sel:#0078d7;--sel-t:#fff;--hov:#cce8ff;
+  --odd:#f8f9fc;--even:#fff;--dngr:#cc0000;
+  --sts:#0f3580;--sts-t:#c8d8f0;
+  --th:linear-gradient(180deg,#dde5f0,#c8d4e8);
+  --ch:linear-gradient(180deg,#e8edf8,#d8e0f0);
+  --tl:linear-gradient(180deg,#1e4fa0,#0f3580);
+  --sbh:linear-gradient(180deg,#2255b0,#1a3a80);
+  --inp:#fff;--inp-ro:#e8edf5;--modal:#f0f0f0;--mfoot:#e8eaf0;
+  --trm:#0c0c0c;--trm-h:#1e1e1e;
+  --chart:#f8f9fc;--login-bg:#1a3a6b;
 }
-[data-theme="dark"] {
-  --bg:#000; --panel:#0f172a; --card:#1e293b;
-  --toolbar:#1e293b; --toolbar-b:#334155;
-  --sidebar:#0f172a; --sidebar-b:#334155; --sidebar-sel:#1e3a5f;
-  --border:#334155; --text:#f1f5f9; --sub:#94a3b8; --subtext:#94a3b8;
-  --sel:#3b82f6; --sel-t:#fff; --hover:#1e3a5f;
-  --odd:#1e293b; --even:#0f172a;
-  --danger:#ef4444; --success:#22c55e;
-  --status:#0f172a; --status-t:#94a3b8;
-  --th-bg:linear-gradient(180deg,#1e293b,#334155);
-  --th-bg-h:linear-gradient(180deg,#2a3a50,#3a4a60);
-  --ch-bg:linear-gradient(180deg,#1e293b,#0f172a);
-  --title-bg:linear-gradient(180deg,#1e3a6b,#0f2550);
-  --sb-head:linear-gradient(180deg,#1e3a6b,#0f2550);
-  --login-bg:#000;
-  --term-bg:#000; --term-head:#0f172a; --term-inp:#0f172a;
-  --inp-bg:#1e293b; --inp-bg-ro:#0f172a;
-  --modal-bg:#1e293b; --modal-foot:#0f172a;
-  --chart-bg:#1e293b;
+[data-theme="dark"]{
+  --bg:#000;--panel:#000;--card:#0a0a0a;
+  --tb:#050505;--tb-b:#0d0d1a;
+  --sb:#000;--sb-b:#0d0d1a;--sb-sel:#060d1f;
+  --bdr:#111827;--txt:#c9d1d9;--sub:#4b5563;
+  --sel:#3b82f6;--sel-t:#fff;--hov:#060d1f;
+  --odd:#030303;--even:#000;--dngr:#ef4444;
+  --sts:#000;--sts-t:#374151;
+  --th:linear-gradient(180deg,#050505,#000);
+  --ch:linear-gradient(180deg,#060a14,#000);
+  --tl:linear-gradient(180deg,#060d1f,#000);
+  --sbh:linear-gradient(180deg,#060d1f,#000);
+  --inp:#050505;--inp-ro:#030303;--modal:#050505;--mfoot:#030303;
+  --trm:#000;--trm-h:#050505;
+  --chart:#030303;--login-bg:#000;
 }
-
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,sans-serif}
-body{background:var(--bg);color:var(--text);font-size:13px;height:100vh;display:flex;flex-direction:column;overflow:hidden;transition:background .2s,color .2s}
+body{background:var(--bg);color:var(--txt);font-size:13px;height:100vh;display:flex;flex-direction:column;overflow:hidden;transition:background .15s,color .15s}
 
-/* TITLEBAR */
-.titlebar{background:var(--title-bg);color:#fff;padding:5px 10px;display:flex;align-items:center;gap:8px;border-bottom:2px solid rgba(0,0,0,.3);flex-shrink:0}
-.tb-icon{font-size:15px}.tb-title{font-size:12px;font-weight:600;flex:1;letter-spacing:.2px}
-.tb-win{display:flex;gap:2px}
-.tb-win span{width:20px;height:16px;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;border-radius:2px;color:#fff}
-.tb-win span:hover{background:rgba(255,255,255,.2)}.tb-win .x:hover{background:#c42b1c}
-.theme-btn{background:none;border:none;cursor:pointer;font-size:16px;padding:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:50%;margin-right:4px}
-.theme-btn:hover{background:rgba(255,255,255,.15)}
+/* ─── TITLEBAR ─── */
+.titlebar{background:var(--tl);color:#fff;padding:3px 6px;display:flex;align-items:center;gap:5px;border-bottom:2px solid rgba(0,0,0,.5);flex-shrink:0;min-height:26px}
+.tl-icon{font-size:13px;flex-shrink:0}
+.tl-title{font-size:11px;font-weight:600;flex:1;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl-win{display:flex;gap:0}
+.tl-win button{width:24px;height:20px;background:rgba(255,255,255,.08);border:none;cursor:pointer;color:rgba(255,255,255,.8);font-size:11px;display:flex;align-items:center;justify-content:center;transition:background .1s;padding:0}
+.tl-win button:hover{background:rgba(255,255,255,.2)}.tl-win button.wx:hover{background:#c42b1c;color:#fff}
+.theme-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:9px;font-weight:700;letter-spacing:.8px;padding:2px 7px;cursor:pointer;border-radius:1px;margin-right:4px;height:18px;white-space:nowrap}
+.theme-btn:hover{background:rgba(255,255,255,.2)}
+.hamburger{display:none;background:none;border:none;font-size:16px;cursor:pointer;padding:0 5px;color:#fff;flex-shrink:0}
 
-/* MENUBAR */
-.menubar{background:var(--toolbar);border-bottom:1px solid var(--toolbar-b);padding:1px 4px;display:flex;gap:1px;flex-shrink:0;overflow-x:auto}
-.mi{padding:4px 10px;cursor:pointer;border-radius:3px;font-size:12px;border:1px solid transparent;white-space:nowrap;color:var(--text)}
-.mi:hover{background:var(--hover);border-color:var(--sel)}
+/* ─── MENUBAR ─── */
+.menubar{background:var(--tb);border-bottom:1px solid var(--tb-b);padding:0 3px;display:flex;flex-shrink:0;overflow-x:auto}
+.mb-item{position:relative}
+.mb-btn{padding:3px 9px;cursor:pointer;font-size:12px;border:1px solid transparent;color:var(--txt);background:transparent;white-space:nowrap;user-select:none;display:block}
+.mb-btn:hover,.mb-btn.open{background:var(--sel);color:#fff;border-color:var(--sel)}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:var(--modal);border:1px solid var(--bdr);z-index:900;min-width:190px;box-shadow:3px 4px 12px rgba(0,0,0,.4)}
+.dropdown.show{display:block}
+.dd-item{padding:4px 16px;font-size:12px;cursor:pointer;color:var(--txt);white-space:nowrap}
+.dd-item:hover{background:var(--hov);color:var(--sel)}
+.dd-sep{height:1px;background:var(--bdr);margin:2px 0}
+.dd-item.dd-d{color:var(--dngr)}.dd-item.dd-d:hover{background:rgba(204,0,0,.08)}
+.dd-dis{opacity:.4;cursor:default!important}.dd-dis:hover{background:transparent!important;color:var(--txt)!important}
 
-/* TOOLBAR */
-.toolbar{background:var(--toolbar);border-bottom:1px solid var(--toolbar-b);padding:3px 6px;display:flex;gap:1px;align-items:center;flex-shrink:0;flex-wrap:wrap}
-.tbb{display:flex;flex-direction:column;align-items:center;padding:3px 7px;border:1px solid transparent;border-radius:3px;cursor:pointer;background:transparent;color:var(--text);font-size:10px;gap:1px;min-width:46px;width:auto;margin:0}
-.tbb:hover{background:var(--hover);border-color:var(--sel)}.tbb:active{background:var(--hover)}
-.tbb .ti{font-size:18px;line-height:1}
-.tsep{width:1px;background:var(--border);height:32px;margin:0 3px}
-.hamburger{display:none;background:none;border:none;font-size:20px;cursor:pointer;padding:4px 8px;color:var(--text)}
+/* ─── TOOLBAR ─── */
+.toolbar{background:var(--tb);border-bottom:1px solid var(--tb-b);padding:2px 5px;display:flex;gap:1px;align-items:center;flex-shrink:0;flex-wrap:wrap;min-height:36px}
+.tbtn{display:flex;flex-direction:column;align-items:center;padding:2px 6px;border:1px solid transparent;border-radius:2px;cursor:pointer;background:transparent;color:var(--txt);font-size:10px;gap:1px;min-width:42px}
+.tbtn:hover{background:var(--hov);border-color:var(--sel)}.tbtn:active{background:var(--hov)}
+.tbtn .ti{font-size:15px;line-height:1;display:block}
+.tsep{width:1px;background:var(--bdr);height:28px;margin:0 2px;flex-shrink:0}
 
-/* LAYOUT */
+/* ─── MAIN LAYOUT ─── */
 .layout{display:flex;flex:1;overflow:hidden}
 
-/* SIDEBAR */
-.sidebar{width:200px;background:var(--sidebar);border-right:1px solid var(--sidebar-b);overflow-y:auto;flex-shrink:0;transition:transform .25s,width .25s}
-.sb-head{background:var(--sb-head);color:#fff;padding:8px 12px;font-size:11px;font-weight:600;letter-spacing:.3px;flex-shrink:0}
-.sb-sec{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--sub);padding:8px 12px 3px}
-.si{display:flex;align-items:center;gap:5px;padding:4px 10px;cursor:pointer;border:1px solid transparent;border-radius:2px;margin:1px 3px;color:var(--text);font-size:11px}
-.si:hover{background:var(--hover)}.si.act{background:var(--sidebar-sel);border-color:rgba(0,120,215,.4)}
-.si .sic{font-size:13px;flex-shrink:0}.si-child{padding-left:22px}
+/* ─── SIDEBAR ─── */
+.sidebar{width:192px;background:var(--sb);border-right:1px solid var(--sb-b);overflow-y:auto;flex-shrink:0;transition:transform .2s}
+.sbh{background:var(--sbh);color:#fff;padding:6px 11px;font-size:11px;font-weight:600;letter-spacing:.2px}
+.sbs{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--sub);padding:6px 11px 2px}
+.si{display:flex;align-items:center;gap:4px;padding:3px 8px;cursor:pointer;border:1px solid transparent;border-radius:1px;margin:1px 2px;color:var(--txt);font-size:11px;user-select:none}
+.si:hover{background:var(--hov)}.si.act{background:var(--sb-sel);border-color:rgba(59,130,246,.2)}
+.sic{font-size:11px;flex-shrink:0;width:14px;text-align:center}
+.si-ch{padding-left:18px}
+.sb-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:498}
+.sb-ov.show{display:block}
 
-/* CONTENT */
-.content{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--panel)}
-.ch{background:var(--ch-bg);border-bottom:1px solid var(--toolbar-b);padding:6px 14px;display:flex;align-items:center;gap:6px}
-.ch h2{font-size:13px;font-weight:600;color:var(--sel)}.ch span{color:var(--sub);font-size:11px}
-.sbar{display:flex;align-items:center;gap:5px;padding:5px 14px;background:var(--toolbar);border-bottom:1px solid var(--toolbar-b);flex-shrink:0}
-.sbar input{padding:3px 7px;border:1px solid var(--border);border-radius:2px;font-size:11px;flex:1;background:var(--inp-bg);color:var(--text)}
+/* ─── CONTENT AREA ─── */
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* ─── MAIN TABS ─── */
+.mtabs{display:flex;border-bottom:2px solid var(--sel);background:var(--tb);padding:0 6px;flex-shrink:0;overflow-x:auto;scrollbar-width:thin}
+.mtab{padding:4px 11px;font-size:11px;cursor:pointer;border:1px solid transparent;border-bottom:none;border-radius:2px 2px 0 0;color:var(--sub);margin-bottom:-2px;white-space:nowrap;user-select:none}
+.mtab.act{background:var(--panel);border-color:var(--bdr);border-bottom-color:var(--panel);color:var(--txt);font-weight:600}
+.tpane{display:none;flex:1;overflow:hidden;flex-direction:column}
+.tpane.act{display:flex}
+
+/* ─── CONTENT HEADER ─── */
+.ch{background:var(--ch);border-bottom:1px solid var(--tb-b);padding:4px 12px;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.ch h2{font-size:12px;font-weight:700;color:var(--sel)}.ch .chsub{color:var(--sub);font-size:10px;margin-left:auto;cursor:pointer}
+.ch .chsub:hover{color:var(--sel)}
+
+/* ─── SEARCH BAR ─── */
+.sbar{display:flex;align-items:center;gap:5px;padding:3px 12px;background:var(--tb);border-bottom:1px solid var(--tb-b);flex-shrink:0}
+.sbar input{padding:2px 6px;border:1px solid var(--bdr);border-radius:1px;font-size:11px;flex:1;background:var(--inp);color:var(--txt);min-width:0}
 .sbar input:focus{outline:none;border-color:var(--sel)}
-.tw{flex:1;overflow-y:auto}
-table{width:100%;border-collapse:collapse}
-thead th{background:var(--th-bg);border-right:1px solid var(--border);border-bottom:2px solid var(--sel);padding:5px 10px;text-align:left;font-size:11px;font-weight:600;color:var(--sel);position:sticky;top:0;cursor:pointer;user-select:none;white-space:nowrap}
-thead th:hover{background:var(--th-bg-h)}thead th:last-child{border-right:none}
-tbody tr{border-bottom:1px solid var(--border)}
-tbody tr:nth-child(odd){background:var(--odd)}tbody tr:nth-child(even){background:var(--even)}
-tbody tr:hover{background:var(--hover);cursor:pointer}
-tbody tr.sel{background:var(--sel)!important}tbody tr.sel td{color:#fff}
-td{padding:4px 10px;font-size:11px;border-right:1px solid var(--border)}td:last-child{border-right:none}
+.sbar .sc{color:var(--sub);font-size:10px;white-space:nowrap;flex-shrink:0}
 
-/* BADGES */
-.badge{display:inline-flex;align-items:center;gap:3px;padding:1px 7px;border-radius:2px;font-size:10px;font-weight:600;border:1px solid}
-.b-admin{background:#dbeafe;color:#1e40af;border-color:#93c5fd}
-.b-tech{background:#dcfce7;color:#166534;border-color:#86efac}
-.b-user{background:#f3f4f6;color:#374151;border-color:#d1d5db}
-.b-custom{background:#fef3c7;color:#92400e;border-color:#fcd34d}
-[data-theme="dark"] .b-admin{background:#1e3a6b;color:#93c5fd;border-color:#3b82f6}
-[data-theme="dark"] .b-tech{background:#14532d;color:#86efac;border-color:#22c55e}
-[data-theme="dark"] .b-user{background:#1e293b;color:#94a3b8;border-color:#475569}
-[data-theme="dark"] .b-custom{background:#3a2a00;color:#fcd34d;border-color:#f59e0b}
+/* ─── TABLE ─── */
+.tw{flex:1;overflow-y:auto;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:400px}
+thead th{background:var(--th);border-right:1px solid var(--bdr);border-bottom:2px solid var(--sel);padding:4px 9px;text-align:left;font-size:10px;font-weight:700;color:var(--sel);position:sticky;top:0;cursor:pointer;user-select:none;white-space:nowrap;z-index:2;text-transform:uppercase;letter-spacing:.3px}
+thead th:hover{filter:brightness(1.08)}thead th:last-child{border-right:none}
+tbody tr{border-bottom:1px solid var(--bdr)}
+tbody tr:nth-child(odd){background:var(--odd)}
+tbody tr:nth-child(even){background:var(--even)}
+tbody tr:hover{background:var(--hov);cursor:pointer}
+tbody tr.sel-row{background:var(--sel)!important}
+tbody tr.sel-row td{color:var(--sel-t)!important}
+td{padding:3px 9px;font-size:11px;border-right:1px solid var(--bdr);color:var(--txt)}
+td:last-child{border-right:none}
 
-/* STATUS CHIPS */
-.chip-on{background:#dcfce7;color:#166534;border:1px solid #86efac;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:600}
-.chip-off{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:600}
-[data-theme="dark"] .chip-on{background:#14532d;color:#86efac;border-color:#22c55e}
-[data-theme="dark"] .chip-off{background:#450a0a;color:#fca5a5;border-color:#ef4444}
-
-/* DETAILS PANEL */
-.details{width:240px;border-left:1px solid var(--sidebar-b);background:var(--sidebar);overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column}
-.dh{background:var(--sb-head);color:#fff;padding:8px 12px;font-size:11px;font-weight:600;flex-shrink:0}
-.davatar{text-align:center;padding:14px 12px;border-bottom:1px solid var(--sidebar-b)}
-.av{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#1a3a80,#0078d7);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;margin:0 auto 5px;border:2px solid #7db8e8}
-.av.dis{background:linear-gradient(135deg,#444,#666)}
+/* ─── DETAILS PANEL ─── */
+.details{width:230px;border-left:1px solid var(--sb-b);background:var(--sb);overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column}
+.dh{background:var(--sbh);color:#fff;padding:6px 11px;font-size:11px;font-weight:600;flex-shrink:0}
+.davatar{text-align:center;padding:10px;border-bottom:1px solid var(--bdr)}
+.av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#1a3a80,#0078d7);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;margin:0 auto 5px;border:2px solid #7db8e8}
+.av.dis{background:linear-gradient(135deg,#222,#444)}
 .dn{font-weight:700;font-size:12px;color:var(--sel)}.de{font-size:10px;color:var(--sub);margin-top:1px}
-.dr{padding:5px 10px;border-bottom:1px solid var(--border);font-size:11px}
-.dr label{color:var(--sub);display:block;font-size:9px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1px}
-.dr span{color:var(--text);font-weight:500}
-.dact{padding:8px 10px;display:flex;flex-direction:column;gap:3px}
-.db{padding:4px 8px;border:1px solid var(--border);border-radius:2px;cursor:pointer;font-size:11px;background:var(--toolbar);color:var(--text);display:flex;align-items:center;gap:5px;width:100%;margin:0}
-.db:hover{background:var(--hover);border-color:var(--sel)}.db.dang{color:var(--danger);border-color:rgba(204,0,0,.3)}.db.dang:hover{background:rgba(204,0,0,.08)}
+.dr{padding:4px 9px;border-bottom:1px solid var(--bdr)}
+.dr label{color:var(--sub);display:block;font-size:9px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px}
+.dr span{color:var(--txt);font-weight:500;font-size:11px}
+.dact{padding:6px 8px;display:flex;flex-direction:column;gap:2px}
+.dab{padding:3px 7px;border:1px solid var(--bdr);border-radius:1px;cursor:pointer;font-size:11px;background:var(--tb);color:var(--txt);display:flex;align-items:center;gap:4px;width:100%}
+.dab:hover{background:var(--hov);border-color:var(--sel)}.dab.dng{color:var(--dngr)}.dab.dng:hover{background:rgba(200,0,0,.07)}
 
-/* STATUSBAR */
-.statusbar{background:var(--status);color:var(--status-t);padding:2px 10px;font-size:10px;display:flex;gap:16px;flex-shrink:0;overflow-x:auto}
-.statusbar span{display:flex;align-items:center;gap:3px;white-space:nowrap}
+/* ─── STATUS BAR ─── */
+.statusbar{background:var(--sts);color:var(--sts-t);padding:1px 8px;font-size:10px;display:flex;gap:12px;flex-shrink:0;border-top:1px solid rgba(0,0,0,.3);overflow-x:auto}
+.statusbar span{display:flex;align-items:center;gap:2px;white-space:nowrap;padding:1px 0}
 
-/* TERMINAL */
-.terminal-panel{height:200px;background:var(--term-bg);border-top:2px solid var(--sel);flex-shrink:0;display:none;flex-direction:column}
-.terminal-panel.show{display:flex}
-.term-head{background:var(--term-head);color:#ccc;padding:3px 10px;font-size:10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #333}
-.term-body{flex:1;overflow-y:auto;padding:6px 10px;font-family:'Consolas','Courier New',monospace;font-size:12px;color:#ccc}
-.term-line{margin:1px 0;white-space:pre-wrap;word-break:break-all}
-.tcmd{color:#4fc1ff}.tout{color:#ccc}.terr{color:#f44747}.tok{color:#4ec9b0}
-.term-input-row{display:flex;align-items:center;padding:4px 10px;border-top:1px solid #333;background:var(--term-inp)}
-.term-prompt{color:#4ec9b0;font-family:monospace;font-size:12px;margin-right:6px;white-space:nowrap}
-.term-input{flex:1;background:transparent;border:none;outline:none;color:#ccc;font-family:monospace;font-size:12px}
+/* ─── BADGES ─── */
+.badge{display:inline-flex;align-items:center;padding:0 6px;border-radius:1px;font-size:10px;font-weight:600;border:1px solid;height:16px}
+.ba{background:#dbeafe;color:#1e40af;border-color:#93c5fd}
+.bt{background:#dcfce7;color:#166534;border-color:#86efac}
+.bu{background:#f3f4f6;color:#374151;border-color:#d1d5db}
+.bc{background:#fef3c7;color:#92400e;border-color:#fcd34d}
+[data-theme="dark"] .ba{background:#060d1f;color:#93c5fd;border-color:#1e3a6b}
+[data-theme="dark"] .bt{background:#031a0e;color:#86efac;border-color:#0a3d1f}
+[data-theme="dark"] .bu{background:#050505;color:#6b7280;border-color:#111827}
+[data-theme="dark"] .bc{background:#1a0e00;color:#fcd34d;border-color:#3a2a00}
+.chip-on{background:#dcfce7;color:#166534;border:1px solid #86efac;padding:0 6px;border-radius:8px;font-size:10px;font-weight:600}
+.chip-off{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;padding:0 6px;border-radius:8px;font-size:10px;font-weight:600}
+[data-theme="dark"] .chip-on{background:#031a0e;color:#86efac;border-color:#0a3d1f}
+[data-theme="dark"] .chip-off{background:#1a0000;color:#fca5a5;border-color:#3d0a0a}
+.ph{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;padding:0 6px;border-radius:1px;font-size:10px;font-weight:600}
+.pm{background:#fff7ed;color:#9a3412;border:1px solid #fdba74;padding:0 6px;border-radius:1px;font-size:10px;font-weight:600}
+.pl{background:#f0fdf4;color:#166534;border:1px solid #86efac;padding:0 6px;border-radius:1px;font-size:10px;font-weight:600}
+.so{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;padding:0 6px;border-radius:1px;font-size:10px;font-weight:600}
+.sc2{background:#f3f4f6;color:#374151;border:1px solid #d1d5db;padding:0 6px;border-radius:1px;font-size:10px;font-weight:600}
+.sr{background:#dcfce7;color:#166534;border:1px solid #86efac;padding:0 6px;border-radius:1px;font-size:10px;font-weight:600}
+.sov{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;padding:0 6px;border-radius:1px;font-size:10px;font-weight:600}
+[data-theme="dark"] .ph{background:#2d0000;color:#fca5a5;border-color:#450a0a}
+[data-theme="dark"] .pm{background:#1a0d00;color:#fdba74;border-color:#3d2500}
+[data-theme="dark"] .pl{background:#031a0e;color:#86efac;border-color:#0a3d1f}
+[data-theme="dark"] .so{background:#060d1f;color:#93c5fd;border-color:#1e3a6b}
 
-/* MAIN TABS */
-.main-tabs{display:flex;border-bottom:2px solid var(--sel);background:var(--toolbar);padding:0 10px;gap:0;flex-shrink:0;overflow-x:auto}
-.main-tab{padding:5px 14px;font-size:11px;cursor:pointer;border:1px solid transparent;border-bottom:none;border-radius:3px 3px 0 0;color:var(--sub);margin-bottom:-2px;white-space:nowrap}
-.main-tab.act{background:var(--panel);border-color:var(--border);border-bottom-color:var(--panel);color:var(--text);font-weight:600}
-.tab-content{display:none;flex:1;overflow:hidden;flex-direction:column}
-.tab-content.act{display:flex}
+/* ─── AUDIT TAGS ─── */
+.atag{display:inline-block;padding:0 5px;border-radius:1px;font-size:10px;font-weight:600;height:16px;line-height:16px}
+.atag-LOGIN{background:#dbeafe;color:#1e40af}
+.atag-LOGIN_FAILED,.atag-DELETE_USER,.atag-DELETE_FILE,.atag-DISABLE_USER,.atag-DELETE_COUNTER{background:#fee2e2;color:#991b1b}
+.atag-CREATE_USER,.atag-ENABLE_USER{background:#dcfce7;color:#166534}
+.atag-RESET_PASSWORD,.atag-UPDATE_PERMISSIONS,.atag-CREATE_ROLE{background:#fef3c7;color:#92400e}
+.atag-UPDATE_PROFILE,.atag-UPDATE_ROLE{background:#f3f4f6;color:#374151}
+.atag-UPLOAD_FILE,.atag-CREATE_TICKET{background:#ede9fe;color:#4c1d95}
+.atag-CREATE_COUNTER,.atag-RESET_COUNTER{background:#e0f2fe;color:#075985}
+.atag-UPDATE_TICKET{background:#fef3c7;color:#92400e}
+[data-theme="dark"] .atag-LOGIN{background:#060d1f;color:#93c5fd}
+[data-theme="dark"] .atag-LOGIN_FAILED,[data-theme="dark"] .atag-DELETE_USER{background:#2d0000;color:#fca5a5}
+[data-theme="dark"] .atag-CREATE_USER{background:#031a0e;color:#86efac}
+[data-theme="dark"] .atag-UPLOAD_FILE,[data-theme="dark"] .atag-CREATE_TICKET{background:#0d0020;color:#c4b5fd}
+[data-theme="dark"] .atag-UPDATE_PROFILE,[data-theme="dark"] .atag-UPDATE_ROLE{background:#050505;color:#6b7280}
+[data-theme="dark"] .atag-CREATE_COUNTER,.atag-RESET_COUNTER{background:#001a2e;color:#38bdf8}
 
-/* MODAL */
-.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;align-items:center;justify-content:center;padding:10px}
+/* ─── TERMINAL ─── */
+.term-panel{background:var(--trm);border-top:2px solid var(--sel);flex-shrink:0;display:none;flex-direction:column;height:185px}
+.term-panel.open{display:flex}
+.term-hd{background:var(--trm-h);color:#666;padding:2px 8px;font-size:10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #111;flex-shrink:0}
+.term-hd button{background:none;border:none;color:#555;cursor:pointer;font-size:11px;padding:0 3px;width:auto}
+.term-hd button:hover{color:#999}
+.term-body{flex:1;overflow-y:auto;padding:4px 8px;font-family:'Consolas','Courier New',monospace;font-size:12px;color:#aaa;word-break:break-all}
+.tl-c{color:#4fc1ff}.tl-o{color:#bbb}.tl-e{color:#f44747}.tl-ok{color:#4ec9b0}
+.term-ir{display:flex;align-items:center;padding:2px 8px;border-top:1px solid #0d0d0d;background:var(--trm-h);flex-shrink:0}
+.term-prompt{color:#4ec9b0;font-family:monospace;font-size:12px;margin-right:6px;white-space:nowrap;flex-shrink:0}
+.term-inp{flex:1;background:transparent;border:none;outline:none;color:#bbb;font-family:monospace;font-size:12px}
+
+/* ─── MODAL ─── */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:1000;align-items:center;justify-content:center;padding:10px}
 .mo.show{display:flex}
-.mw{background:var(--modal-bg);border:1px solid var(--border);border-radius:4px;box-shadow:4px 4px 24px rgba(0,0,0,.5);width:440px;max-width:100%;max-height:92vh;overflow:hidden;display:flex;flex-direction:column}
-.mw.wide{width:580px}
-.mt{background:var(--title-bg);color:#fff;padding:6px 12px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;flex-shrink:0}
-.mc{margin-left:auto;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:10px;cursor:pointer;border-radius:2px;padding:1px 6px;width:auto}
-.mc:hover{background:#c42b1c;border-color:#c42b1c}
-.mb{padding:16px;overflow-y:auto;background:var(--modal-bg)}
-.mb label{display:block;font-size:11px;color:var(--sub);margin:8px 0 2px}
+.mw{background:var(--modal);border:1px solid var(--bdr);border-radius:2px;box-shadow:4px 6px 32px rgba(0,0,0,.7);width:440px;max-width:100%;max-height:90vh;overflow:hidden;display:flex;flex-direction:column}
+.mw.wide{width:560px}.mw.sm{width:330px}
+.mt{background:var(--tl);color:#fff;padding:5px 11px;display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;flex-shrink:0}
+.mclose{margin-left:auto;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:10px;cursor:pointer;border-radius:1px;padding:1px 6px;width:auto}
+.mclose:hover{background:#c42b1c;border-color:#c42b1c}
+.mb{padding:12px;overflow-y:auto;background:var(--modal)}
+.mb label{display:block;font-size:10px;color:var(--sub);margin:6px 0 2px;text-transform:uppercase;letter-spacing:.3px}
 .mb label:first-child{margin-top:0}
-.mb input,.mb select,.mb textarea{width:100%;padding:5px 7px;border:1px solid var(--border);border-radius:2px;font-size:12px;background:var(--inp-bg);color:var(--text)}
+.mb input,.mb select,.mb textarea{width:100%;padding:4px 7px;border:1px solid var(--bdr);border-radius:1px;font-size:12px;background:var(--inp);color:var(--txt)}
 .mb input:focus,.mb select:focus,.mb textarea:focus{outline:none;border-color:var(--sel)}
-.mb textarea{resize:vertical;height:60px;font-family:inherit}
-.mf{background:var(--modal-foot);border-top:1px solid var(--border);padding:8px 14px;display:flex;justify-content:flex-end;gap:6px;flex-shrink:0}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.wbtn{padding:4px 16px;border:1px solid var(--border);border-radius:2px;cursor:pointer;font-size:11px;background:var(--toolbar);color:var(--text);min-width:70px;text-align:center;width:auto;margin:0}
-.wbtn:hover{background:var(--hover);border-color:var(--sel)}
+.mb textarea{resize:vertical;height:58px;font-family:inherit}
+.mb input[type=checkbox]{width:auto;margin:0;accent-color:var(--sel)}
+.mb .ro{background:var(--inp-ro)!important;color:var(--sub)!important}
+.mfoot{background:var(--mfoot);border-top:1px solid var(--bdr);padding:6px 12px;display:flex;justify-content:flex-end;gap:5px;flex-shrink:0}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.wbtn{padding:3px 13px;border:1px solid var(--bdr);border-radius:1px;cursor:pointer;font-size:11px;background:var(--tb);color:var(--txt);min-width:64px}
+.wbtn:hover{background:var(--hov);border-color:var(--sel)}
 .wbtn.pri{background:linear-gradient(180deg,#0e84e8,#0060c0);border-color:#004a9f;color:#fff}
-.wbtn.pri:hover{background:linear-gradient(180deg,#1990f0,#006fd0)}
-.wbtn.dng{background:linear-gradient(180deg,#f56060,#cc0000);border-color:#a00000;color:#fff}
-.err-msg{color:var(--danger);font-size:11px;margin-top:5px;min-height:14px}
+.wbtn.pri:hover{background:linear-gradient(180deg,#1990f0,#0070d8)}
+.wbtn.dng{background:linear-gradient(180deg,#e84040,#cc0000);border-color:#900;color:#fff}
+.err{color:var(--dngr);font-size:11px;margin-top:4px;min-height:14px}
 
-/* MODAL TABS */
-.tab-bar{display:flex;border-bottom:1px solid var(--border);background:var(--toolbar);padding:0 14px}
-.tab{padding:6px 14px;font-size:11px;cursor:pointer;border:1px solid transparent;border-bottom:none;border-radius:3px 3px 0 0;color:var(--sub);margin-bottom:-1px}
-.tab.act{background:var(--modal-bg);border-color:var(--border);color:var(--text);font-weight:600}
-.tab-body{display:none;padding:14px;background:var(--modal-bg)}.tab-body.act{display:block}
+/* ─── MODAL TABS ─── */
+.tabbar{display:flex;border-bottom:1px solid var(--bdr);background:var(--tb);padding:0 10px;flex-shrink:0}
+.mtab2{padding:4px 11px;font-size:11px;cursor:pointer;border:1px solid transparent;border-bottom:none;border-radius:2px 2px 0 0;color:var(--sub);margin-bottom:-1px;user-select:none}
+.mtab2.act{background:var(--modal);border-color:var(--bdr);color:var(--txt);font-weight:600}
+.tbody2{display:none;padding:12px;background:var(--modal)}.tbody2.act{display:block}
 
-/* PW WRAP */
-.pw-w{position:relative}.pw-w input{padding-right:28px}
-.eye{position:absolute;right:5px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:13px;color:var(--sub);padding:0;width:auto;margin:0}
+/* ─── PW WRAPPER ─── */
+.pww{position:relative}
+.pww input{padding-right:26px!important}
+.eye{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:11px;color:var(--sub);padding:0;width:auto}
 .eye:hover{color:var(--sel)}
 
-/* LOGIN */
-.login-screen{position:fixed;inset:0;background:var(--login-bg);display:flex;align-items:center;justify-content:center;z-index:2000;flex-direction:column;padding:16px}
-.lw{background:var(--modal-bg);border:1px solid var(--border);border-radius:4px;box-shadow:4px 4px 30px rgba(0,0,0,.6);width:360px;max-width:100%;overflow:hidden}
-.lb{background:var(--title-bg);padding:20px;text-align:center;color:#fff}
-.lb .li{font-size:40px;margin-bottom:5px}.lb h2{font-size:14px;font-weight:700;letter-spacing:.3px}.lb p{font-size:10px;color:#a8c4f0;margin-top:3px}
-.lf{padding:16px;background:var(--modal-bg)}.lf label{display:block;font-size:11px;color:var(--sub);margin-bottom:2px}
-.lf input{width:100%;padding:6px 9px;border:1px solid var(--border);border-radius:2px;font-size:12px;background:var(--inp-bg);color:var(--text);margin-bottom:10px}
-.lf input:focus{outline:none;border-color:var(--sel)}
-.ls{width:100%;padding:7px;background:linear-gradient(180deg,#0e84e8,#0060c0);color:#fff;border:1px solid #004a9f;border-radius:2px;cursor:pointer;font-size:12px;font-weight:600;margin-top:3px}
-.ls:hover{background:linear-gradient(180deg,#1990f0,#006fd0)}
-.le{color:var(--danger);font-size:11px;margin-top:5px;min-height:14px}
-.lfoot{background:var(--toolbar);border-top:1px solid var(--border);padding:7px 16px;font-size:10px;color:var(--sub);text-align:center}
-.win-bg{color:rgba(255,255,255,.05);font-size:100px;font-weight:900;position:absolute;bottom:-15px;right:10px;pointer-events:none;user-select:none;letter-spacing:-5px}
+/* ─── DASHBOARD ─── */
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:10px}
+.stat{background:var(--card);border:1px solid var(--bdr);border-left:3px solid var(--sel);padding:10px 12px;border-radius:1px}
+.stat .sv{font-size:24px;font-weight:700;color:var(--sel);line-height:1}
+.stat .sl{font-size:9px;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.stat.red{border-left-color:#ef4444}.stat.red .sv{color:#ef4444}
+.stat.grn{border-left-color:#22c55e}.stat.grn .sv{color:#22c55e}
+.stat.amb{border-left-color:#f59e0b}.stat.amb .sv{color:#f59e0b}
+.dsec{padding:0 10px 10px}
+.dsec h3{font-size:9px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;border-bottom:1px solid var(--bdr);padding-bottom:3px}
+.chart-wrap{background:var(--chart);border:1px solid var(--bdr);padding:8px;display:flex;align-items:flex-end;gap:5px;height:100px}
+.bc{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;min-width:0}
+.bf{width:100%;border-radius:1px 1px 0 0;min-height:3px;transition:height .3s}
+.bl{font-size:8px;color:var(--sub);text-align:center;word-break:break-all;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bn{font-size:9px;font-weight:700;color:var(--txt)}
+.ami-w{background:var(--chart);border:1px solid var(--bdr)}
+.ami{display:flex;align-items:center;gap:5px;padding:3px 7px;border-bottom:1px solid var(--bdr);font-size:10px}
+.ami:last-child{border-bottom:none}
+.ami-t{color:var(--sub);white-space:nowrap;flex-shrink:0;font-size:9px}
+.ami-a{font-weight:600;padding:0 5px;border-radius:1px;font-size:9px;background:var(--hov);color:var(--sel);white-space:nowrap;flex-shrink:0}
+.ami-d{color:var(--txt);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* SPINNER & TOAST */
-.spin-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:3000;align-items:center;justify-content:center}
-.spin-ov.show{display:flex}
-.spin{width:40px;height:40px;border:4px solid rgba(255,255,255,.2);border-top-color:#0078d7;border-radius:50%;animation:_spin .7s linear infinite}
-@keyframes _spin{to{transform:rotate(360deg)}}
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#1a3a6b;color:#fff;padding:7px 18px;border-radius:3px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .3s;z-index:5000;border:1px solid #0078d7;white-space:nowrap}
+/* ─── AUDIT FILTER ─── */
+.af{display:flex;gap:4px;padding:5px 10px;background:var(--tb);border-bottom:1px solid var(--tb-b);flex-shrink:0;flex-wrap:wrap;align-items:center}
+.af input,.af select{padding:2px 6px;border:1px solid var(--bdr);border-radius:1px;font-size:11px;background:var(--inp);color:var(--txt);height:22px}
+.af input{flex:1;min-width:100px}
+
+/* ─── DRIVE ─── */
+.drive-hdr{background:var(--ch);border-bottom:1px solid var(--tb-b);padding:4px 12px;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.hdd-svg{flex-shrink:0;opacity:.8}
+.bc-wrap{display:flex;align-items:center;gap:3px;font-size:11px;flex:1;flex-wrap:wrap;min-width:0}
+.bci{cursor:pointer;color:var(--sel)}.bci:hover{text-decoration:underline}
+.bcs{color:var(--sub);font-size:12px}
+.drive-tool{display:flex;align-items:center;gap:3px;padding:2px 8px;background:var(--tb);border-bottom:1px solid var(--tb-b);flex-shrink:0;flex-wrap:wrap}
+.drive-stor{padding:4px 12px;background:var(--tb);border-bottom:1px solid var(--tb-b);flex-shrink:0}
+.stor-wrap{background:var(--bdr);border-radius:1px;height:10px;overflow:hidden;margin-bottom:2px}
+.stor-fill{height:100%;background:linear-gradient(90deg,#0078d7,#1a90ff);transition:width .4s;border-radius:1px}
+.stor-fill.warn{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.stor-fill.crit{background:linear-gradient(90deg,#ef4444,#f87171)}
+.stor-lbl{font-size:10px;color:var(--sub)}
+.dgrid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:5px;padding:7px;overflow-y:auto;flex:1;align-content:start}
+.dfile{display:flex;flex-direction:column;align-items:center;padding:6px 3px;border:1px solid transparent;border-radius:1px;cursor:pointer;text-align:center}
+.dfile:hover{background:var(--hov);border-color:var(--sel)}.dfile.sf{background:var(--sb-sel);border-color:var(--sel)}
+.dfile-ico{font-size:22px;margin-bottom:2px}
+.dfile-nm{font-size:10px;word-break:break-word;max-width:80px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;color:var(--txt)}
+.dfile-sz{color:var(--sub);font-size:9px;margin-top:1px}
+.dlist{display:none;flex-direction:column;flex:1;overflow-y:auto}
+.dlist.show{display:flex}
+.dlitem{display:flex;align-items:center;gap:6px;padding:3px 11px;border-bottom:1px solid var(--bdr);font-size:11px;cursor:pointer;color:var(--txt)}
+.dlitem:hover{background:var(--hov)}.dlico{font-size:13px;flex-shrink:0}
+.dlnm{flex:1}.dlsz{color:var(--sub);font-size:10px;white-space:nowrap}.dldt{color:var(--sub);font-size:10px;white-space:nowrap;margin-left:8px}
+.vbtn{padding:2px 5px;border:1px solid var(--bdr);border-radius:1px;cursor:pointer;background:var(--tb);font-size:10px;color:var(--txt)}
+.vbtn.act{background:var(--sb-sel);border-color:var(--sel)}
+
+/* ─── TOKEN COUNTERS ─── */
+.counter-big{text-align:center;padding:14px 8px;border-bottom:1px solid var(--bdr)}
+.cnum{font-size:26px;font-weight:900;color:var(--sel);letter-spacing:1px;font-family:'Consolas',monospace}
+.cname{font-size:10px;color:var(--sub);margin-top:2px}
+.cact-row{display:flex;gap:3px;padding:7px 9px;flex-wrap:wrap}
+.cabt{flex:1;padding:4px 3px;border:1px solid var(--bdr);border-radius:1px;cursor:pointer;font-size:10px;background:var(--tb);color:var(--txt);text-align:center;min-width:38px}
+.cabt:hover{background:var(--hov);border-color:var(--sel)}
+.cabt.pri{background:linear-gradient(180deg,#0e84e8,#0060c0);border-color:#004a9f;color:#fff}
+.cabt.pri:hover{background:linear-gradient(180deg,#1990f0,#0070d8)}
+
+/* ─── PERMISSIONS ─── */
+.perm-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:3px}
+.pitem{display:flex;align-items:center;gap:5px;padding:4px 7px;border:1px solid var(--bdr);border-radius:1px;cursor:pointer;font-size:11px;color:var(--txt);background:var(--tb);user-select:none}
+.pitem:hover{background:var(--hov);border-color:var(--sel)}
+.pitem.on{background:var(--sb-sel);border-color:var(--sel)}
+.pitem input{margin:0;accent-color:var(--sel);pointer-events:none}
+.psec{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--sub);margin:7px 0 2px;grid-column:1/-1;padding-top:4px;border-top:1px solid var(--bdr)}
+.psec:first-child{border-top:none;margin-top:0;padding-top:0}
+
+/* ─── ROLES TABLE ─── */
+.rt{width:100%;border-collapse:collapse;font-size:11px}
+.rt th{background:var(--th);padding:3px 8px;text-align:left;font-size:9px;color:var(--sub);text-transform:uppercase;border-bottom:1px solid var(--bdr)}
+.rt td{padding:4px 8px;border-bottom:1px solid var(--bdr);color:var(--txt)}
+.rdot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+
+/* ─── LOGIN ─── */
+.lscreen{position:fixed;inset:0;background:var(--login-bg);display:flex;align-items:center;justify-content:center;z-index:2000;padding:16px}
+.lbox{background:var(--modal);border:1px solid var(--bdr);border-radius:2px;box-shadow:4px 8px 36px rgba(0,0,0,.8);width:320px;max-width:100%;overflow:hidden}
+.lhd{background:var(--tl);padding:16px;text-align:center;color:#fff}
+.lhd .lic{font-size:34px;margin-bottom:4px}.lhd h2{font-size:13px;font-weight:700}.lhd p{font-size:10px;color:#a8c4f0;margin-top:1px}
+.lbody{padding:14px;background:var(--modal)}
+.lbody label{display:block;font-size:10px;color:var(--sub);margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px}
+.lbody input{width:100%;padding:5px 7px;border:1px solid var(--bdr);border-radius:1px;font-size:12px;background:var(--inp);color:var(--txt);margin-bottom:8px}
+.lbody input:focus{outline:none;border-color:var(--sel)}
+.lbtn{width:100%;padding:6px;background:linear-gradient(180deg,#0e84e8,#0060c0);color:#fff;border:1px solid #004a9f;border-radius:1px;cursor:pointer;font-size:12px;font-weight:600}
+.lbtn:hover{background:linear-gradient(180deg,#1990f0,#0070d8)}
+.lerr{color:var(--dngr);font-size:11px;margin-top:5px;min-height:14px}
+.lfoot{background:var(--mfoot);border-top:1px solid var(--bdr);padding:5px 14px;font-size:10px;color:var(--sub);text-align:center}
+
+/* ─── SPINNER/TOAST ─── */
+.sov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:3000;align-items:center;justify-content:center}
+.sov.show{display:flex}
+.spin{width:36px;height:36px;border:4px solid rgba(255,255,255,.12);border-top-color:#0078d7;border-radius:50%;animation:_sp .65s linear infinite}
+@keyframes _sp{to{transform:rotate(360deg)}}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#050d20;color:#e2e8f0;padding:5px 18px;border-radius:1px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:5000;border:1px solid #1e3a6b;border-left:3px solid var(--sel);white-space:nowrap}
 .toast.show{opacity:1}
 
-/* ROLES TABLE */
-.rt{width:100%;border-collapse:collapse;font-size:11px}
-.rt th{background:var(--th-bg);padding:4px 8px;text-align:left;font-size:10px;color:var(--sub);text-transform:uppercase;border-bottom:1px solid var(--border)}
-.rt td{padding:5px 8px;border-bottom:1px solid var(--border);color:var(--text)}
-.role-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}
+/* ─── TICKET FILTER BAR ─── */
+.tick-tb{display:flex;align-items:center;gap:4px;padding:3px 10px;background:var(--tb);border-bottom:1px solid var(--tb-b);flex-shrink:0;flex-wrap:wrap}
 
-/* ══ DASHBOARD ══ */
-.dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:14px}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
-.stat-card .sc-val{font-size:28px;font-weight:700;color:var(--sel)}
-.stat-card .sc-lbl{font-size:11px;color:var(--sub)}
-.stat-card.red .sc-val{color:#ef4444}
-.stat-card.grn .sc-val{color:#22c55e}
-.stat-card.amb .sc-val{color:#f59e0b}
-.dash-section{padding:0 14px 14px}
-.dash-section h3{font-size:12px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;padding-top:2px}
-.chart-wrap{background:var(--chart-bg);border:1px solid var(--border);border-radius:6px;padding:12px;display:flex;align-items:flex-end;gap:8px;min-height:110px}
-.bar-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
-.bar-fill{width:100%;border-radius:3px 3px 0 0;min-height:4px;transition:height .4s}
-.bar-lbl{font-size:10px;color:var(--sub);text-align:center;word-break:break-all}
-.bar-num{font-size:10px;font-weight:700;color:var(--text)}
-.audit-mini{background:var(--chart-bg);border:1px solid var(--border);border-radius:6px;overflow:hidden}
-.ami-row{display:flex;align-items:center;gap:8px;padding:5px 10px;border-bottom:1px solid var(--border);font-size:11px}
-.ami-row:last-child{border-bottom:none}
-.ami-time{color:var(--sub);font-size:10px;white-space:nowrap}
-.ami-act{font-weight:600;padding:1px 6px;border-radius:2px;font-size:10px;background:var(--hover);color:var(--sel);white-space:nowrap}
-.ami-detail{color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ami-actor{color:var(--sub);font-size:10px;white-space:nowrap}
-
-/* ══ AUDIT LOG ══ */
-.audit-filters{display:flex;gap:6px;padding:8px 14px;background:var(--toolbar);border-bottom:1px solid var(--toolbar-b);flex-shrink:0;flex-wrap:wrap;align-items:center}
-.audit-filters input,.audit-filters select{padding:3px 7px;border:1px solid var(--border);border-radius:2px;font-size:11px;background:var(--inp-bg);color:var(--text)}
-.audit-tag{display:inline-block;padding:1px 6px;border-radius:2px;font-size:10px;font-weight:600}
-.audit-CREATE_USER{background:#dcfce7;color:#166534}
-.audit-DELETE_USER{background:#fee2e2;color:#991b1b}
-.audit-RESET_PASSWORD{background:#fef3c7;color:#92400e}
-.audit-LOGIN{background:#dbeafe;color:#1e40af}
-.audit-LOGIN_FAILED{background:#fee2e2;color:#991b1b}
-.audit-UPDATE_PROFILE,.audit-UPDATE_ROLE{background:#f3f4f6;color:#374151}
-.audit-ENABLE_USER{background:#dcfce7;color:#166534}
-.audit-DISABLE_USER{background:#fee2e2;color:#991b1b}
-.audit-CREATE_ROLE,.audit-DELETE_ROLE{background:#fef3c7;color:#92400e}
-.audit-UPLOAD_FILE,.audit-DELETE_FILE{background:#ede9fe;color:#4c1d95}
-[data-theme="dark"] .audit-CREATE_USER{background:#14532d;color:#86efac}
-[data-theme="dark"] .audit-DELETE_USER{background:#450a0a;color:#fca5a5}
-[data-theme="dark"] .audit-LOGIN{background:#1e3a6b;color:#93c5fd}
-[data-theme="dark"] .audit-RESET_PASSWORD{background:#3a2a00;color:#fcd34d}
-[data-theme="dark"] .audit-UPDATE_PROFILE,[data-theme="dark"] .audit-UPDATE_ROLE{background:#1e293b;color:#94a3b8}
-
-/* ══ DRIVE ══ */
-.drive-header{background:var(--ch-bg);border-bottom:1px solid var(--toolbar-b);padding:6px 14px;display:flex;align-items:center;gap:6px;flex-shrink:0}
-.breadcrumb{display:flex;align-items:center;gap:4px;font-size:11px;flex:1;flex-wrap:wrap}
-.bc-item{cursor:pointer;color:var(--sel)}.bc-item:hover{text-decoration:underline}
-.bc-sep{color:var(--sub)}
-.drive-toolbar{display:flex;align-items:center;gap:4px;padding:4px 10px;background:var(--toolbar);border-bottom:1px solid var(--toolbar-b);flex-shrink:0;flex-wrap:wrap}
-.drive-storage-bar{padding:6px 14px;background:var(--toolbar);border-bottom:1px solid var(--toolbar-b);flex-shrink:0}
-.stor-bar-wrap{background:var(--border);border-radius:2px;height:10px;margin-bottom:3px;overflow:hidden}
-.stor-bar{height:100%;background:linear-gradient(90deg,#0078d7,#1a90ff);transition:width .5s;border-radius:2px}
-.stor-bar.warn{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
-.stor-bar.crit{background:linear-gradient(90deg,#ef4444,#f87171)}
-.dfile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;padding:10px;overflow-y:auto;flex:1;align-content:start}
-.dfile{display:flex;flex-direction:column;align-items:center;padding:8px 4px;border:1px solid transparent;border-radius:3px;cursor:pointer;text-align:center;font-size:10px}
-.dfile:hover{background:var(--hover);border-color:var(--sel)}.dfile.sel-f{background:var(--sidebar-sel);border-color:var(--sel)}
-.dfile-icon{font-size:26px;margin-bottom:4px}
-.dfile-name{word-break:break-word;max-width:86px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;color:var(--text)}
-.dfile-size{color:var(--sub);font-size:9px;margin-top:2px}
-.drive-list-view{display:none;flex-direction:column;flex:1;overflow-y:auto}
-.drive-list-view.show{display:flex}
-.dl-item{display:flex;align-items:center;gap:8px;padding:5px 12px;border-bottom:1px solid var(--border);font-size:11px;cursor:pointer;color:var(--text)}
-.dl-item:hover{background:var(--hover)}.dl-icon{font-size:15px;flex-shrink:0}
-.dl-name{flex:1;color:var(--text)}.dl-size{color:var(--sub);font-size:10px;white-space:nowrap}.dl-date{color:var(--sub);font-size:10px;white-space:nowrap}
-.vt-btn{padding:2px 6px;border:1px solid var(--border);border-radius:2px;cursor:pointer;background:var(--toolbar);font-size:11px;color:var(--text)}
-.vt-btn.act{background:var(--sidebar-sel);border-color:var(--sel)}
-
-/* ══ RESPONSIVE ══ */
+/* ─── RESPONSIVE ─── */
 @media(max-width:1000px){.details{display:none}}
-@media(max-width:760px){
-  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:500;transform:translateX(-100%);width:220px}
-  .sidebar.open{transform:translateX(0)}
-  .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:499}
-  .sidebar-overlay.show{display:block}
-  .hamburger{display:flex}
+@media(max-width:720px){
+  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:499;transform:translateX(-100%);width:200px}
+  .sidebar.open{transform:translateX(0)}.hamburger{display:flex}
   .toolbar{display:none}
-  .tb-title{font-size:11px}
-  .dash-grid{grid-template-columns:repeat(2,1fr)}
-  .row2,.row3{grid-template-columns:1fr}
-  .mw.wide{width:100%}
-  .main-tab{font-size:10px;padding:4px 10px}
-  thead th{font-size:10px;padding:4px 6px}
-  td{font-size:10px;padding:3px 6px}
+  .dgrid{grid-template-columns:repeat(2,1fr)}
+  .r2,.r3{grid-template-columns:1fr}.mw.wide{width:100%}
+  .perm-grid{grid-template-columns:1fr}
 }
-@media(max-width:480px){
-  .dash-grid{grid-template-columns:1fr 1fr}
-  .statusbar{gap:10px}
-  .statusbar span{font-size:9px}
-}
+@media(max-width:480px){.mtab{font-size:10px;padding:3px 7px}.statusbar{gap:7px}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div class="login-screen" id="loginScreen">
-  <div class="win-bg">AD</div>
-  <div class="lw">
-    <div class="lb">
-      <div class="li">🏢</div>
-      <h2>User Management Console</h2>
-      <p>Active Directory — Administrator Access Only</p>
-    </div>
-    <div class="lf">
-      <label>Administrator Email</label>
-      <input type="text" id="lEmail" value="admin@aman5z.in" placeholder="admin@domain.com" autocomplete="username">
+<!-- ═══ LOGIN SCREEN ═══ -->
+<div class="lscreen" id="loginScreen">
+  <div class="lbox">
+    <div class="lhd"><div class="lic">🏢</div><h2>Active Directory Console</h2><p>aman5z.in — Secure Access Portal</p></div>
+    <div class="lbody">
+      <label>Email / Username</label>
+      <input type="text" id="lEmail" autocomplete="username" placeholder="admin@aman5z.in">
       <label>Password</label>
-      <div class="pw-w">
-        <input type="password" id="lPass" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
-        <button class="eye" onclick="toggleEye('lPass',this)">👁</button>
-      </div>
-      <button class="ls" onclick="doLogin()">Sign In →</button>
-      <div class="le" id="lErr"></div>
+      <div class="pww"><input type="password" id="lPass" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"><button class="eye" onclick="toggleEye('lPass',this)" type="button">👁</button></div>
+      <br>
+      <button class="lbtn" onclick="doLogin()">Sign In →</button>
+      <div class="lerr" id="lErr"></div>
     </div>
-    <div class="lfoot">🔒 Administrators only · All actions are logged</div>
+    <div class="lfoot">🔒 All actions are logged and audited</div>
   </div>
 </div>
 
-<div class="spin-ov" id="spinner"><div class="spin"></div></div>
+<!-- ═══ SPINNER / TOAST ═══ -->
+<div class="sov" id="spinner"><div class="spin"></div></div>
 <div class="toast" id="toast"></div>
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+<div class="sb-ov" id="sbOv" onclick="closeSb()"></div>
 
-<!-- APP -->
+<!-- ═══ TITLE BAR ═══ -->
 <div class="titlebar">
-  <button class="hamburger" onclick="toggleSidebar()">☰</button>
-  <span class="tb-icon">🏢</span>
-  <span class="tb-title">Active Directory — [aman5z.in]</span>
-  <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle dark mode">🌙</button>
-  <div class="tb-win"><span>─</span><span>□</span><span class="x">✕</span></div>
+  <button class="hamburger" onclick="toggleSb()" type="button">☰</button>
+  <span class="tl-icon">🏢</span>
+  <span class="tl-title" id="tlTitle">Active Directory Users and Computers — [aman5z.in]</span>
+  <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">DARK</button>
+  <div class="tl-win">
+    <button onclick="void 0" title="Minimize">─</button>
+    <button onclick="void 0" title="Maximize">□</button>
+    <button class="wx" onclick="doLogout()" title="Close">✕</button>
+  </div>
 </div>
 
-<div class="menubar">
-  <div class="mi" onclick="openAddUser()">File</div>
-  <div class="mi">Action</div>
-  <div class="mi">View</div>
-  <div class="mi" onclick="toggleTerminal()">⬛ Terminal</div>
-  <div class="mi" onclick="openChangeMyPw()">🔑 Change PW</div>
-  <div class="mi" onclick="doLogout()">Sign Out</div>
+<!-- ═══ MENU BAR ═══ -->
+<div class="menubar" id="menubar">
+  <div class="mb-item">
+    <div class="mb-btn" onclick="toggleDD('ddFile')">File</div>
+    <div class="dropdown" id="ddFile">
+      <div class="dd-item" onclick="openAddUser();closeDD()">👤 New User Object…</div>
+      <div class="dd-item" onclick="openAddCounter();closeDD()">🔢 New Token Counter…</div>
+      <div class="dd-item" onclick="openNewTicket();closeDD()">🎫 New IT Ticket…</div>
+      <div class="dd-sep"></div>
+      <div class="dd-item" onclick="exportAudit();closeDD()">📥 Export Audit Log as CSV…</div>
+      <div class="dd-item" onclick="document.getElementById('fileIn').click();closeDD()">⬆️ Upload File to Drive…</div>
+      <div class="dd-sep"></div>
+      <div class="dd-item dd-d" onclick="doLogout();closeDD()">🚪 Sign Out</div>
+    </div>
+  </div>
+  <div class="mb-item">
+    <div class="mb-btn" onclick="toggleDD('ddAction')">Action</div>
+    <div class="dropdown" id="ddAction">
+      <div class="dd-item" onclick="editSel();closeDD()">✏️ Properties…</div>
+      <div class="dd-item" onclick="permSel();closeDD()">🔐 Edit Permissions…</div>
+      <div class="dd-item" onclick="pwSel();closeDD()">🔑 Reset Password…</div>
+      <div class="dd-item" onclick="toggleAccSel();closeDD()">🔒 Enable / Disable Account</div>
+      <div class="dd-sep"></div>
+      <div class="dd-item" onclick="nextTokSel();closeDD()">▶ Next Token</div>
+      <div class="dd-item" onclick="prevTokSel();closeDD()">⏮ Previous Token</div>
+      <div class="dd-item" onclick="repeatTokSel();closeDD()">🔄 Repeat Token</div>
+      <div class="dd-sep"></div>
+      <div class="dd-item" onclick="loadUsers();closeDD()">🔄 Refresh</div>
+      <div class="dd-sep"></div>
+      <div class="dd-item dd-d" onclick="delSel();closeDD()">🗑️ Delete</div>
+    </div>
+  </div>
+  <div class="mb-item">
+    <div class="mb-btn" onclick="toggleDD('ddView')">View</div>
+    <div class="dropdown" id="ddView">
+      <div class="dd-item" onclick="switchTab('users');closeDD()">👥 Users</div>
+      <div class="dd-item" onclick="switchTab('dash');closeDD()">📊 Dashboard</div>
+      <div class="dd-item" onclick="switchTab('audit');closeDD()">📋 Audit Log</div>
+      <div class="dd-item" onclick="switchTab('drive');closeDD()">🖴 Local Disk (D:)</div>
+      <div class="dd-item" onclick="switchTab('tokens');closeDD()">🔢 Token Counters</div>
+      <div class="dd-item" onclick="switchTab('tickets');closeDD()">🎫 IT Tickets</div>
+      <div class="dd-sep"></div>
+      <div class="dd-item" onclick="setDriveView('grid');closeDD()">⊞ Large Icons</div>
+      <div class="dd-item" onclick="setDriveView('list');closeDD()">☰ Details List</div>
+      <div class="dd-sep"></div>
+      <div class="dd-item" onclick="toggleTerminal();closeDD()">⬛ Toggle Terminal</div>
+    </div>
+  </div>
+  <div class="mb-item">
+    <div class="mb-btn" onclick="toggleDD('ddTools')">Tools</div>
+    <div class="dropdown" id="ddTools">
+      <div class="dd-item" onclick="openRoles();closeDD()">🏷️ Manage Roles…</div>
+      <div class="dd-item" onclick="loadDashboard();closeDD()">🔄 Refresh Dashboard</div>
+      <div class="dd-item" onclick="loadAudit();closeDD()">🔄 Refresh Audit Log</div>
+      <div class="dd-sep"></div>
+      <div class="dd-item" onclick="openChangeMyPw();closeDD()">🔑 Change My Password…</div>
+    </div>
+  </div>
+  <div class="mb-item">
+    <div class="mb-btn" onclick="toggleDD('ddHelp')">Help</div>
+    <div class="dropdown" id="ddHelp">
+      <div class="dd-item" onclick="showAbout();closeDD()">ℹ️ About Active Directory Console</div>
+      <div class="dd-item" onclick="toggleTerminal();closeDD()">⬛ Open Terminal Shell</div>
+    </div>
+  </div>
+  <div class="mb-item" style="margin-left:auto">
+    <div class="mb-btn" onclick="openChangeMyPw()">🔑 My Account</div>
+  </div>
+  <div class="mb-item">
+    <div class="mb-btn" onclick="doLogout()">Sign Out</div>
+  </div>
 </div>
 
+<!-- ═══ TOOLBAR ═══ -->
 <div class="toolbar">
-  <button class="tbb" onclick="openAddUser()"><span class="ti">👤➕</span><span>New User</span></button>
+  <button class="tbtn" id="tb-newuser" onclick="openAddUser()" type="button"><span class="ti">👤</span><span>New User</span></button>
   <div class="tsep"></div>
-  <button class="tbb" onclick="editSel()"><span class="ti">✏️</span><span>Properties</span></button>
-  <button class="tbb" onclick="pwSel()"><span class="ti">🔑</span><span>Reset PW</span></button>
-  <button class="tbb" onclick="toggleAccSel()"><span class="ti">🔒</span><span>En/Disable</span></button>
-  <button class="tbb" onclick="delSel()"><span class="ti">🗑️</span><span>Delete</span></button>
+  <button class="tbtn" onclick="editSel()" type="button"><span class="ti">✏️</span><span>Properties</span></button>
+  <button class="tbtn" onclick="pwSel()" type="button"><span class="ti">🔑</span><span>Reset PW</span></button>
+  <button class="tbtn" onclick="permSel()" type="button"><span class="ti">🔐</span><span>Permissions</span></button>
+  <button class="tbtn" onclick="toggleAccSel()" type="button"><span class="ti">🔒</span><span>En/Disable</span></button>
+  <button class="tbtn" onclick="delSel()" type="button"><span class="ti">🗑️</span><span>Delete</span></button>
   <div class="tsep"></div>
-  <button class="tbb" onclick="openRoles()"><span class="ti">🏷️</span><span>Roles</span></button>
-  <button class="tbb" onclick="loadUsers()"><span class="ti">🔄</span><span>Refresh</span></button>
+  <button class="tbtn" onclick="openRoles()" type="button"><span class="ti">🏷️</span><span>Roles</span></button>
+  <button class="tbtn" onclick="loadUsers()" type="button"><span class="ti">🔄</span><span>Refresh</span></button>
   <div class="tsep"></div>
-  <button class="tbb" onclick="switchTab('drive')"><span class="ti">💾</span><span>Storage</span></button>
-  <button class="tbb" onclick="switchTab('dash')"><span class="ti">📊</span><span>Dashboard</span></button>
-  <button class="tbb" onclick="switchTab('audit')"><span class="ti">📋</span><span>Audit Log</span></button>
-  <button class="tbb" onclick="toggleTerminal()"><span class="ti">⬛</span><span>Terminal</span></button>
+  <button class="tbtn" onclick="switchTab('tokens')" type="button"><span class="ti">🔢</span><span>Tokens</span></button>
+  <button class="tbtn" onclick="switchTab('tickets')" type="button"><span class="ti">🎫</span><span>Tickets</span></button>
+  <button class="tbtn" onclick="switchTab('drive')" type="button"><span class="ti">🖴</span><span>Disk (D:)</span></button>
+  <button class="tbtn" onclick="switchTab('dash')" type="button"><span class="ti">📊</span><span>Dashboard</span></button>
+  <div class="tsep"></div>
+  <button class="tbtn" onclick="toggleTerminal()" type="button"><span class="ti">⬛</span><span>Terminal</span></button>
 </div>
 
+<!-- ═══ MAIN LAYOUT ═══ -->
 <div class="layout">
+
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
-    <div class="sb-head">🌐 aman5z.in</div>
-    <div class="sb-sec">Domain</div>
-    <div class="si act" onclick="filterView('all',this);closeSidebar()"><span class="sic">📁</span>All Users</div>
-    <div class="sb-sec">Roles</div>
-    <div id="sbRolesList"></div>
-    <div class="sb-sec">Views</div>
-    <div class="si" onclick="switchTab('dash');closeSidebar()"><span class="sic">📊</span>Dashboard</div>
-    <div class="si" onclick="switchTab('audit');closeSidebar()"><span class="sic">📋</span>Audit Log</div>
-    <div class="si" onclick="switchTab('drive');closeSidebar()"><span class="sic">💾</span>Storage</div>
-    <div class="sb-sec">Tools</div>
-    <div class="si" onclick="openAddUser();closeSidebar()"><span class="sic">➕</span>New User</div>
-    <div class="si" onclick="openRoles();closeSidebar()"><span class="sic">🏷️</span>Manage Roles</div>
-    <div class="si" onclick="loadUsers()"><span class="sic">🔄</span>Refresh</div>
-    <div class="si" onclick="toggleTerminal();closeSidebar()"><span class="sic">⬛</span>Terminal</div>
-    <div class="sb-sec">Account</div>
-    <div class="si" onclick="openChangeMyPw();closeSidebar()"><span class="sic">🔑</span>Change My PW</div>
+    <div class="sbh">🌐 aman5z.in</div>
+    <div class="sbs">My Computer</div>
+    <div class="si act" onclick="switchTab('users');filterView('all',this);closeSb()"><span class="sic">📁</span>All Users</div>
+    <div class="sbs">Roles</div>
+    <div id="sbRoles"></div>
+    <div class="sbs">Applications</div>
+    <div class="si" id="sb-dash"    onclick="switchTab('dash');closeSb()"><span class="sic">📊</span>Dashboard</div>
+    <div class="si" id="sb-audit"   onclick="switchTab('audit');closeSb()"><span class="sic">📋</span>Audit Log</div>
+    <div class="si" id="sb-drive"   onclick="switchTab('drive');closeSb()"><span class="sic">🖴</span>Local Disk (D:)</div>
+    <div class="si" id="sb-tokens"  onclick="switchTab('tokens');closeSb()"><span class="sic">🔢</span>Token Counters</div>
+    <div class="si" id="sb-tickets" onclick="switchTab('tickets');closeSb()"><span class="sic">🎫</span>IT Tickets</div>
+    <div class="sbs">Quick Actions</div>
+    <div class="si" onclick="openAddUser();closeSb()"><span class="sic">➕</span>New User</div>
+    <div class="si" onclick="openRoles();closeSb()"><span class="sic">🏷️</span>Manage Roles</div>
+    <div class="si" onclick="openAddCounter();closeSb()"><span class="sic">🔢</span>New Counter</div>
+    <div class="si" onclick="openNewTicket();closeSb()"><span class="sic">🎫</span>New Ticket</div>
+    <div class="si" onclick="toggleTerminal();closeSb()"><span class="sic">⬛</span>Terminal</div>
+    <div class="sbs">Account</div>
+    <div class="si" onclick="openChangeMyPw();closeSb()"><span class="sic">🔑</span>Change Password</div>
     <div class="si" onclick="doLogout()"><span class="sic">🚪</span>Sign Out</div>
   </div>
 
   <!-- CONTENT -->
   <div class="content">
-    <div class="main-tabs">
-      <div class="main-tab act" id="tab-users"  onclick="switchTab('users')">👥 Users</div>
-      <div class="main-tab"     id="tab-dash"   onclick="switchTab('dash')">📊 Dashboard</div>
-      <div class="main-tab"     id="tab-audit"  onclick="switchTab('audit')">📋 Audit Log</div>
-      <div class="main-tab"     id="tab-drive"  onclick="switchTab('drive')">💾 Storage</div>
+    <!-- MAIN TABS -->
+    <div class="mtabs">
+      <div class="mtab act" id="tab-users"   onclick="switchTab('users')">👥 Users</div>
+      <div class="mtab"     id="tab-dash"    onclick="switchTab('dash')">📊 Dashboard</div>
+      <div class="mtab"     id="tab-audit"   onclick="switchTab('audit')">📋 Audit Log</div>
+      <div class="mtab"     id="tab-drive"   onclick="switchTab('drive')">🖴 Local Disk (D:)</div>
+      <div class="mtab"     id="tab-tokens"  onclick="switchTab('tokens')">🔢 Tokens</div>
+      <div class="mtab"     id="tab-tickets" onclick="switchTab('tickets')">🎫 Tickets</div>
     </div>
 
-    <!-- USERS -->
-    <div class="tab-content act" id="tc-users">
-      <div class="ch"><span>📁</span><h2 id="viewTitle">All Users</h2><span id="uCount">—</span></div>
+    <!-- ── USERS ── -->
+    <div class="tpane act" id="tp-users">
+      <div class="ch"><span>📁</span><h2 id="viewTitle">All Users</h2><span class="chsub" id="uCount">—</span></div>
       <div class="sbar">
-        <span style="color:var(--sub);font-size:11px">🔍</span>
-        <input type="text" id="srch" placeholder="Search email, name, role, phone, department..." oninput="renderTable()">
-        <span style="color:var(--sub);font-size:11px" id="fCount"></span>
+        <span style="color:var(--sub);font-size:11px;flex-shrink:0">🔍</span>
+        <input type="text" id="srch" placeholder="Search by email, name, role, phone, department…" oninput="renderUsers()">
+        <span class="sc" id="fCount"></span>
       </div>
       <div class="tw">
-        <table>
-          <thead><tr>
-            <th onclick="sortBy('email')">📧 Email ↕</th>
-            <th onclick="sortBy('displayName')">👤 Name ↕</th>
-            <th onclick="sortBy('role')">🏷️ Role ↕</th>
-            <th onclick="sortBy('department')">🏢 Dept ↕</th>
-            <th>📱 Phone</th>
-            <th onclick="sortBy('enabled')">🔒 Status ↕</th>
-          </tr></thead>
-          <tbody id="tbody"></tbody>
-        </table>
+        <table><thead><tr>
+          <th onclick="sortBy('email')">📧 Email ↕</th>
+          <th onclick="sortBy('displayName')">👤 Name ↕</th>
+          <th onclick="sortBy('role')">🏷️ Role ↕</th>
+          <th onclick="sortBy('department')">🏢 Dept ↕</th>
+          <th>📱 Phone</th>
+          <th onclick="sortBy('enabled')">🔒 Status ↕</th>
+        </tr></thead><tbody id="tbody"></tbody></table>
       </div>
     </div>
 
-    <!-- DASHBOARD -->
-    <div class="tab-content" id="tc-dash">
-      <div class="ch"><span>📊</span><h2>Dashboard</h2><span id="dashRefreshBtn" style="cursor:pointer;color:var(--sel)" onclick="loadDashboard()">🔄 Refresh</span></div>
+    <!-- ── DASHBOARD ── -->
+    <div class="tpane" id="tp-dash">
+      <div class="ch"><span>📊</span><h2>System Dashboard</h2><span class="chsub" onclick="loadDashboard()">🔄 Refresh</span></div>
       <div style="flex:1;overflow-y:auto">
-        <div class="dash-grid" id="dashStats"></div>
-        <div class="dash-section">
-          <h3>Users by Role</h3>
-          <div class="chart-wrap" id="dashChart" style="min-height:120px"></div>
-        </div>
-        <div class="dash-section">
-          <h3>Ticket Status</h3>
-          <div class="chart-wrap" id="ticketChart" style="min-height:120px"></div>
-        </div>
-        <div class="dash-section">
-          <h3>Recent Activity</h3>
-          <div class="audit-mini" id="dashAudit"></div>
-        </div>
+        <div class="dgrid" id="dashStats"></div>
+        <div class="dsec"><h3>Users by Role</h3><div class="chart-wrap" id="dashChart"></div></div>
+        <div class="dsec"><h3>Ticket Status</h3><div class="chart-wrap" id="tickChart"></div></div>
+        <div class="dsec"><h3>Recent Activity</h3><div class="ami-w" id="dashAudit"></div></div>
       </div>
     </div>
 
-    <!-- AUDIT LOG -->
-    <div class="tab-content" id="tc-audit">
-      <div class="ch"><span>📋</span><h2>Audit Log</h2><span style="cursor:pointer;color:var(--sel)" onclick="loadAudit()">🔄 Refresh</span></div>
-      <div class="audit-filters">
-        <input type="text" id="auditSearch" placeholder="Search actor, action, detail..." oninput="renderAudit()" style="flex:1;min-width:120px">
-        <select id="auditFilter" onchange="renderAudit()">
+    <!-- ── AUDIT LOG ── -->
+    <div class="tpane" id="tp-audit">
+      <div class="ch"><span>📋</span><h2>Audit Log</h2><span class="chsub" onclick="loadAudit()">🔄 Refresh</span></div>
+      <div class="af">
+        <input type="text" id="auditQ" placeholder="Search actor, action, detail…" oninput="renderAudit()">
+        <select id="auditF" onchange="renderAudit()">
           <option value="">All Actions</option>
           <option>LOGIN</option><option>LOGIN_FAILED</option>
           <option>CREATE_USER</option><option>DELETE_USER</option>
-          <option>RESET_PASSWORD</option><option>UPDATE_PROFILE</option>
-          <option>UPDATE_ROLE</option><option>ENABLE_USER</option><option>DISABLE_USER</option>
+          <option>RESET_PASSWORD</option><option>UPDATE_PROFILE</option><option>UPDATE_PERMISSIONS</option>
+          <option>ENABLE_USER</option><option>DISABLE_USER</option>
           <option>CREATE_ROLE</option><option>DELETE_ROLE</option>
+          <option>CREATE_TICKET</option><option>UPDATE_TICKET</option>
+          <option>CREATE_COUNTER</option><option>RESET_COUNTER</option><option>DELETE_COUNTER</option>
           <option>UPLOAD_FILE</option><option>DELETE_FILE</option>
         </select>
-        <button class="wbtn" onclick="exportAudit()">⬇️ Export</button>
+        <button class="wbtn" onclick="exportAudit()" type="button">⬇ Export CSV</button>
       </div>
       <div class="tw">
-        <table>
-          <thead><tr>
-            <th>📅 Timestamp</th>
-            <th>👤 Actor</th>
-            <th>⚡ Action</th>
-            <th>📝 Detail</th>
-          </tr></thead>
-          <tbody id="auditBody"></tbody>
-        </table>
+        <table><thead><tr>
+          <th>📅 Timestamp</th><th>👤 Actor</th><th>⚡ Action</th><th>📝 Detail</th>
+        </tr></thead><tbody id="auditBody"></tbody></table>
       </div>
     </div>
 
-    <!-- STORAGE/DRIVE -->
-    <div class="tab-content" id="tc-drive">
-      <div class="drive-header">
-        <span>💾</span>
-        <div class="breadcrumb" id="breadcrumb"><span class="bc-item" onclick="navToRoot()">📁 Shared Drive</span></div>
+    <!-- ── DRIVE ── -->
+    <div class="tpane" id="tp-drive">
+      <div class="drive-hdr">
+        <svg class="hdd-svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--sel)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="12" cy="5" rx="9" ry="3"/>
+          <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+          <circle cx="15" cy="14" r="1" fill="var(--sel)"/>
+        </svg>
+        <div class="bc-wrap" id="bcWrap"><span class="bci" onclick="navRoot()">Local Disk (D:)</span></div>
         <span style="font-size:10px;color:var(--sub)" id="storLabel">—</span>
       </div>
-      <div class="drive-storage-bar">
-        <div class="stor-bar-wrap"><div class="stor-bar" id="storBar" style="width:0%"></div></div>
-        <div style="font-size:10px;color:var(--sub)" id="storDetail">—</div>
+      <div class="drive-stor">
+        <div class="stor-wrap"><div class="stor-fill" id="storFill" style="width:0"></div></div>
+        <div class="stor-lbl" id="storDetail">—</div>
       </div>
-      <div class="drive-toolbar">
-        <button class="tbb" style="font-size:10px;min-width:auto;padding:2px 8px" onclick="loadDrive()">🔄 Refresh</button>
-        <button class="tbb" style="font-size:10px;min-width:auto;padding:2px 8px" onclick="document.getElementById('fileInput').click()">⬆️ Upload</button>
-        <button class="tbb" style="font-size:10px;min-width:auto;padding:2px 8px" id="delFileBtn" onclick="deleteSelFile()" style="display:none">🗑️ Delete</button>
-        <input type="file" id="fileInput" style="display:none" onchange="doUpload(this)">
+      <div class="drive-tool">
+        <button class="tbtn" style="min-width:auto;padding:2px 8px;font-size:10px;flex-direction:row;gap:3px" onclick="loadDrive()" type="button">🔄 Refresh</button>
+        <button class="tbtn" style="min-width:auto;padding:2px 8px;font-size:10px;flex-direction:row;gap:3px" onclick="document.getElementById('fileIn').click()" type="button">⬆ Upload</button>
+        <button class="tbtn" style="min-width:auto;padding:2px 8px;font-size:10px;flex-direction:row;gap:3px" id="delFBtn" onclick="delSelFile()" type="button">🗑 Delete</button>
+        <input type="file" id="fileIn" style="display:none" onchange="doUpload(this)">
         <div style="flex:1"></div>
         <div style="display:flex;gap:2px">
-          <button class="vt-btn act" id="vgrid" onclick="setDriveView('grid')">⊞</button>
-          <button class="vt-btn" id="vlist" onclick="setDriveView('list')">☰</button>
+          <button class="vbtn act" id="vg" onclick="setDriveView('grid')" type="button">⊞</button>
+          <button class="vbtn" id="vl" onclick="setDriveView('list')" type="button">☰</button>
         </div>
       </div>
-      <div id="driveGrid" class="dfile-grid"></div>
-      <div id="driveList" class="drive-list-view"></div>
+      <div id="driveGrid" class="dgrid2"></div>
+      <div id="driveList" class="dlist"></div>
     </div>
-  </div>
+
+    <!-- ── TOKENS ── -->
+    <div class="tpane" id="tp-tokens">
+      <div class="ch"><span>🔢</span><h2>Token Counter System</h2><span class="chsub" id="tokCount">—</span></div>
+      <div class="toolbar" style="border-bottom:1px solid var(--tb-b);min-height:32px">
+        <button class="tbtn" id="tb-addctr" onclick="openAddCounter()" type="button"><span class="ti">➕</span><span>Add Counter</span></button>
+        <div class="tsep"></div>
+        <button class="tbtn" onclick="nextTokSel()" type="button"><span class="ti">▶</span><span>Next</span></button>
+        <button class="tbtn" id="tb-prev" onclick="prevTokSel()" type="button"><span class="ti">⏮</span><span>Previous</span></button>
+        <button class="tbtn" onclick="repeatTokSel()" type="button"><span class="ti">🔄</span><span>Repeat</span></button>
+        <div class="tsep"></div>
+        <button class="tbtn" id="tb-ren" onclick="openRenameCounter()" type="button"><span class="ti">✏️</span><span>Rename</span></button>
+        <button class="tbtn" id="tb-rst" onclick="resetCounterSel()" type="button"><span class="ti">↩</span><span>Reset</span></button>
+        <button class="tbtn" id="tb-delc" onclick="delCounterSel()" type="button"><span class="ti">🗑️</span><span>Delete</span></button>
+        <div class="tsep"></div>
+        <button class="tbtn" onclick="loadCounters()" type="button"><span class="ti">🔄</span><span>Refresh</span></button>
+      </div>
+      <div class="tw">
+        <table><thead><tr>
+          <th>🔖 Prefix</th>
+          <th>📛 Counter Name</th>
+          <th>🔢 Current Token</th>
+          <th>🔢 Value</th>
+        </tr></thead><tbody id="tokBody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- ── TICKETS ── -->
+    <div class="tpane" id="tp-tickets">
+      <div class="ch"><span>🎫</span><h2>IT Ticket System</h2><span class="chsub" id="tickCount">—</span></div>
+      <div class="tick-tb">
+        <button class="tbtn" style="flex-direction:row;gap:4px;min-width:auto;padding:2px 8px" onclick="openNewTicket()" type="button"><span>➕</span><span>New Ticket</span></button>
+        <div class="tsep"></div>
+        <button class="tbtn" id="tb-updtick" style="flex-direction:row;gap:4px;min-width:auto;padding:2px 8px" onclick="openUpdateTicket()" type="button"><span>✏️</span><span>Update</span></button>
+        <button class="tbtn" id="tb-clstick" style="flex-direction:row;gap:4px;min-width:auto;padding:2px 8px" onclick="closeTicketSel()" type="button"><span>🔒</span><span>Close</span></button>
+        <div class="tsep"></div>
+        <button class="tbtn" style="flex-direction:row;gap:4px;min-width:auto;padding:2px 8px" onclick="loadTickets()" type="button"><span>🔄</span><span>Refresh</span></button>
+        <div class="tsep"></div>
+        <select id="tickF" onchange="renderTickets()" style="font-size:11px;padding:2px 6px;border:1px solid var(--bdr);border-radius:1px;background:var(--inp);color:var(--txt);height:22px">
+          <option value="">All Status</option><option>Open</option><option>Resolved</option><option>Closed</option>
+        </select>
+        <select id="tickPF" onchange="renderTickets()" style="font-size:11px;padding:2px 6px;border:1px solid var(--bdr);border-radius:1px;background:var(--inp);color:var(--txt);height:22px">
+          <option value="">All Priority</option><option>High</option><option>Medium</option><option>Low</option>
+        </select>
+      </div>
+      <div class="tw">
+        <table><thead><tr>
+          <th>🆔 Ticket ID</th><th>📝 Title</th><th>🚦 Priority</th><th>📌 Status</th>
+          <th>👤 Requester</th><th>👷 Assigned To</th><th>⏱ Due</th>
+        </tr></thead><tbody id="tickBody"></tbody></table>
+      </div>
+    </div>
+  </div><!-- /content -->
 
   <!-- DETAILS PANEL -->
-  <div class="details">
-    <div class="dh">👤 User Properties</div>
+  <div class="details" id="details">
+    <div class="dh" id="detailHdr">Properties</div>
     <div id="detailPane">
-      <div style="padding:20px;color:var(--sub);font-size:11px;text-align:center">
-        <div style="font-size:34px;margin-bottom:6px">👤</div>Select a user
+      <div style="padding:18px;color:var(--sub);font-size:11px;text-align:center">
+        <div style="font-size:28px;margin-bottom:6px">🖥️</div>Select an item to view its properties
       </div>
     </div>
   </div>
-</div>
 
-<!-- TERMINAL -->
-<div class="terminal-panel" id="termPanel">
-  <div class="term-head">
-    <span>⬛ Administrator: Command Prompt — aman5z.in</span>
-    <button onclick="toggleTerminal()" style="background:none;border:none;color:#999;cursor:pointer;font-size:12px;padding:0;width:auto;margin:0">✕</button>
+</div><!-- /layout -->
+
+<!-- ═══ TERMINAL ═══ -->
+<div class="term-panel" id="termPanel">
+  <div class="term-hd">
+    <span>Administrator: Command Prompt  ─  aman5z.in</span>
+    <button onclick="toggleTerminal()" type="button">✕ Close</button>
   </div>
   <div class="term-body" id="termBody">
-    <div class="term-line tok">Active Directory Shell v2.0 [aman5z.in]</div>
-    <div class="term-line tok">Type 'help' for available commands.</div>
+    <div style="color:#4ec9b0">Active Directory Shell v3  ·  Type <span style="color:#4fc1ff">help</span> for commands</div>
   </div>
-  <div class="term-input-row">
-    <span class="term-prompt" id="termPrompt">AD\admin&gt;</span>
-    <input class="term-input" id="termInput" placeholder="Type a command..." onkeydown="termKey(event)" autocomplete="off" spellcheck="false">
+  <div class="term-ir">
+    <span class="term-prompt" id="termP">AD\admin&gt;</span>
+    <input class="term-inp" id="termI" placeholder="Type a command…" onkeydown="termKey(event)" autocomplete="off" spellcheck="false">
   </div>
 </div>
 
-<!-- STATUSBAR -->
+<!-- ═══ STATUS BAR ═══ -->
 <div class="statusbar">
-  <span>🟢 aman5z.in</span>
+  <span id="sbSite">🟢 aman5z.in</span>
   <span id="sbCount">📋 0 objects</span>
-  <span id="sbAdmin">👤 —</span>
-  <span id="sbStore">💾 —</span>
-  <span id="sbTime"></span>
+  <span id="sbUser">👤 —</span>
+  <span id="sbRole"></span>
+  <span id="sbStore">🖴 —</span>
+  <span id="sbTime" style="margin-left:auto"></span>
 </div>
 
 <!-- ═══ MODALS ═══ -->
 
-<!-- ADD/EDIT USER -->
+<!-- ADD / EDIT USER -->
 <div class="mo" id="userModal">
   <div class="mw wide">
-    <div class="mt"><span id="userModalTitle">👤 New User</span><button class="mc" onclick="closeModal('userModal')">✕</button></div>
-    <div class="tab-bar">
-      <div class="tab act" onclick="switchMTab(0,this)">General</div>
-      <div class="tab" onclick="switchMTab(1,this)">Account</div>
-      <div class="tab" onclick="switchMTab(2,this)">Contact</div>
+    <div class="mt"><span id="uMTitle">👤 New User Object</span><button class="mclose" onclick="closeModal('userModal')" type="button">✕</button></div>
+    <div class="tabbar">
+      <div class="mtab2 act" onclick="switchMTab(0,this)">General</div>
+      <div class="mtab2" onclick="switchMTab(1,this)">Account</div>
+      <div class="mtab2" onclick="switchMTab(2,this)">Contact</div>
+      <div class="mtab2" onclick="switchMTab(3,this)">🔐 Permissions</div>
     </div>
-    <div class="tab-body act" id="mt0">
-      <div class="row2">
-        <div><label>Display Name</label><input type="text" id="uDisplayName" placeholder="Full Name" autocomplete="off"></div>
+    <div class="tbody2 act" id="mt0">
+      <div class="r2">
+        <div><label>Display Name</label><input type="text" id="uName" placeholder="Full Name" autocomplete="off"></div>
         <div><label>Email / Username *</label><input type="text" id="uEmail" placeholder="user@aman5z.in" autocomplete="off"></div>
       </div>
-      <div class="row2">
-        <div><label>Department</label><input type="text" id="uDept" placeholder="IT, HR, Finance..." autocomplete="off"></div>
+      <div class="r2" style="margin-top:8px">
+        <div><label>Department</label><input type="text" id="uDept" placeholder="IT, HR, Finance…"></div>
         <div><label>Role *</label><select id="uRole"></select></div>
       </div>
     </div>
-    <div class="tab-body" id="mt1">
-      <div class="row2">
-        <div><label>Password *</label><div class="pw-w"><input type="password" id="uPass" placeholder="Min 6 chars" autocomplete="new-password"><button class="eye" onclick="toggleEye('uPass',this)">👁</button></div></div>
-        <div><label>Confirm Password *</label><div class="pw-w"><input type="password" id="uPassC" placeholder="Re-enter" autocomplete="new-password"><button class="eye" onclick="toggleEye('uPassC',this)">👁</button></div></div>
+    <div class="tbody2" id="mt1">
+      <div class="r2">
+        <div><label>Password * (min 4 chars)</label><div class="pww"><input type="password" id="uPass" autocomplete="new-password"><button class="eye" onclick="toggleEye('uPass',this)" type="button">👁</button></div></div>
+        <div><label>Confirm Password *</label><div class="pww"><input type="password" id="uPassC" autocomplete="new-password"><button class="eye" onclick="toggleEye('uPassC',this)" type="button">👁</button></div></div>
       </div>
-      <label style="display:flex;align-items:center;gap:6px;margin-top:10px;cursor:pointer;font-size:12px;color:var(--text)">
-        <input type="checkbox" id="uEnabled" checked style="width:auto;margin:0"> Account is enabled
+      <label style="display:flex;align-items:center;gap:7px;margin-top:10px;cursor:pointer;font-size:12px;text-transform:none;letter-spacing:0;color:var(--txt)">
+        <input type="checkbox" id="uEnabled" checked> Account is enabled
       </label>
-      <label style="display:flex;align-items:center;gap:6px;margin-top:8px;cursor:pointer;font-size:12px;color:var(--text)">
-        <input type="checkbox" id="uSendWelcome" checked style="width:auto;margin:0"> Send welcome email with credentials
+      <label style="display:flex;align-items:center;gap:7px;margin-top:7px;cursor:pointer;font-size:12px;text-transform:none;letter-spacing:0;color:var(--txt)">
+        <input type="checkbox" id="uSendWel" checked> Send welcome email with credentials
       </label>
     </div>
-    <div class="tab-body" id="mt2">
-      <label>Phone Number</label>
-      <input type="text" id="uPhone" placeholder="+971 50 000 0000">
-      <label>Notes</label>
-      <textarea id="uNotes" placeholder="Additional notes..."></textarea>
+    <div class="tbody2" id="mt2">
+      <label>Phone Number</label><input type="text" id="uPhone" placeholder="+971 50 000 0000">
+      <label>Notes / Description</label><textarea id="uNotes" placeholder="Additional notes about this account…"></textarea>
     </div>
-    <div class="err-msg" id="userErr" style="padding:0 16px 4px"></div>
-    <div class="mf">
-      <button class="wbtn" onclick="closeModal('userModal')">Cancel</button>
-      <button class="wbtn pri" id="userSubmitBtn" onclick="submitUser()">Create User</button>
+    <div class="tbody2" id="mt3">
+      <div style="font-size:11px;color:var(--sub);margin-bottom:8px;padding:6px 8px;background:var(--hov);border-radius:1px;border-left:2px solid var(--sel)">
+        ℹ️ <strong>Admin</strong> role always gets full access regardless of selections below. Custom permissions override role defaults.
+      </div>
+      <div class="perm-grid" id="permGrid"></div>
+    </div>
+    <div class="err" id="uErr" style="padding:0 12px 4px"></div>
+    <div class="mfoot">
+      <button class="wbtn" onclick="closeModal('userModal')" type="button">Cancel</button>
+      <button class="wbtn pri" id="uSubmit" onclick="submitUser()" type="button">Create User</button>
     </div>
   </div>
 </div>
 
-<!-- RESET PW -->
+<!-- RESET PASSWORD -->
 <div class="mo" id="pwModal">
-  <div class="mw">
-    <div class="mt">🔑 Reset Password<button class="mc" onclick="closeModal('pwModal')">✕</button></div>
+  <div class="mw sm">
+    <div class="mt">🔑 Reset Password<button class="mclose" onclick="closeModal('pwModal')" type="button">✕</button></div>
     <div class="mb">
       <label>Account</label>
-      <input type="text" id="pwTarget" readonly style="background:var(--inp-bg-ro);color:var(--sub);font-weight:bold">
-      <label>New Password *</label>
-      <div class="pw-w"><input type="password" id="pwNew" autocomplete="new-password"><button class="eye" onclick="toggleEye('pwNew',this)">👁</button></div>
-      <label>Confirm *</label>
-      <div class="pw-w"><input type="password" id="pwConf" autocomplete="new-password"><button class="eye" onclick="toggleEye('pwConf',this)">👁</button></div>
-      <div class="err-msg" id="pwErr"></div>
+      <input type="text" id="pwTarget" class="ro" readonly>
+      <label>New Password * (min 4 chars)</label>
+      <div class="pww"><input type="password" id="pwNew" autocomplete="new-password"><button class="eye" onclick="toggleEye('pwNew',this)" type="button">👁</button></div>
+      <label>Confirm Password *</label>
+      <div class="pww"><input type="password" id="pwConf" autocomplete="new-password"><button class="eye" onclick="toggleEye('pwConf',this)" type="button">👁</button></div>
+      <div class="err" id="pwErr"></div>
     </div>
-    <div class="mf">
-      <button class="wbtn" onclick="closeModal('pwModal')">Cancel</button>
-      <button class="wbtn pri" onclick="submitPw()">Reset Password</button>
+    <div class="mfoot">
+      <button class="wbtn" onclick="closeModal('pwModal')" type="button">Cancel</button>
+      <button class="wbtn pri" onclick="submitPw()" type="button">Reset Password</button>
     </div>
   </div>
 </div>
 
-<!-- CHANGE MY PW -->
+<!-- CHANGE MY PASSWORD -->
 <div class="mo" id="myPwModal">
-  <div class="mw">
-    <div class="mt">🔑 Change My Password<button class="mc" onclick="closeModal('myPwModal')">✕</button></div>
+  <div class="mw sm">
+    <div class="mt">🔑 Change My Password<button class="mclose" onclick="closeModal('myPwModal')" type="button">✕</button></div>
     <div class="mb">
       <label>Current Password</label>
-      <div class="pw-w"><input type="password" id="myPwCur"><button class="eye" onclick="toggleEye('myPwCur',this)">👁</button></div>
-      <label>New Password</label>
-      <div class="pw-w"><input type="password" id="myPwNew"><button class="eye" onclick="toggleEye('myPwNew',this)">👁</button></div>
-      <label>Confirm</label>
-      <div class="pw-w"><input type="password" id="myPwConf"><button class="eye" onclick="toggleEye('myPwConf',this)">👁</button></div>
-      <div class="err-msg" id="myPwErr"></div>
+      <div class="pww"><input type="password" id="myPwCur"><button class="eye" onclick="toggleEye('myPwCur',this)" type="button">👁</button></div>
+      <label>New Password (min 4 chars)</label>
+      <div class="pww"><input type="password" id="myPwNew"><button class="eye" onclick="toggleEye('myPwNew',this)" type="button">👁</button></div>
+      <label>Confirm New Password</label>
+      <div class="pww"><input type="password" id="myPwConf"><button class="eye" onclick="toggleEye('myPwConf',this)" type="button">👁</button></div>
+      <div class="err" id="myPwErr"></div>
     </div>
-    <div class="mf">
-      <button class="wbtn" onclick="closeModal('myPwModal')">Cancel</button>
-      <button class="wbtn pri" onclick="submitMyPw()">Change Password</button>
+    <div class="mfoot">
+      <button class="wbtn" onclick="closeModal('myPwModal')" type="button">Cancel</button>
+      <button class="wbtn pri" onclick="submitMyPw()" type="button">Change Password</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT PERMISSIONS -->
+<div class="mo" id="permModal">
+  <div class="mw">
+    <div class="mt">🔐 Edit Permissions — <span id="permTarget"></span><button class="mclose" onclick="closeModal('permModal')" type="button">✕</button></div>
+    <div class="mb">
+      <div style="font-size:11px;color:var(--sub);margin-bottom:8px;padding:6px 8px;background:var(--hov);border:1px solid var(--bdr);border-left:2px solid var(--sel)">
+        These permissions define what tabs and features this user can access after login.
+      </div>
+      <div class="perm-grid" id="permGrid2"></div>
+    </div>
+    <div class="mfoot">
+      <button class="wbtn" onclick="closeModal('permModal')" type="button">Cancel</button>
+      <button class="wbtn pri" onclick="submitPerms()" type="button">Save Permissions</button>
     </div>
   </div>
 </div>
@@ -630,651 +808,824 @@ td{padding:4px 10px;font-size:11px;border-right:1px solid var(--border)}td:last-
 <!-- ROLES -->
 <div class="mo" id="rolesModal">
   <div class="mw wide">
-    <div class="mt">🏷️ Role Management<button class="mc" onclick="closeModal('rolesModal')">✕</button></div>
+    <div class="mt">🏷️ Role Management<button class="mclose" onclick="closeModal('rolesModal')" type="button">✕</button></div>
     <div class="mb">
       <table class="rt" id="rolesTable"></table>
-      <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px">
-        <div style="font-size:11px;font-weight:600;margin-bottom:8px;color:var(--sub)">ADD NEW ROLE</div>
-        <div class="row3">
-          <div><label>Name *</label><input type="text" id="newRoleName" placeholder="e.g. Viewer"></div>
-          <div><label>Color</label><input type="color" id="newRoleColor" value="#6366f1" style="height:30px;padding:2px"></div>
-          <div><label>Description</label><input type="text" id="newRoleDesc" placeholder="Brief description"></div>
+      <div style="margin-top:12px;border-top:1px solid var(--bdr);padding-top:10px">
+        <div style="font-size:10px;font-weight:700;color:var(--sub);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Add New Role</div>
+        <div class="r3">
+          <div><label>Name *</label><input type="text" id="newRName" placeholder="e.g. Viewer"></div>
+          <div><label>Color</label><input type="color" id="newRColor" value="#6366f1" style="height:28px;padding:2px"></div>
+          <div><label>Description</label><input type="text" id="newRDesc" placeholder="Brief description"></div>
         </div>
-        <div class="err-msg" id="roleErr"></div>
+        <div class="err" id="roleErr"></div>
       </div>
     </div>
-    <div class="mf">
-      <button class="wbtn" onclick="closeModal('rolesModal')">Close</button>
-      <button class="wbtn pri" onclick="submitRole()">Add Role</button>
+    <div class="mfoot">
+      <button class="wbtn" onclick="closeModal('rolesModal')" type="button">Close</button>
+      <button class="wbtn pri" onclick="submitRole()" type="button">Add Role</button>
     </div>
   </div>
 </div>
 
-<!-- DELETE -->
-<div class="mo" id="delModal">
-  <div class="mw" style="width:340px">
-    <div class="mt">⚠️ Confirm Delete<button class="mc" onclick="closeModal('delModal')">✕</button></div>
+<!-- ADD COUNTER -->
+<div class="mo" id="addCtrModal">
+  <div class="mw sm">
+    <div class="mt">🔢 New Token Counter<button class="mclose" onclick="closeModal('addCtrModal')" type="button">✕</button></div>
     <div class="mb">
-      <p style="font-size:12px;line-height:1.6;color:var(--text)">Delete this account permanently?</p>
-      <p style="font-weight:700;font-size:13px;margin:8px 0;color:var(--danger)" id="delTarget"></p>
-      <p style="font-size:11px;color:var(--sub)">This cannot be undone. The user immediately loses all access.</p>
+      <label>Counter Name *</label>
+      <input type="text" id="newCtrName" placeholder="e.g. General, VIP, Premium…">
+      <div class="err" id="cErr"></div>
     </div>
-    <div class="mf">
-      <button class="wbtn" onclick="closeModal('delModal')">Cancel</button>
-      <button class="wbtn dng" onclick="submitDel()">Delete User</button>
+    <div class="mfoot">
+      <button class="wbtn" onclick="closeModal('addCtrModal')" type="button">Cancel</button>
+      <button class="wbtn pri" onclick="submitAddCtr()" type="button">Add Counter</button>
     </div>
   </div>
 </div>
 
+<!-- RENAME COUNTER -->
+<div class="mo" id="renCtrModal">
+  <div class="mw sm">
+    <div class="mt">✏️ Rename Counter<button class="mclose" onclick="closeModal('renCtrModal')" type="button">✕</button></div>
+    <div class="mb">
+      <label>New Name *</label>
+      <input type="text" id="renVal" placeholder="Counter name">
+      <div class="err" id="rnErr"></div>
+    </div>
+    <div class="mfoot">
+      <button class="wbtn" onclick="closeModal('renCtrModal')" type="button">Cancel</button>
+      <button class="wbtn pri" onclick="submitRename()" type="button">Rename</button>
+    </div>
+  </div>
+</div>
+
+<!-- NEW TICKET -->
+<div class="mo" id="ticketModal">
+  <div class="mw wide">
+    <div class="mt">🎫 New IT Support Ticket<button class="mclose" onclick="closeModal('ticketModal')" type="button">✕</button></div>
+    <div class="mb">
+      <div class="r2">
+        <div><label>Your Name *</label><input type="text" id="tkName" placeholder="Requester full name" autocomplete="off"></div>
+        <div><label>Priority *</label>
+          <select id="tkPri">
+            <option value="Low">🟢 Low — 24h SLA</option>
+            <option value="Medium" selected>🟡 Medium — 12h SLA</option>
+            <option value="High">🔴 High — 4h SLA</option>
+          </select>
+        </div>
+      </div>
+      <label>Issue Title *</label>
+      <input type="text" id="tkTitle" placeholder="Brief one-line summary of the problem" autocomplete="off">
+      <label>Description</label>
+      <textarea id="tkDesc" placeholder="Detailed description of the issue, steps to reproduce, error messages…" style="height:80px"></textarea>
+      <div class="err" id="tkErr"></div>
+    </div>
+    <div class="mfoot">
+      <button class="wbtn" onclick="closeModal('ticketModal')" type="button">Cancel</button>
+      <button class="wbtn pri" onclick="submitTicket()" type="button">Submit Ticket</button>
+    </div>
+  </div>
+</div>
+
+<!-- UPDATE TICKET -->
+<div class="mo" id="updTicketModal">
+  <div class="mw sm">
+    <div class="mt">✏️ Update Ticket<button class="mclose" onclick="closeModal('updTicketModal')" type="button">✕</button></div>
+    <div class="mb">
+      <label>Ticket ID</label>
+      <input type="text" id="utId" class="ro" readonly>
+      <label>Status</label>
+      <select id="utStatus"><option>Open</option><option>Resolved</option><option>Closed</option></select>
+      <label>Assigned To</label>
+      <input type="text" id="utAssigned" placeholder="Technician name or email" autocomplete="off">
+      <div class="err" id="utErr"></div>
+    </div>
+    <div class="mfoot">
+      <button class="wbtn" onclick="closeModal('updTicketModal')" type="button">Cancel</button>
+      <button class="wbtn pri" onclick="submitUpdTicket()" type="button">Update</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE USER -->
+<div class="mo" id="delModal">
+  <div class="mw sm">
+    <div class="mt">⚠️ Confirm Delete<button class="mclose" onclick="closeModal('delModal')" type="button">✕</button></div>
+    <div class="mb">
+      <p style="font-size:12px;color:var(--txt)">Permanently delete this account?</p>
+      <p style="font-weight:700;font-size:13px;margin:8px 0;color:var(--dngr)" id="delTarget">—</p>
+      <p style="font-size:11px;color:var(--sub)">This action cannot be undone. The user loses all access immediately.</p>
+    </div>
+    <div class="mfoot">
+      <button class="wbtn" onclick="closeModal('delModal')" type="button">Cancel</button>
+      <button class="wbtn dng" onclick="submitDel()" type="button">Delete Account</button>
+    </div>
+  </div>
+</div>
 <script>
-const API = "https://script.google.com/macros/s/AKfycbx6-2mwLUFgyIFBwwF3vYJqIfIn9_r_xapZs-iuc4jMj_gZxy5RSQ_b6tc5nEznd4z4Tw/exec";
+// ── CONFIG ──
+const API = "https://script.google.com/macros/s/AKfycbyxhqVi3BPh_ksWRJ5n9TWLGBK8HbEhxqqwqV4Bfft7VJJlGxRWI9PPS4Zhw_aKN1TOQQ/exec";
+const ROOT_FOLDER = "1rgi0M0glLySObvzjVV5B1-NCPkpdul9p";
 
-let tok=null, adminEmail="", allUsers=[], allRoles=[], allAudit=[];
+const PERM_DEFS = [
+  {id:"users",          label:"User Management",        icon:"👥", group:"Administration"},
+  {id:"dashboard",      label:"Dashboard",              icon:"📊", group:"Administration"},
+  {id:"audit",          label:"Audit Log",              icon:"📋", group:"Administration"},
+  {id:"storage",        label:"Storage / Drive",        icon:"🖴",  group:"Features"},
+  {id:"tokens",         label:"Token Counters (view)",  icon:"🔢", group:"Features"},
+  {id:"tokens.manage",  label:"Token Admin (add/edit)",  icon:"⚙️", group:"Features"},
+  {id:"tickets",        label:"IT Tickets (view/create)",icon:"🎫", group:"Features"},
+  {id:"tickets.manage", label:"Ticket Admin (close/edit)",icon:"🔒",group:"Features"},
+];
+
+// ── STATE ──
+let tok=null, myEmail="", myRole="", myPerms=[];
+let allUsers=[], allRoles=[], allAudit=[], allCounters=[], allTickets=[];
 let curView="all", selEmail=null, sortCol="email", sortAsc=true;
-let isEditMode=false, curFolderId="1rgi0M0glLySObvzjVV5B1-NCPkpdul9p";
-let breadcrumbs=[{id:"1rgi0M0glLySObvzjVV5B1-NCPkpdul9p",name:"Shared Drive"}];
-let selFileId=null, driveViewMode="grid", termHistory=[], termHIdx=-1;
+let isEdit=false, selCtrId=null, selTickId=null;
+let curFolderId=ROOT_FOLDER;
+let bcPath=[{id:ROOT_FOLDER,name:"Local Disk (D:)"}];
+let selFileId=null, driveView="grid";
+let termHist=[], termIdx=-1;
 
-/* ── CLOCK ── */
-setInterval(()=>{
-  const n=new Date();
-  document.getElementById("sbTime").textContent=
-    "🕐 "+String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0")+":"+String(n.getSeconds()).padStart(2,"0");
-},1000);
+// ── UTIL ──
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s).replace(/'/g,"\\'")}
+function can(p){return myRole==="Admin" || myPerms.includes(p)}
+function spin(v){$("spinner").classList.toggle("show",v)}
+function toast(msg,dur=2600){
+  const t=$("toast");t.textContent=msg;t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),dur);
+}
+function openModal(id){$(id).classList.add("show")}
+function closeModal(id){$(id).classList.remove("show")}
+function toggleEye(id,btn){const inp=$(id);inp.type=inp.type==="password"?"text":"password";btn.textContent=inp.type==="password"?"👁":"🙈"}
+function pad(n){return String(n).padStart(2,"0")}
+function fmtDate(d){return d?new Date(d).toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}):"—"}
+function tryParse(s){try{return JSON.parse(s)}catch{return null}}
+function fmtSz(b){if(!b)return"";b=Number(b);if(b<1024)return b+"B";if(b<1048576)return(b/1024).toFixed(1)+"KB";if(b<1073741824)return(b/1048576).toFixed(1)+"MB";return(b/1073741824).toFixed(2)+"GB"}
 
-/* ── THEME ── */
-const savedTheme=localStorage.getItem("ad-theme")||"light";
-document.documentElement.setAttribute("data-theme",savedTheme);
-document.getElementById("themeBtn").textContent=savedTheme==="dark"?"☀️":"🌙";
+// ── CLOCK ──
+setInterval(()=>{const n=new Date();$("sbTime").textContent="🕐 "+pad(n.getHours())+":"+pad(n.getMinutes())+":"+pad(n.getSeconds())},1000);
+
+// ── THEME ──
+(function(){
+  const t=localStorage.getItem("ad-theme")||"light";
+  document.documentElement.setAttribute("data-theme",t);
+  $("themeBtn").textContent=t==="dark"?"LIGHT":"DARK";
+})();
 function toggleTheme(){
-  const cur=document.documentElement.getAttribute("data-theme");
-  const next=cur==="dark"?"light":"dark";
-  document.documentElement.setAttribute("data-theme",next);
-  localStorage.setItem("ad-theme",next);
-  document.getElementById("themeBtn").textContent=next==="dark"?"☀️":"🌙";
+  const c=document.documentElement.getAttribute("data-theme");
+  const n=c==="dark"?"light":"dark";
+  document.documentElement.setAttribute("data-theme",n);
+  localStorage.setItem("ad-theme",n);
+  $("themeBtn").textContent=n==="dark"?"LIGHT":"DARK";
 }
 
-/* ── MOBILE SIDEBAR ── */
-function toggleSidebar(){
-  document.getElementById("sidebar").classList.toggle("open");
-  document.getElementById("sidebarOverlay").classList.toggle("show");
-}
-function closeSidebar(){
-  document.getElementById("sidebar").classList.remove("open");
-  document.getElementById("sidebarOverlay").classList.remove("show");
-}
+// ── SIDEBAR ──
+function toggleSb(){$("sidebar").classList.toggle("open");$("sbOv").classList.toggle("show")}
+function closeSb(){$("sidebar").classList.remove("open");$("sbOv").classList.remove("show")}
 
-/* ── LOGIN ── */
+// ── MENUS ──
+document.addEventListener("click",e=>{if(!e.target.closest(".mb-item"))closeDD()});
+function toggleDD(id){const d=$(id);const open=d.classList.contains("show");closeDD();if(!open){d.classList.add("show");d.previousElementSibling.classList.add("open")}}
+function closeDD(){document.querySelectorAll(".dropdown").forEach(d=>d.classList.remove("show"));document.querySelectorAll(".mb-btn").forEach(b=>b.classList.remove("open"))}
+
+// ── LOGIN ──
 async function doLogin(){
-  const em=document.getElementById("lEmail").value.trim();
-  const pw=document.getElementById("lPass").value;
-  if(!em||!pw){document.getElementById("lErr").textContent="Enter email and password.";return;}
+  const em=$("lEmail").value.trim(), pw=$("lPass").value;
+  $("lErr").textContent="";
+  if(!em||!pw){$("lErr").textContent="Enter email and password.";return}
   spin(true);
   try{
-    const res=await fetch(API,{method:"POST",body:new URLSearchParams({action:"login",email:em,password:pw})});
-    const txt=await res.text();
-    let data; try{data=JSON.parse(txt);}catch{
-      document.getElementById("lErr").textContent=txt.includes("Invalid")?"Invalid credentials.":txt.includes("disabled")?"Account is disabled.":"Error: "+txt.substring(0,60);
-      spin(false);return;
-    }
-    if(!data.token){document.getElementById("lErr").textContent="Login failed.";spin(false);return;}
-    if(data.role!=="Admin"){document.getElementById("lErr").textContent="Admin accounts only.";spin(false);return;}
-    tok=data.token; adminEmail=em;
-    document.getElementById("loginScreen").style.display="none";
-    document.getElementById("sbAdmin").textContent="👤 "+adminEmail;
-    document.getElementById("termPrompt").textContent="AD\\"+adminEmail.split("@")[0]+">";
-    await loadRoles(); await loadUsers();
-    loadStorage(); loadDashboard();
-  }catch(e){document.getElementById("lErr").textContent="Network error.";}
+    const fd=new FormData();fd.append("action","login");fd.append("email",em);fd.append("password",pw);
+    const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"login",email:em,password:pw})});
+    const txt=await r.text();
+    let d;try{d=JSON.parse(txt)}catch{$("lErr").textContent=txt.includes("Invalid")?"Invalid credentials":txt.includes("disabled")?"Account disabled":"Server error";spin(false);return}
+    if(!d.token){$("lErr").textContent="Login failed.";spin(false);return}
+    tok=d.token;myEmail=em;myRole=d.role;myPerms=Array.isArray(d.perms)?d.perms:[];
+    $("loginScreen").style.display="none";
+    $("sbUser").textContent="👤 "+myEmail;
+    $("sbRole").textContent="["+myRole+"]";
+    $("termP").textContent="AD\\"+em.split("@")[0]+">";
+    $("tlTitle").textContent="Active Directory — [aman5z.in] — "+myRole;
+    applyPerms();
+    if(can("users")){await loadRoles();await loadUsers()}
+    if(can("dashboard"))loadDashboard();
+    if(can("storage"))loadStorageInfo();
+  }catch(e){$("lErr").textContent="Network error: "+e.message}
   spin(false);
 }
-function doLogout(){
-  tok=null;adminEmail="";allUsers=[];
-  document.getElementById("loginScreen").style.display="flex";
-  document.getElementById("lPass").value="";
-  document.getElementById("lErr").textContent="";
+function applyPerms(){
+  const tabMap={dash:"dashboard",audit:"audit",drive:"storage",tokens:"tokens",tickets:"tickets"};
+  Object.entries(tabMap).forEach(([tab,perm])=>{
+    const show=can(perm);
+    $("tab-"+tab).style.display=show?"":"none";
+    const sb=$("sb-"+tab);if(sb)sb.style.display=show?"":"none";
+  });
+  if(!can("users"))$("tb-newuser").style.display="none";
+  const tokAdmin=can("tokens.manage");
+  ["tb-addctr","tb-prev","tb-ren","tb-rst","tb-delc"].forEach(id=>{const el=$(id);if(el)el.style.display=tokAdmin?"":"none"});
+  const tickMan=can("tickets.manage");
+  ["tb-updtick","tb-clstick"].forEach(id=>{const el=$(id);if(el)el.style.display=tickMan?"":"none"});
+  // Navigate to first allowed tab
+  if(!can("users")){
+    if(can("tokens"))switchTab("tokens");
+    else if(can("tickets"))switchTab("tickets");
+    else if(can("dashboard"))switchTab("dash");
+    else if(can("storage"))switchTab("drive");
+  }
 }
+function doLogout(){tok=null;myEmail="";myRole="";myPerms=[];allUsers=[];$("loginScreen").style.display="flex";$("lPass").value="";$("lErr").textContent=""}
 
-/* ── ROLES ── */
+// ── ROLES ──
 async function loadRoles(){
   try{
     const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"getRoles",token:tok})});
     const d=await r.json();
     if(!Array.isArray(d))return;
     allRoles=d.slice(1).map(r=>({name:r[0]||"",color:r[1]||"#6b7280",desc:r[2]||""}));
-    populateRoleSelect();
-    buildSidebarRoles();
+    $("uRole").innerHTML=allRoles.map(r=>`<option value="${r.name}">${r.name}</option>`).join("");
+    $("sbRoles").innerHTML=allRoles.map(r=>`<div class="si si-ch" onclick="filterView('${esc(r.name)}',this);closeSb()"><span class="sic" style="color:${r.color}">●</span>${r.name}</div>`).join("");
   }catch{}
 }
-function populateRoleSelect(){
-  document.getElementById("uRole").innerHTML=allRoles.map(r=>`<option value="${r.name}">${r.name}</option>`).join("");
+async function openRoles(){await loadRoles();renderRolesTable();$("roleErr").textContent="";openModal("rolesModal")}
+function renderRolesTable(){
+  const built=["Admin","Technician","User"];
+  $("rolesTable").innerHTML=`<tr><th>Name</th><th>Color</th><th>Description</th><th></th></tr>`+
+    allRoles.map(r=>`<tr>
+      <td><span class="rdot" style="background:${r.color}"></span>${r.name}</td>
+      <td style="font-family:monospace;font-size:10px">${r.color}</td>
+      <td>${r.desc||"—"}</td>
+      <td>${built.includes(r.name)?`<span style="color:var(--sub);font-size:10px">Built-in</span>`:`<button class="wbtn dng" style="padding:1px 8px;font-size:10px" onclick="delRole('${esc(r.name)}')" type="button">Del</button>`}</td>
+    </tr>`).join("");
 }
-function buildSidebarRoles(){
-  document.getElementById("sbRolesList").innerHTML=allRoles.map(r=>
-    `<div class="si si-child" onclick="filterView('${esc(r.name)}',this);closeSidebar()">
-      <span class="sic" style="color:${r.color}">●</span>${r.name}
-    </div>`
-  ).join("");
+async function submitRole(){
+  const name=$("newRName").value.trim();if(!name){$("roleErr").textContent="Name required.";return}
+  const color=$("newRColor").value,desc=$("newRDesc").value.trim();
+  spin(true);
+  try{const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"addRole",token:tok,name,color,description:desc})});
+    const t=await r.text();if(t.includes("exists")){$("roleErr").textContent="Already exists.";spin(false);return}
+    $("newRName").value="";$("newRDesc").value="";
+    toast("✅ Role added: "+name);await loadRoles();renderRolesTable();
+  }catch(e){$("roleErr").textContent="Error: "+e}
+  spin(false);
+}
+async function delRole(name){
+  if(!confirm("Delete role '"+name+"'?"))return;spin(true);
+  try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"deleteRole",token:tok,name})});toast("🗑️ Role deleted.");await loadRoles();renderRolesTable()}catch{}
+  spin(false);
 }
 
-/* ── LOAD USERS ── */
+// ── USERS ──
 async function loadUsers(){
   spin(true);
   try{
     const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"getUsers",token:tok})});
     const d=await r.json();
     allUsers=(Array.isArray(d)?d:[]).slice(1).map(r=>({
-      email:r[0]||"",hash:r[1]||"",role:r[2]||"User",phone:r[3]||"",
+      email:r[0]||"",role:r[2]||"User",phone:r[3]||"",
       displayName:r[4]||"",department:r[5]||"",enabled:r[6]!==false,
-      modified:r[7]||"",lastLogon:r[8]||""
+      modified:r[7]||"",lastLogon:r[8]||"",
+      permissions:r[9]?tryParse(r[9]):null
     })).filter(u=>u.email);
-    document.getElementById("uCount").textContent=allUsers.length+" users";
-    document.getElementById("sbCount").textContent="📋 "+allUsers.length+" objects";
-    renderTable();
-  }catch{toast("Failed to load users");}
+    $("uCount").textContent=allUsers.length+" users";
+    $("sbCount").textContent="📋 "+allUsers.length+" objects";
+    renderUsers();
+  }catch{toast("Failed to load users")}
   spin(false);
 }
-
-/* ── TABLE ── */
 function filterView(v,el){
   curView=v;selEmail=null;
   document.querySelectorAll(".si").forEach(e=>e.classList.remove("act"));
   if(el)el.classList.add("act");
-  document.getElementById("viewTitle").textContent=v==="all"?"All Users":v+" Users";
-  renderTable();
+  $("viewTitle").textContent=v==="all"?"All Users":v+" Users";
+  renderUsers();
 }
-function sortBy(col){sortCol===col?sortAsc=!sortAsc:(sortCol=col,sortAsc=true);renderTable();}
-function renderTable(){
-  const q=document.getElementById("srch").value.toLowerCase();
+function sortBy(col){sortCol===col?sortAsc=!sortAsc:(sortCol=col,sortAsc=true);renderUsers()}
+function getBc(r){return r==="Admin"?"ba":r==="Technician"?"bt":r==="User"?"bu":"bc"}
+function renderUsers(){
+  const q=$("srch").value.toLowerCase();
   let users=allUsers.filter(u=>{
     const vm=curView==="all"||u.role===curView;
-    const qm=!q||[u.email,u.role,u.displayName,u.department,u.phone].some(v=>v.toLowerCase().includes(q));
+    const qm=!q||[u.email,u.role,u.displayName,u.department,u.phone].some(v=>(v||"").toLowerCase().includes(q));
     return vm&&qm;
   });
-  users.sort((a,b)=>{const va=String(a[sortCol]||""),vb=String(b[sortCol]||"");return sortAsc?va.localeCompare(vb):vb.localeCompare(va);});
-  document.getElementById("fCount").textContent=users.length+" object(s)";
-  const body=document.getElementById("tbody");
-  if(!users.length){body.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--sub)">No users found</td></tr>`;return;}
-  body.innerHTML=users.map(u=>{
-    const bc=getBadgeClass(u.role);
-    const chip=u.enabled?`<span class="chip-on">✔ Enabled</span>`:`<span class="chip-off">✖ Disabled</span>`;
-    return `<tr class="${selEmail===u.email?"sel":""}" onclick="selectUser('${esc(u.email)}')">
-      <td>👤 ${u.email}</td><td>${u.displayName||"—"}</td>
-      <td><span class="badge ${bc}">${u.role}</span></td>
-      <td>${u.department||"—"}</td><td>${u.phone||"—"}</td><td>${chip}</td>
-    </tr>`;
-  }).join("");
+  users.sort((a,b)=>{const va=String(a[sortCol]||""),vb=String(b[sortCol]||"");return sortAsc?va.localeCompare(vb):vb.localeCompare(va)});
+  $("fCount").textContent=users.length+" item(s)";
+  const body=$("tbody");
+  if(!users.length){body.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:22px;color:var(--sub)">No users found</td></tr>`;return}
+  body.innerHTML=users.map(u=>`<tr class="${selEmail===u.email?"sel-row":""}" onclick="selUser('${esc(u.email)}')">
+    <td>👤 ${u.email}</td>
+    <td>${u.displayName||"—"}</td>
+    <td><span class="badge ${getBc(u.role)}">${u.role}</span></td>
+    <td>${u.department||"—"}</td>
+    <td>${u.phone||"—"}</td>
+    <td>${u.enabled?`<span class="chip-on">✔ Enabled</span>`:`<span class="chip-off">✖ Disabled</span>`}</td>
+  </tr>`).join("");
 }
-function getBadgeClass(role){
-  return role==="Admin"?"b-admin":role==="Technician"?"b-tech":role==="User"?"b-user":"b-custom";
-}
-
-/* ── SELECT USER ── */
-function selectUser(email){
-  selEmail=email;renderTable();
+function selUser(email){
+  selEmail=email;renderUsers();
   const u=allUsers.find(x=>x.email===email);if(!u)return;
-  const bc=getBadgeClass(u.role);
-  const chip=u.enabled?`<span class="chip-on">✔ Enabled</span>`:`<span class="chip-off">✖ Disabled</span>`;
-  const fmt=d=>d?new Date(d).toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}):"—";
-  document.getElementById("detailPane").innerHTML=`
+  $("detailHdr").textContent="👤 User Properties";
+  const permsDisplay=u.permissions?u.permissions.map(p=>`<span style="background:var(--hov);color:var(--sel);padding:0 4px;border-radius:1px;font-size:9px;margin:1px;display:inline-block">${p}</span>`).join(""):"<span style='color:var(--sub);font-size:10px'>Default (role-based)</span>";
+  $("detailPane").innerHTML=`
     <div class="davatar">
       <div class="av ${u.enabled?"":"dis"}">${(u.email[0]||"?").toUpperCase()}</div>
       <div class="dn">${u.displayName||u.email}</div>
       <div class="de">${u.role} · aman5z.in</div>
     </div>
     <div class="dr"><label>Email</label><span>${u.email}</span></div>
-    <div class="dr"><label>Role</label><span><span class="badge ${bc}">${u.role}</span></span></div>
+    <div class="dr"><label>Role</label><span><span class="badge ${getBc(u.role)}">${u.role}</span></span></div>
     <div class="dr"><label>Display Name</label><span>${u.displayName||"—"}</span></div>
     <div class="dr"><label>Department</label><span>${u.department||"—"}</span></div>
     <div class="dr"><label>Phone</label><span>${u.phone||"—"}</span></div>
-    <div class="dr"><label>Status</label><span>${chip}</span></div>
-    <div class="dr"><label>Last Modified</label><span>${fmt(u.modified)}</span></div>
-    <div class="dr"><label>Last Logon</label><span>${u.lastLogon?fmt(u.lastLogon):"Never"}</span></div>
+    <div class="dr"><label>Status</label><span>${u.enabled?`<span class="chip-on">✔ Enabled</span>`:`<span class="chip-off">✖ Disabled</span>`}</span></div>
+    <div class="dr"><label>Last Logon</label><span>${fmtDate(u.lastLogon)}</span></div>
+    <div class="dr"><label>Custom Permissions</label><span style="line-height:1.8">${permsDisplay}</span></div>
     <div class="dact">
-      <button class="db" onclick="openEditUser('${esc(email)}')">✏️ Edit Properties</button>
-      <button class="db" onclick="openPw('${esc(email)}')">🔑 Reset Password</button>
-      <button class="db" onclick="toggleAcc('${esc(email)}')">${u.enabled?"🔒 Disable":"🔓 Enable"} Account</button>
-      <button class="db dang" onclick="openDel('${esc(email)}')">🗑️ Delete Account</button>
+      <button class="dab" onclick="openEditUser('${esc(email)}')" type="button">✏️ Edit Properties</button>
+      <button class="dab" onclick="openPermModal('${esc(email)}')" type="button">🔐 Edit Permissions</button>
+      <button class="dab" onclick="openPw('${esc(email)}')" type="button">🔑 Reset Password</button>
+      <button class="dab" onclick="toggleAcc('${esc(email)}')" type="button">${u.enabled?"🔒 Disable Account":"🔓 Enable Account"}</button>
+      <button class="dab dng" onclick="openDel('${esc(email)}')" type="button">🗑️ Delete Account</button>
     </div>`;
 }
+function editSel(){if(!selEmail){toast("Select a user first");return}openEditUser(selEmail)}
+function pwSel(){if(!selEmail){toast("Select a user first");return}openPw(selEmail)}
+function permSel(){if(!selEmail){toast("Select a user first");return}openPermModal(selEmail)}
+function delSel(){if(!selEmail){toast("Select a user first");return}openDel(selEmail)}
+function toggleAccSel(){if(!selEmail){toast("Select a user first");return}toggleAcc(selEmail)}
 
-/* ── TOOLBAR SHORTCUTS ── */
-function editSel(){if(!selEmail){toast("Select a user first");return;}openEditUser(selEmail);}
-function pwSel(){if(!selEmail){toast("Select a user first");return;}openPw(selEmail);}
-function delSel(){if(!selEmail){toast("Select a user first");return;}openDel(selEmail);}
-function toggleAccSel(){if(!selEmail){toast("Select a user first");return;}toggleAcc(selEmail);}
+// ── PERMISSIONS UI ──
+function buildPermGrid(containerId,currentPerms){
+  const groups={};PERM_DEFS.forEach(p=>{if(!groups[p.group])groups[p.group]=[];groups[p.group].push(p)});
+  let html="";
+  Object.entries(groups).forEach(([g,perms])=>{
+    html+=`<div class="psec">${g}</div>`;
+    perms.forEach(p=>{
+      const on=currentPerms&&currentPerms.includes(p.id);
+      html+=`<label class="pitem${on?" on":""}" onclick="togglePerm(this)">
+        <input type="checkbox" value="${p.id}" ${on?"checked":""}> ${p.icon} ${p.label}
+      </label>`;
+    });
+  });
+  $(containerId).innerHTML=html;
+}
+function togglePerm(el){const cb=el.querySelector("input");cb.checked=!cb.checked;el.classList.toggle("on",cb.checked)}
+function getPerms(containerId){return[...document.querySelectorAll("#"+containerId+" input:checked")].map(cb=>cb.value)}
 
-/* ── ADD USER ── */
+// ── ADD/EDIT USER ──
 function openAddUser(){
-  isEditMode=false;
-  document.getElementById("userModalTitle").textContent="👤 New User Object";
-  document.getElementById("userSubmitBtn").textContent="Create User";
-  document.getElementById("uEmail").readOnly=false;
-  document.getElementById("uEmail").style.background="";
-  ["uEmail","uDisplayName","uDept","uPhone","uNotes","uPass","uPassC"].forEach(id=>document.getElementById(id).value="");
-  document.getElementById("uEnabled").checked=true;
-  document.getElementById("uSendWelcome").checked=true;
-  document.getElementById("uRole").value=allRoles[2]?.name||"User";
-  document.getElementById("userErr").textContent="";
-  switchMTab(0,document.querySelector(".tab-bar .tab"));
-  openModal("userModal");
+  if(!can("users")){toast("No permission");return}
+  isEdit=false;$("uMTitle").textContent="👤 New User Object";$("uSubmit").textContent="Create User";
+  $("uEmail").readOnly=false;$("uEmail").className="";
+  ["uEmail","uName","uDept","uPhone","uNotes","uPass","uPassC"].forEach(id=>$(id).value="");
+  $("uEnabled").checked=true;$("uSendWel").checked=true;
+  if(allRoles.length)$("uRole").value=allRoles.find(r=>r.name==="User")?.name||allRoles[0]?.name||"User";
+  $("uErr").textContent="";buildPermGrid("permGrid",null);
+  switchMTab(0,document.querySelector(".tabbar .mtab2"));openModal("userModal");
 }
 function openEditUser(email){
-  isEditMode=true;
-  const u=allUsers.find(x=>x.email===email);if(!u)return;
-  document.getElementById("userModalTitle").textContent="✏️ Properties — "+email;
-  document.getElementById("userSubmitBtn").textContent="Apply Changes";
-  document.getElementById("uEmail").value=email;
-  document.getElementById("uEmail").readOnly=true;
-  document.getElementById("uEmail").style.background="var(--inp-bg-ro)";
-  document.getElementById("uDisplayName").value=u.displayName||"";
-  document.getElementById("uDept").value=u.department||"";
-  document.getElementById("uPhone").value=u.phone||"";
-  document.getElementById("uEnabled").checked=u.enabled!==false;
-  document.getElementById("uRole").value=u.role;
-  document.getElementById("uPass").value="";
-  document.getElementById("uPassC").value="";
-  document.getElementById("userErr").textContent="";
-  switchMTab(0,document.querySelector(".tab-bar .tab"));
-  openModal("userModal");
+  if(!can("users")){toast("No permission");return}
+  isEdit=true;const u=allUsers.find(x=>x.email===email);if(!u)return;
+  $("uMTitle").textContent="✏️ Properties — "+email;$("uSubmit").textContent="Apply Changes";
+  $("uEmail").value=email;$("uEmail").readOnly=true;$("uEmail").className="ro";
+  $("uName").value=u.displayName||"";$("uDept").value=u.department||"";
+  $("uPhone").value=u.phone||"";$("uEnabled").checked=u.enabled!==false;
+  $("uRole").value=u.role;$("uPass").value="";$("uPassC").value="";
+  $("uErr").textContent="";buildPermGrid("permGrid",u.permissions);
+  switchMTab(0,document.querySelector(".tabbar .mtab2"));openModal("userModal");
 }
 async function submitUser(){
-  const email=document.getElementById("uEmail").value.trim();
-  const pw=document.getElementById("uPass").value;
-  const pc=document.getElementById("uPassC").value;
-  const role=document.getElementById("uRole").value;
-  const displayName=document.getElementById("uDisplayName").value.trim();
-  const dept=document.getElementById("uDept").value.trim();
-  const phone=document.getElementById("uPhone").value.trim();
-  const enabled=document.getElementById("uEnabled").checked;
-  const err=document.getElementById("userErr");
-  if(!email){err.textContent="Email is required.";return;}
-  if(!isEditMode){
-    if(!pw){err.textContent="Password is required.";return;}
-    if(pw!==pc){err.textContent="Passwords do not match.";return;}
-    if(pw.length<6){err.textContent="Min 6 characters.";return;}
+  const email=$("uEmail").value.trim(),pw=$("uPass").value,pc=$("uPassC").value;
+  $("uErr").textContent="";
+  if(!email){$("uErr").textContent="Email required.";return}
+  if(!isEdit){
+    if(!pw){$("uErr").textContent="Password required.";return}
+    if(pw!==pc){$("uErr").textContent="Passwords do not match.";return}
+    if(pw.length<4){$("uErr").textContent="Minimum 4 characters required.";return}
   }
-  spin(true);
+  const perms=getPerms("permGrid");spin(true);
   try{
-    if(!isEditMode){
-      const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"addUser",token:tok,email,password:pw,role,phone,displayName,department:dept,enabled:String(enabled)})});
-      const t=await r.text();
-      if(t.includes("exists")){err.textContent="User already exists.";spin(false);return;}
-      toast("✅ User created & welcome email sent to "+email);
+    const params={token:tok,email,role:$("uRole").value,phone:$("uPhone").value.trim(),
+      displayName:$("uName").value.trim(),department:$("uDept").value.trim(),
+      enabled:String($("uEnabled").checked),permissions:JSON.stringify(perms)};
+    if(!isEdit){
+      const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"addUser",...params,password:pw})});
+      const t=await r.text();if(t.includes("exists")){$("uErr").textContent="User already exists.";spin(false);return}
+      toast("✅ User created");
     }else{
-      await fetch(API,{method:"POST",body:new URLSearchParams({action:"updateUserProfile",token:tok,email,role,phone,displayName,department:dept,enabled:String(enabled)})});
-      toast("✅ User updated.");
+      await fetch(API,{method:"POST",body:new URLSearchParams({action:"updateUserProfile",...params})});
+      await fetch(API,{method:"POST",body:new URLSearchParams({action:"updatePermissions",token:tok,email,permissions:JSON.stringify(perms)})});
+      toast("✅ User updated");
     }
-    closeModal("userModal"); await loadUsers(); loadDashboard();
-  }catch(e){err.textContent="Error: "+e;}
+    closeModal("userModal");await loadUsers();loadDashboard();
+  }catch(e){$("uErr").textContent="Error: "+e}
   spin(false);
 }
 
-/* ── RESET PW ── */
-function openPw(email){
-  document.getElementById("pwTarget").value=email;
-  document.getElementById("pwNew").value="";
-  document.getElementById("pwConf").value="";
-  document.getElementById("pwErr").textContent="";
-  openModal("pwModal");
-}
-async function submitPw(){
-  const email=document.getElementById("pwTarget").value;
-  const pw=document.getElementById("pwNew").value;
-  const pc=document.getElementById("pwConf").value;
-  const err=document.getElementById("pwErr");
-  if(!pw){err.textContent="Enter a password.";return;}
-  if(pw!==pc){err.textContent="Passwords do not match.";return;}
-  if(pw.length<6){err.textContent="Min 6 characters.";return;}
-  spin(true);
-  try{
-    await fetch(API,{method:"POST",body:new URLSearchParams({action:"resetPassword",token:tok,email,password:pw})});
-    closeModal("pwModal"); toast("✅ Password reset for "+email); loadDashboard();
-  }catch(e){document.getElementById("pwErr").textContent="Error: "+e;}
-  spin(false);
-}
-
-/* ── TOGGLE ACCOUNT ── */
-async function toggleAcc(email){
+// ── PERMISSIONS MODAL ──
+function openPermModal(email){
   const u=allUsers.find(x=>x.email===email);if(!u)return;
+  $("permTarget").textContent=email;
+  buildPermGrid("permGrid2",u.permissions);
+  $("permModal").dataset.email=email;
+  openModal("permModal");
+}
+async function submitPerms(){
+  const email=$("permModal").dataset.email;
+  const perms=getPerms("permGrid2");
   spin(true);
-  try{
-    await fetch(API,{method:"POST",body:new URLSearchParams({action:"updateUserProfile",token:tok,email,enabled:String(!u.enabled)})});
-    toast(u.enabled?"🔒 Account disabled.":"🔓 Account enabled.");
-    await loadUsers(); if(selEmail===email)selectUser(email); loadDashboard();
-  }catch{}
+  try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"updatePermissions",token:tok,email,permissions:JSON.stringify(perms)})});
+    closeModal("permModal");toast("✅ Permissions updated");await loadUsers();
+  }catch(e){toast("Error: "+e)}
   spin(false);
 }
 
-/* ── DELETE ── */
-function openDel(email){document.getElementById("delTarget").textContent=email;openModal("delModal");}
-async function submitDel(){
-  const email=document.getElementById("delTarget").textContent;
-  if(email===adminEmail){toast("⚠️ Cannot delete your own account.");closeModal("delModal");return;}
+// ── RESET PASSWORD ──
+function openPw(email){$("pwTarget").value=email;["pwNew","pwConf"].forEach(id=>$(id).value="");$("pwErr").textContent="";openModal("pwModal")}
+async function submitPw(){
+  const email=$("pwTarget").value,pw=$("pwNew").value,pc=$("pwConf").value;
+  if(!pw){$("pwErr").textContent="Enter password.";return}
+  if(pw!==pc){$("pwErr").textContent="Passwords do not match.";return}
+  if(pw.length<4){$("pwErr").textContent="Min 4 characters.";return}
   spin(true);
-  try{
-    await fetch(API,{method:"POST",body:new URLSearchParams({action:"deleteUser",token:tok,email})});
-    closeModal("delModal"); selEmail=null; toast("🗑️ Deleted: "+email);
-    await loadUsers(); loadDashboard();
-  }catch(e){toast("Error: "+e);}
+  try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"resetPassword",token:tok,email,password:pw})});closeModal("pwModal");toast("✅ Password reset.")}catch(e){$("pwErr").textContent="Error: "+e}
   spin(false);
 }
 
-/* ── CHANGE MY PW ── */
-function openChangeMyPw(){
-  if(!tok){toast("Not signed in");return;}
-  ["myPwCur","myPwNew","myPwConf"].forEach(id=>document.getElementById(id).value="");
-  document.getElementById("myPwErr").textContent="";
-  openModal("myPwModal");
-}
+// ── CHANGE MY PASSWORD ──
+function openChangeMyPw(){if(!tok){toast("Not signed in");return}["myPwCur","myPwNew","myPwConf"].forEach(id=>$(id).value="");$("myPwErr").textContent="";openModal("myPwModal")}
 async function submitMyPw(){
-  const cur=document.getElementById("myPwCur").value;
-  const pw=document.getElementById("myPwNew").value;
-  const pc=document.getElementById("myPwConf").value;
-  const err=document.getElementById("myPwErr");
-  if(!cur||!pw){err.textContent="Fill all fields.";return;}
-  if(pw!==pc){err.textContent="Passwords do not match.";return;}
-  if(pw.length<6){err.textContent="Min 6 characters.";return;}
+  const cur=$("myPwCur").value,pw=$("myPwNew").value,pc=$("myPwConf").value;
+  if(!cur||!pw){$("myPwErr").textContent="Fill all fields.";return}
+  if(pw!==pc){$("myPwErr").textContent="Passwords do not match.";return}
+  if(pw.length<4){$("myPwErr").textContent="Min 4 characters.";return}
   spin(true);
   try{
-    const chk=await fetch(API,{method:"POST",body:new URLSearchParams({action:"login",email:adminEmail,password:cur})});
-    const cd=await chk.json();
-    if(!cd.token){err.textContent="Current password incorrect.";spin(false);return;}
-    await fetch(API,{method:"POST",body:new URLSearchParams({action:"resetPassword",token:tok,email:adminEmail,password:pw})});
-    closeModal("myPwModal"); toast("✅ Password changed.");
-  }catch(e){err.textContent="Error: "+e;}
+    const chk=await fetch(API,{method:"POST",body:new URLSearchParams({action:"login",email:myEmail,password:cur})});
+    const cd=await chk.json();if(!cd.token){$("myPwErr").textContent="Current password incorrect.";spin(false);return}
+    await fetch(API,{method:"POST",body:new URLSearchParams({action:"resetPassword",token:tok,email:myEmail,password:pw})});
+    closeModal("myPwModal");toast("✅ Password changed.");
+  }catch(e){$("myPwErr").textContent="Error: "+e}
   spin(false);
 }
 
-/* ── ROLES ── */
-async function openRoles(){
-  await loadRoles(); renderRolesTable();
-  document.getElementById("roleErr").textContent="";
-  openModal("rolesModal");
+// ── TOGGLE ACCOUNT ──
+async function toggleAcc(email){
+  const u=allUsers.find(x=>x.email===email);if(!u)return;spin(true);
+  try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"updateUserProfile",token:tok,email,enabled:String(!u.enabled)})});
+    toast(u.enabled?"🔒 Account disabled":"🔓 Account enabled");await loadUsers();if(selEmail===email)selUser(email)
+  }catch{}spin(false);
 }
-function renderRolesTable(){
-  const built=["Admin","Technician","User"];
-  document.getElementById("rolesTable").innerHTML=
-    `<tr><th>Name</th><th>Color</th><th>Description</th><th></th></tr>`+
-    allRoles.map(r=>`<tr>
-      <td><span class="role-dot" style="background:${r.color}"></span>${r.name}</td>
-      <td><span style="font-family:monospace;font-size:10px">${r.color}</span></td>
-      <td>${r.desc||"—"}</td>
-      <td>${built.includes(r.name)?`<span style="color:var(--sub);font-size:10px">Built-in</span>`:`<button class="wbtn dng" onclick="delRole('${r.name}')" style="padding:2px 8px;font-size:10px">Delete</button>`}</td>
-    </tr>`).join("");
-}
-async function submitRole(){
-  const name=document.getElementById("newRoleName").value.trim();
-  const color=document.getElementById("newRoleColor").value;
-  const desc=document.getElementById("newRoleDesc").value.trim();
-  const err=document.getElementById("roleErr");
-  if(!name){err.textContent="Name required.";return;}
+
+// ── DELETE USER ──
+function openDel(email){$("delTarget").textContent=email;openModal("delModal")}
+async function submitDel(){
+  const email=$("delTarget").textContent;
+  if(email===myEmail){toast("⚠️ Cannot delete your own account");closeModal("delModal");return}
   spin(true);
-  try{
-    const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"addRole",token:tok,name,color,description:desc})});
-    const t=await r.text();
-    if(t.includes("exists")){err.textContent="Role already exists.";spin(false);return;}
-    document.getElementById("newRoleName").value=""; document.getElementById("newRoleDesc").value="";
-    toast("✅ Role: "+name); await loadRoles(); renderRolesTable();
-  }catch(e){err.textContent="Error: "+e;}
-  spin(false);
-}
-async function delRole(name){
-  if(!confirm("Delete role '"+name+"'?"))return;
-  spin(true);
-  try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"deleteRole",token:tok,name})});toast("🗑️ Role deleted.");await loadRoles();renderRolesTable();}catch{}
+  try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"deleteUser",token:tok,email})});
+    closeModal("delModal");selEmail=null;toast("🗑️ User deleted.");await loadUsers();loadDashboard();
+    $("detailPane").innerHTML=`<div style="padding:18px;color:var(--sub);font-size:11px;text-align:center"><div style="font-size:28px;margin-bottom:6px">🖥️</div>Select an item</div>`;
+  }catch(e){toast("Error: "+e)}
   spin(false);
 }
 
-/* ── DASHBOARD ── */
+// ── DASHBOARD ──
 async function loadDashboard(){
   try{
     const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"getDashboard",token:tok})});
-    const d=await r.json();
-    if(!d||d.error)return;
-    renderDashboard(d);
+    const d=await r.json();if(!d||d.error)return;
+    const u=d.users||{},t=d.tickets||{};
+    $("dashStats").innerHTML=`
+      <div class="stat"><div class="sv">${u.total||0}</div><div class="sl">Total Users</div></div>
+      <div class="stat grn"><div class="sv">${u.enabled||0}</div><div class="sl">Active</div></div>
+      <div class="stat red"><div class="sv">${u.disabled||0}</div><div class="sl">Disabled</div></div>
+      <div class="stat"><div class="sv">${t.total||0}</div><div class="sl">Total Tickets</div></div>
+      <div class="stat amb"><div class="sv">${t.open||0}</div><div class="sl">Open</div></div>
+      <div class="stat red"><div class="sv">${t.overdue||0}</div><div class="sl">Overdue</div></div>`;
+    const byRole=u.byRole||{},re=Object.entries(byRole),mx=Math.max(1,...re.map(e=>e[1]));
+    const RC={"Admin":"#ef4444","Technician":"#22c55e","User":"#3b82f6"};
+    $("dashChart").innerHTML=re.length?re.map(([r,c])=>`<div class="bc"><div class="bn">${c}</div><div class="bf" style="height:${Math.round(c/mx*90)+10}%;background:${RC[r]||"#6366f1"}"></div><div class="bl">${r}</div></div>`).join(""):`<div style="color:var(--sub);font-size:11px;margin:auto">No data</div>`;
+    const td=[["Open",t.open||0,"#3b82f6"],["Resolved",t.resolved||0,"#22c55e"],["Closed",t.closed||0,"#6b7280"],["Overdue",t.overdue||0,"#ef4444"]];
+    const mx2=Math.max(1,...td.map(x=>x[1]));
+    $("tickChart").innerHTML=td.map(([l,v,c])=>`<div class="bc"><div class="bn">${v}</div><div class="bf" style="height:${Math.round(v/mx2*90)+10}%;background:${c}"></div><div class="bl">${l}</div></div>`).join("");
+    const ra=d.recentAudit||[];
+    $("dashAudit").innerHTML=ra.length?ra.map(a=>`<div class="ami"><span class="ami-t">${a.time?new Date(a.time).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}):"—"}</span><span class="ami-a">${a.action}</span><span class="ami-d">${a.detail}</span></div>`).join(""):`<div class="ami" style="color:var(--sub)">No recent activity</div>`;
   }catch{}
 }
-function renderDashboard(d){
-  const u=d.users||{}, t=d.tickets||{};
-  // Stat cards
-  document.getElementById("dashStats").innerHTML=
-    `<div class="stat-card"><div class="sc-val">${u.total||0}</div><div class="sc-lbl">Total Users</div></div>
-     <div class="stat-card grn"><div class="sc-val">${u.enabled||0}</div><div class="sc-lbl">Active Accounts</div></div>
-     <div class="stat-card red"><div class="sc-val">${u.disabled||0}</div><div class="sc-lbl">Disabled Accounts</div></div>
-     <div class="stat-card"><div class="sc-val">${t.total||0}</div><div class="sc-lbl">Total Tickets</div></div>
-     <div class="stat-card amb"><div class="sc-val">${t.open||0}</div><div class="sc-lbl">Open Tickets</div></div>
-     <div class="stat-card red"><div class="sc-val">${t.overdue||0}</div><div class="sc-lbl">Overdue Tickets</div></div>`;
 
-  // Users by role chart
-  const byRole=u.byRole||{};
-  const roleEntries=Object.entries(byRole);
-  const maxR=Math.max(1,...roleEntries.map(e=>e[1]));
-  const COLORS={"Admin":"#ef4444","Technician":"#22c55e","User":"#3b82f6"};
-  document.getElementById("dashChart").innerHTML=roleEntries.length?
-    roleEntries.map(([role,count])=>{
-      const pct=Math.round((count/maxR)*100);
-      const col=COLORS[role]||"#6366f1";
-      return `<div class="bar-col">
-        <div class="bar-num">${count}</div>
-        <div class="bar-fill" style="height:${pct}%;background:${col};width:100%;min-height:4px;border-radius:3px 3px 0 0"></div>
-        <div class="bar-lbl">${role}</div>
-      </div>`;
-    }).join(""):
-    `<div style="color:var(--sub);font-size:11px;margin:auto">No data</div>`;
-
-  // Tickets chart
-  const tdata=[["Open",t.open||0,"#3b82f6"],["Closed",t.closed||0,"#22c55e"],["Resolved",t.resolved||0,"#f59e0b"],["Overdue",t.overdue||0,"#ef4444"]];
-  const maxT=Math.max(1,...tdata.map(x=>x[1]));
-  document.getElementById("ticketChart").innerHTML=tdata.map(([lbl,val,col])=>{
-    const pct=Math.round((val/maxT)*100);
-    return `<div class="bar-col">
-      <div class="bar-num">${val}</div>
-      <div class="bar-fill" style="height:${pct}%;background:${col};width:100%;min-height:4px;border-radius:3px 3px 0 0"></div>
-      <div class="bar-lbl">${lbl}</div>
-    </div>`;
-  }).join("");
-
-  // Recent audit
-  const recent=d.recentAudit||[];
-  document.getElementById("dashAudit").innerHTML=recent.length?
-    recent.map(a=>`<div class="ami-row">
-      <span class="ami-time">${a.time?new Date(a.time).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}):"—"}</span>
-      <span class="ami-act audit-tag audit-${a.action}">${a.action}</span>
-      <span class="ami-detail">${a.detail}</span>
-      <span class="ami-actor">${(a.actor||"").split("@")[0]}</span>
-    </div>`).join(""):
-    `<div class="ami-row" style="color:var(--sub)">No activity yet</div>`;
-}
-
-/* ── AUDIT LOG ── */
+// ── AUDIT LOG ──
 async function loadAudit(){
   spin(true);
   try{
     const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"getAuditLog",token:tok})});
     const d=await r.json();
-    allAudit=(Array.isArray(d)?d:[]).slice(1).map(r=>({
-      time:r[0]?new Date(r[0]).toISOString():"",
-      actor:r[1]||"",action:r[2]||"",detail:r[3]||""
-    })).reverse();
+    allAudit=(Array.isArray(d)?d:[]).slice(1).map(r=>({time:r[0]?new Date(r[0]).toISOString():"",actor:r[1]||"",action:r[2]||"",detail:r[3]||""})).reverse();
     renderAudit();
-  }catch{toast("Failed to load audit log");}
+  }catch{toast("Failed to load audit")}
   spin(false);
 }
 function renderAudit(){
-  const q=document.getElementById("auditSearch").value.toLowerCase();
-  const f=document.getElementById("auditFilter").value;
-  let rows=allAudit.filter(a=>{
-    const mf=!f||a.action===f;
-    const mq=!q||[a.actor,a.action,a.detail].some(v=>v.toLowerCase().includes(q));
-    return mf&&mq;
-  });
-  const body=document.getElementById("auditBody");
-  if(!rows.length){body.innerHTML=`<tr><td colspan="4" style="text-align:center;padding:28px;color:var(--sub)">No entries found</td></tr>`;return;}
-  body.innerHTML=rows.map(a=>{
-    const dt=a.time?new Date(a.time).toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",second:"2-digit"}):"—";
-    return `<tr>
-      <td style="white-space:nowrap;font-size:10px">${dt}</td>
-      <td>${a.actor||"—"}</td>
-      <td><span class="audit-tag audit-${a.action}">${a.action}</span></td>
-      <td>${a.detail}</td>
-    </tr>`;
-  }).join("");
+  const q=$("auditQ").value.toLowerCase(),f=$("auditF").value;
+  const rows=allAudit.filter(a=>(!f||a.action===f)&&(!q||[a.actor,a.action,a.detail].some(v=>v.toLowerCase().includes(q))));
+  const body=$("auditBody");
+  if(!rows.length){body.innerHTML=`<tr><td colspan="4" style="text-align:center;padding:22px;color:var(--sub)">No entries</td></tr>`;return}
+  body.innerHTML=rows.map(a=>`<tr>
+    <td style="white-space:nowrap;font-size:10px">${a.time?new Date(a.time).toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit",second:"2-digit"}):"—"}</td>
+    <td>${a.actor}</td>
+    <td><span class="atag atag-${a.action}">${a.action}</span></td>
+    <td>${a.detail}</td>
+  </tr>`).join("");
 }
 function exportAudit(){
   const rows=[["Timestamp","Actor","Action","Detail"],...allAudit.map(a=>[a.time,a.actor,a.action,a.detail])];
   const csv=rows.map(r=>r.map(v=>'"'+(v||"").replace(/"/g,'""')+'"').join(",")).join("\n");
-  const a=document.createElement("a"); a.href="data:text/csv;charset=utf-8,"+encodeURIComponent(csv);
-  a.download="AuditLog_"+new Date().toISOString().slice(0,10)+".csv"; a.click();
+  const a=document.createElement("a");a.href="data:text/csv;charset=utf-8,"+encodeURIComponent(csv);a.download="AuditLog_"+new Date().toISOString().slice(0,10)+".csv";a.click();
 }
 
-/* ── STORAGE / DRIVE ── */
-async function loadStorage(){
+// ── STORAGE ──
+async function loadStorageInfo(){
   try{
     const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"getStorageInfo",token:tok})});
     const d=await r.json();
     if(d.usedGB){
       const pct=parseFloat(d.percent);
-      const bar=document.getElementById("storBar");
-      bar.style.width=Math.min(pct,100)+"%";
-      bar.className="stor-bar"+(pct>90?" crit":pct>70?" warn":"");
-      document.getElementById("storLabel").textContent=d.usedGB+" GB / 2 TB ("+d.percent+"%)";
-      document.getElementById("storDetail").textContent="Used: "+d.usedGB+" GB  |  Free: "+((2048-parseFloat(d.usedGB)).toFixed(2))+" GB  |  Total: 2 TB";
-      document.getElementById("sbStore").textContent="💾 "+d.usedGB+"GB";
+      const fill=$("storFill");fill.style.width=Math.min(pct,100)+"%";
+      fill.className="stor-fill"+(pct>90?" crit":pct>70?" warn":"");
+      $("storLabel").textContent=d.usedGB+" GB / 2 TB";
+      $("storDetail").textContent="Used: "+d.usedGB+" GB ("+d.percent+"%)   Free: "+((2048-parseFloat(d.usedGB)).toFixed(2))+" GB   Total: 2 TB";
+      $("sbStore").textContent="🖴 "+d.usedGB+"GB/2TB";
     }
   }catch{}
 }
-async function loadDrive(folderId){
-  folderId=folderId||curFolderId; spin(true);
+async function loadDrive(fid){
+  fid=fid||curFolderId;spin(true);
   try{
-    const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"listDriveFiles",token:tok,folderId})});
-    const txt=await r.text();
-    let d; try{d=JSON.parse(txt);}catch{toast("Drive error: bad response");spin(false);return;}
-    if(!d||typeof d!=="object"||d.error){toast("Drive error: "+(d&&d.error?d.error:"unknown"));spin(false);return;}
-    if(!Array.isArray(d.files))d.files=[];
-    if(!Array.isArray(d.folders))d.folders=[];
-    curFolderId=folderId; renderDriveFiles(d);
-  }catch(e){toast("Drive error: "+e);}
+    const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"listDriveFiles",token:tok,folderId:fid})});
+    const txt=await r.text();let d;try{d=JSON.parse(txt)}catch{toast("Drive error");spin(false);return}
+    if(!d||d.error){toast("Drive: "+(d?.error||"error"));spin(false);return}
+    if(!Array.isArray(d.files))d.files=[];if(!Array.isArray(d.folders))d.folders=[];
+    curFolderId=fid;renderDrive(d);
+  }catch(e){toast("Drive error: "+e)}
   spin(false);
 }
-function renderDriveFiles(data){
-  const grid=document.getElementById("driveGrid");
-  const list=document.getElementById("driveList");
-  grid.innerHTML=""; list.innerHTML=""; selFileId=null;
-  document.getElementById("delFileBtn").style.display="none";
+function renderDrive(data){
+  const gr=$("driveGrid"),li=$("driveList");gr.innerHTML="";li.innerHTML="";selFileId=null;$("delFBtn").style.opacity="0.4";
   const items=[...data.folders.map(f=>({...f,isFolder:true})),...data.files.map(f=>({...f,isFolder:false}))];
-  if(!items.length){
-    const msg=`<div style="padding:30px;text-align:center;color:var(--sub);grid-column:1/-1">📂 Folder is empty</div>`;
-    grid.innerHTML=msg; list.innerHTML=msg; return;
-  }
+  if(!items.length){const m=`<div style="padding:26px;text-align:center;color:var(--sub);grid-column:1/-1;font-size:11px">📂 This folder is empty</div>`;gr.innerHTML=m;return}
   items.forEach(item=>{
-    const icon=item.isFolder?"📁":getMimeIcon(item.mimeType);
-    const size=item.isFolder?"":formatSize(item.size);
-    const date=item.modified?new Date(item.modified).toLocaleDateString("en-GB"):"";
-    const g=document.createElement("div");
-    g.className="dfile"; g.dataset.id=item.id;
-    g.innerHTML=`<div class="dfile-icon">${icon}</div><div class="dfile-name" title="${item.name}">${item.name}</div><div class="dfile-size">${size}</div>`;
-    g.ondblclick=()=>item.isFolder?driveNav(item.id,item.name):window.open(item.url,"_blank");
-    g.onclick=()=>selectDriveFile(item.id,item.isFolder);
-    grid.appendChild(g);
-    const l=document.createElement("div");
-    l.className="dl-item"; l.dataset.id=item.id;
-    l.innerHTML=`<span class="dl-icon">${icon}</span><span class="dl-name">${item.name}</span><span class="dl-size">${size}</span><span class="dl-date">${date}</span>`;
-    l.ondblclick=()=>item.isFolder?driveNav(item.id,item.name):window.open(item.url,"_blank");
-    l.onclick=()=>selectDriveFile(item.id,item.isFolder);
-    list.appendChild(l);
+    const ico=item.isFolder?"📁":getMimeIco(item.mimeType);
+    const sz=item.isFolder?"":fmtSz(item.size);
+    const dt=item.modified?new Date(item.modified).toLocaleDateString("en-GB"):"";
+    const g=document.createElement("div");g.className="dfile";g.dataset.id=item.id;
+    g.innerHTML=`<div class="dfile-ico">${ico}</div><div class="dfile-nm" title="${item.name}">${item.name}</div><div class="dfile-sz">${sz}</div>`;
+    g.ondblclick=()=>item.isFolder?navDrive(item.id,item.name):window.open(item.url,"_blank");
+    g.onclick=()=>selFile(item.id,item.isFolder);gr.appendChild(g);
+    const l=document.createElement("div");l.className="dlitem";l.dataset.id=item.id;
+    l.innerHTML=`<span class="dlico">${ico}</span><span class="dlnm">${item.name}</span><span class="dlsz">${sz}</span><span class="dldt">${dt}</span>`;
+    l.ondblclick=()=>item.isFolder?navDrive(item.id,item.name):window.open(item.url,"_blank");
+    l.onclick=()=>selFile(item.id,item.isFolder);li.appendChild(l);
   });
 }
-function driveNav(id,name){breadcrumbs.push({id,name});updateBreadcrumb();loadDrive(id);}
-function navToRoot(){breadcrumbs=[{id:"1rgi0M0glLySObvzjVV5B1-NCPkpdul9p",name:"Shared Drive"}];updateBreadcrumb();loadDrive("1rgi0M0glLySObvzjVV5B1-NCPkpdul9p");}
-function navToBc(idx){breadcrumbs=breadcrumbs.slice(0,idx+1);updateBreadcrumb();loadDrive(breadcrumbs[idx].id);}
-function updateBreadcrumb(){
-  document.getElementById("breadcrumb").innerHTML=breadcrumbs.map((b,i)=>{
-    const last=i===breadcrumbs.length-1;
-    return last?`<span>${b.name}</span>`:`<span class="bc-item" onclick="navToBc(${i})">${b.name}</span><span class="bc-sep">›</span>`;
-  }).join("");
+function navDrive(id,name){bcPath.push({id,name});updateBc();loadDrive(id)}
+function navRoot(){bcPath=[{id:ROOT_FOLDER,name:"Local Disk (D:)"}];updateBc();loadDrive(ROOT_FOLDER)}
+function navBc(idx){bcPath=bcPath.slice(0,idx+1);updateBc();loadDrive(bcPath[idx].id)}
+function updateBc(){$("bcWrap").innerHTML=bcPath.map((b,i)=>i===bcPath.length-1?`<span>${b.name}</span>`:`<span class="bci" onclick="navBc(${i})">${b.name}</span><span class="bcs">›</span>`).join("")}
+function selFile(id,isFolder){
+  if(isFolder){selFileId=null;$("delFBtn").style.opacity="0.4";return}
+  selFileId=id;$("delFBtn").style.opacity="1";
+  document.querySelectorAll(".dfile,.dlitem").forEach(el=>el.classList.toggle("sf",el.dataset.id===id));
 }
-function selectDriveFile(id,isFolder){
-  if(isFolder){selFileId=null;document.getElementById("delFileBtn").style.display="none";return;}
-  selFileId=id; document.getElementById("delFileBtn").style.display="";
-  document.querySelectorAll(".dfile,.dl-item").forEach(el=>el.classList.toggle("sel-f",el.dataset.id===id));
-}
-async function deleteSelFile(){
-  if(!selFileId){toast("Select a file first");return;}
-  if(!confirm("Move to trash?"))return;
-  spin(true);
-  try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"deleteDriveFile",token:tok,fileId:selFileId})});
-    toast("🗑️ Moved to trash."); selFileId=null; await loadDrive(); await loadStorage();}catch(e){toast("Error: "+e);}
+async function delSelFile(){
+  if(!selFileId){toast("Select a file first");return}
+  if(!confirm("Move selected file to trash?"))return;spin(true);
+  try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"deleteDriveFile",token:tok,fileId:selFileId})});toast("🗑️ Moved to trash.");selFileId=null;await loadDrive();await loadStorageInfo()}catch(e){toast("Error: "+e)}
   spin(false);
 }
 async function doUpload(input){
-  const file=input.files[0];if(!file)return; spin(true);
+  const file=input.files[0];if(!file)return;spin(true);
   try{
-    const b64=await fileToBase64(file);
+    const b64=await fileToB64(file);
     const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"uploadDriveFile",token:tok,fileName:file.name,fileData:b64,mimeType:file.type||"application/octet-stream",folderId:curFolderId})});
     const d=await r.json();
-    if(d.error)toast("Upload failed: "+d.error);
-    else{toast("✅ Uploaded: "+file.name);await loadDrive();await loadStorage();}
-  }catch(e){toast("Error: "+e);}
-  input.value=""; spin(false);
+    if(d.error)toast("Upload failed: "+d.error);else{toast("✅ Uploaded: "+file.name);await loadDrive();await loadStorageInfo()}
+  }catch(e){toast("Error: "+e)}
+  input.value="";spin(false);
 }
-function fileToBase64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(f);});}
+function fileToB64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(f)})}
 function setDriveView(m){
-  driveViewMode=m;
-  document.getElementById("driveGrid").style.display=m==="grid"?"grid":"none";
-  const dl=document.getElementById("driveList");
-  dl.style.display=m==="list"?"flex":"none";
+  driveView=m;
+  $("driveGrid").style.display=m==="grid"?"grid":"none";
+  const dl=$("driveList");dl.style.display=m==="list"?"flex":"none";
   if(m==="list")dl.classList.add("show");
-  document.getElementById("vgrid").className="vt-btn"+(m==="grid"?" act":"");
-  document.getElementById("vlist").className="vt-btn"+(m==="list"?" act":"");
+  $("vg").className="vbtn"+(m==="grid"?" act":"");
+  $("vl").className="vbtn"+(m==="list"?" act":"");
 }
-function getMimeIcon(m){if(!m)return"📄";if(m.includes("pdf"))return"📕";if(m.includes("spreadsheet")||m.includes("excel"))return"📊";if(m.includes("document")||m.includes("word"))return"📝";if(m.includes("presentation"))return"📊";if(m.includes("image"))return"🖼️";if(m.includes("video"))return"🎬";if(m.includes("audio"))return"🎵";if(m.includes("zip"))return"📦";return"📄";}
-function formatSize(b){if(!b)return"";if(b<1024)return b+"B";if(b<1048576)return(b/1024).toFixed(1)+"KB";if(b<1073741824)return(b/1048576).toFixed(1)+"MB";return(b/1073741824).toFixed(2)+"GB";}
+function getMimeIco(m){if(!m)return"📄";if(m.includes("pdf"))return"📕";if(m.includes("spreadsheet")||m.includes("excel"))return"📊";if(m.includes("document")||m.includes("word"))return"📝";if(m.includes("presentation"))return"📊";if(m.includes("image"))return"🖼️";if(m.includes("video"))return"🎬";if(m.includes("audio"))return"🎵";if(m.includes("zip")||m.includes("x-rar"))return"📦";return"📄"}
 
-/* ── TERMINAL ── */
-function toggleTerminal(){const p=document.getElementById("termPanel");p.classList.toggle("show");if(p.classList.contains("show"))document.getElementById("termInput").focus();}
+// ── TOKEN COUNTERS ──
+async function loadCounters(){
+  spin(true);
+  try{
+    const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"getCounters",token:tok})});
+    const d=await r.json();
+    allCounters=(Array.isArray(d)?d:[]).slice(1).map(r=>({id:r[0]||"",name:r[1]||"",value:Number(r[2])||0,key:r[3]||"",prefix:r[4]||""})).filter(c=>c.id);
+    $("tokCount").textContent=allCounters.length+" counters";
+    renderCounters();
+  }catch{toast("Failed to load counters")}
+  spin(false);
+}
+function renderCounters(){
+  const body=$("tokBody");
+  if(!allCounters.length){body.innerHTML=`<tr><td colspan="4" style="text-align:center;padding:22px;color:var(--sub)">No counters. Click "Add Counter" to create one.</td></tr>`;return}
+  body.innerHTML=allCounters.map(c=>`<tr class="${selCtrId===c.id?"sel-row":""}" onclick="selCtr('${esc(c.id)}')">
+    <td><span style="font-family:Consolas,monospace;font-size:15px;font-weight:900;color:var(--sel)">${c.prefix}</span></td>
+    <td>${c.name}</td>
+    <td><span style="font-family:Consolas,monospace;font-size:15px;font-weight:900;letter-spacing:1px">${c.prefix}${c.value}</span></td>
+    <td style="color:var(--sub)">${c.value}</td>
+  </tr>`).join("");
+}
+function selCtr(id){
+  selCtrId=id;renderCounters();
+  const c=allCounters.find(x=>x.id===id);if(!c)return;
+  $("detailHdr").textContent="🔢 Counter Details";
+  $("detailPane").innerHTML=`
+    <div class="counter-big">
+      <div class="cnum">${c.prefix}${c.value}</div>
+      <div class="cname">${c.name}</div>
+    </div>
+    <div class="dr"><label>Counter Name</label><span>${c.name}</span></div>
+    <div class="dr"><label>Prefix</label><span>${c.prefix}</span></div>
+    <div class="dr"><label>Current Value</label><span>${c.value}</span></div>
+    <div class="dr"><label>Full Token</label><span style="font-family:monospace;font-weight:700;font-size:13px">${c.prefix}${c.value}</span></div>
+    <div class="cact-row">
+      <button class="cabt pri" onclick="nextTok('${esc(c.id)}')" type="button">▶ Next</button>
+      ${can("tokens.manage")?`<button class="cabt" onclick="prevTok('${esc(c.id)}')" type="button">⏮ Prev</button>`:""}
+      <button class="cabt" onclick="repeatTok('${esc(c.id)}')" type="button">🔄 Repeat</button>
+      ${can("tokens.manage")?`<button class="cabt" onclick="resetCtr('${esc(c.id)}')" type="button">↩ Reset</button>`:""}
+    </div>
+    ${can("tokens.manage")?`<div class="dact">
+      <button class="dab" onclick="openRenameCtr('${esc(c.id)}','${esc(c.name)}')" type="button">✏️ Rename Counter</button>
+      <button class="dab dng" onclick="delCtrById('${esc(c.id)}')" type="button">🗑️ Delete Counter</button>
+    </div>`:""}`;
+}
+function nextTokSel(){if(!selCtrId){toast("Select a counter");return}nextTok(selCtrId)}
+function prevTokSel(){if(!selCtrId){toast("Select a counter");return}prevTok(selCtrId)}
+function repeatTokSel(){if(!selCtrId){toast("Select a counter");return}repeatTok(selCtrId)}
+function resetCounterSel(){if(!selCtrId){toast("Select a counter");return}resetCtr(selCtrId)}
+function delCounterSel(){if(!selCtrId){toast("Select a counter");return}delCtrById(selCtrId)}
+function openRenameCounter(){if(!selCtrId){toast("Select a counter");return}const c=allCounters.find(x=>x.id===selCtrId);openRenameCtr(selCtrId,c?.name||"")}
+async function nextTok(id){spin(true);try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"nextToken",token:tok,counterId:id})});await loadCounters();if(selCtrId===id)selCtr(id)}catch(e){toast("Error: "+e)}spin(false)}
+async function prevTok(id){spin(true);try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"previousToken",token:tok,counterId:id})});await loadCounters();if(selCtrId===id)selCtr(id)}catch(e){toast("Error: "+e)}spin(false)}
+async function repeatTok(id){spin(true);try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"repeatToken",token:tok,counterId:id})});toast("🔄 Token repeated");if(selCtrId===id)selCtr(id)}catch(e){toast("Error: "+e)}spin(false)}
+async function resetCtr(id){if(!confirm("Reset counter to 1?"))return;spin(true);try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"resetCounter",token:tok,counterId:id})});await loadCounters();if(selCtrId===id)selCtr(id)}catch(e){toast("Error: "+e)}spin(false)}
+async function delCtrById(id){if(!confirm("Delete this counter permanently?"))return;spin(true);try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"deleteCounter",token:tok,counterId:id})});selCtrId=null;await loadCounters();$("detailHdr").textContent="Properties";$("detailPane").innerHTML=`<div style="padding:18px;color:var(--sub);font-size:11px;text-align:center"><div style="font-size:28px;margin-bottom:6px">🖥️</div>Select an item</div>`}catch(e){toast("Error: "+e)}spin(false)}
+function openAddCounter(){$("newCtrName").value="";$("cErr").textContent="";openModal("addCtrModal")}
+async function submitAddCtr(){
+  const name=$("newCtrName").value.trim();if(!name){$("cErr").textContent="Name required.";return}
+  spin(true);try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"addCounter",token:tok,name})});closeModal("addCtrModal");toast("✅ Counter added: "+name);await loadCounters()}catch(e){$("cErr").textContent="Error: "+e}spin(false);
+}
+function openRenameCtr(id,currentName){$("renVal").value=currentName;$("rnErr").textContent="";$("renCtrModal").dataset.cid=id;openModal("renCtrModal")}
+async function submitRename(){
+  const id=$("renCtrModal").dataset.cid,newName=$("renVal").value.trim();
+  if(!newName){$("rnErr").textContent="Name required.";return}
+  spin(true);try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"renameCounter",token:tok,counterId:id,newName})});closeModal("renCtrModal");toast("✅ Renamed.");await loadCounters();if(selCtrId===id)selCtr(id)}catch(e){$("rnErr").textContent="Error: "+e}spin(false);
+}
+
+// ── TICKETS ──
+async function loadTickets(){
+  spin(true);
+  try{
+    const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"getTickets",token:tok})});
+    const d=await r.json();
+    allTickets=(Array.isArray(d)?d:[]).slice(1).map(r=>({
+      id:r[0]||"",created:r[1]||"",createdBy:r[2]||"",
+      title:r[4]||"",desc:r[5]||"",priority:r[6]||"Low",
+      status:r[7]||"Open",assignedTo:r[8]||"Unassigned",
+      lastUpdated:r[9]||"",dueTime:r[11]||"",requesterName:r[13]||r[2]||""
+    })).filter(t=>t.id);
+    $("tickCount").textContent=allTickets.length+" tickets";renderTickets();
+  }catch{toast("Failed to load tickets")}
+  spin(false);
+}
+function renderTickets(){
+  const sf=$("tickF").value,pf=$("tickPF").value;
+  const rows=allTickets.filter(t=>(!sf||t.status===sf)&&(!pf||t.priority===pf));
+  const body=$("tickBody");
+  if(!rows.length){body.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:22px;color:var(--sub)">No tickets found</td></tr>`;return}
+  body.innerHTML=rows.map(t=>{
+    const pb=t.priority==="High"?"ph":t.priority==="Medium"?"pm":"pl";
+    const now=new Date(),due=new Date(t.dueTime);
+    const sb=t.status==="Closed"?"sc2":t.status==="Resolved"?"sr":now>due?"sov":"so";
+    const dueStr=t.dueTime?new Date(t.dueTime).toLocaleDateString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}):"—";
+    return `<tr class="${selTickId===t.id?"sel-row":""}" onclick="selTick('${esc(t.id)}')">
+      <td style="font-family:monospace;font-size:10px;white-space:nowrap">${t.id}</td>
+      <td>${t.title}</td>
+      <td><span class="${pb}">${t.priority}</span></td>
+      <td><span class="${sb}">${t.status}</span></td>
+      <td>${t.requesterName||t.createdBy}</td>
+      <td>${t.assignedTo}</td>
+      <td style="font-size:10px;white-space:nowrap">${dueStr}</td>
+    </tr>`;
+  }).join("");
+}
+function selTick(id){
+  selTickId=id;renderTickets();
+  const t=allTickets.find(x=>x.id===id);if(!t)return;
+  const pb=t.priority==="High"?"ph":t.priority==="Medium"?"pm":"pl";
+  const now=new Date(),due=new Date(t.dueTime);
+  const sb=t.status==="Closed"?"sc2":t.status==="Resolved"?"sr":now>due?"sov":"so";
+  $("detailHdr").textContent="🎫 Ticket Details";
+  $("detailPane").innerHTML=`
+    <div class="davatar" style="padding:8px">
+      <div style="font-size:26px;margin-bottom:4px">🎫</div>
+      <div class="dn" style="font-family:monospace;font-size:11px">${t.id}</div>
+    </div>
+    <div class="dr"><label>Title</label><span>${t.title}</span></div>
+    <div class="dr"><label>Priority</label><span><span class="${pb}">${t.priority}</span></span></div>
+    <div class="dr"><label>Status</label><span><span class="${sb}">${t.status}</span></span></div>
+    <div class="dr"><label>Requester</label><span>${t.requesterName}</span></div>
+    <div class="dr"><label>Assigned To</label><span>${t.assignedTo}</span></div>
+    <div class="dr"><label>Due</label><span>${t.dueTime?new Date(t.dueTime).toLocaleString("en-GB"):"—"}</span></div>
+    <div class="dr"><label>Description</label><span style="white-space:pre-wrap;font-size:10px;line-height:1.4">${t.desc||"—"}</span></div>
+    ${can("tickets.manage")?`<div class="dact">
+      <button class="dab" onclick="openUpdTicket('${esc(t.id)}','${esc(t.status)}','${esc(t.assignedTo)}')" type="button">✏️ Update Ticket</button>
+      <button class="dab dng" onclick="closeTick('${esc(t.id)}')" type="button">🔒 Close Ticket</button>
+    </div>`:""}`;
+}
+function openNewTicket(){["tkName","tkTitle","tkDesc"].forEach(id=>$(id).value="");$("tkPri").value="Medium";$("tkErr").textContent="";openModal("ticketModal")}
+async function submitTicket(){
+  const name=$("tkName").value.trim(),title=$("tkTitle").value.trim(),desc=$("tkDesc").value.trim(),pri=$("tkPri").value;
+  if(!name||!title){$("tkErr").textContent="Name and title are required.";return}
+  spin(true);
+  try{const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"createTicket",token:tok,requesterName:name,title,description:desc,priority:pri})});
+    const t=await r.text();closeModal("ticketModal");toast("✅ "+t);await loadTickets();loadDashboard();
+  }catch(e){$("tkErr").textContent="Error: "+e}
+  spin(false);
+}
+function openUpdateTicket(){if(!selTickId){toast("Select a ticket");return}const t=allTickets.find(x=>x.id===selTickId);if(!t)return;openUpdTicket(t.id,t.status,t.assignedTo)}
+function openUpdTicket(id,status,assigned){
+  $("utId").value=id;$("utStatus").value=status;
+  $("utAssigned").value=assigned==="Unassigned"?"":assigned;
+  $("utErr").textContent="";openModal("updTicketModal");
+}
+async function submitUpdTicket(){
+  const id=$("utId").value,status=$("utStatus").value,assigned=$("utAssigned").value.trim()||"Unassigned";
+  spin(true);try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"updateTicket",token:tok,ticketId:id,status,assignedTo:assigned})});closeModal("updTicketModal");toast("✅ Ticket updated.");await loadTickets()}catch(e){$("utErr").textContent="Error: "+e}spin(false);
+}
+function closeTicketSel(){if(!selTickId){toast("Select a ticket");return}closeTick(selTickId)}
+async function closeTick(id){if(!confirm("Close ticket "+id+"?"))return;spin(true);try{await fetch(API,{method:"POST",body:new URLSearchParams({action:"updateTicket",token:tok,ticketId:id,status:"Closed",assignedTo:myEmail})});toast("🔒 Ticket closed.");await loadTickets()}catch(e){toast("Error: "+e)}spin(false)}
+
+// ── TERMINAL ──
+function toggleTerminal(){const p=$("termPanel");p.classList.toggle("open");if(p.classList.contains("open"))$("termI").focus()}
 async function termKey(e){
-  const input=document.getElementById("termInput");
-  if(e.key==="ArrowUp"){termHIdx=Math.max(0,termHIdx-1);input.value=termHistory[termHIdx]||"";return;}
-  if(e.key==="ArrowDown"){termHIdx=Math.min(termHistory.length,termHIdx+1);input.value=termHistory[termHIdx]||"";return;}
+  const inp=$("termI");
+  if(e.key==="ArrowUp"){e.preventDefault();termIdx=Math.max(0,termIdx-1);inp.value=termHist[termIdx]||"";return}
+  if(e.key==="ArrowDown"){e.preventDefault();termIdx=Math.min(termHist.length,termIdx+1);inp.value=termHist[termIdx]||"";return}
   if(e.key!=="Enter")return;
-  const cmd=input.value.trim(); if(!cmd)return;
-  termHistory.push(cmd); termHIdx=termHistory.length; input.value="";
-  termPrint(document.getElementById("termPrompt").textContent+" "+cmd,"tcmd");
-  if(cmd.toLowerCase()==="clear"){clearTerm();return;}
+  const cmd=inp.value.trim();if(!cmd)return;
+  termHist.push(cmd);termIdx=termHist.length;inp.value="";
+  tPrint($("termP").textContent+" "+cmd,"tl-c");
   try{
     const r=await fetch(API,{method:"POST",body:new URLSearchParams({action:"terminal",token:tok,command:cmd})});
-    const txt=await r.text();
-    let val; try{val=JSON.parse(txt);}catch{val=txt;}
-    if(val==="__clear__")clearTerm(); else termPrint(String(val),"tout");
-  }catch(e){termPrint("Error: "+e,"terr");}
-  document.getElementById("termBody").scrollTop=99999;
+    const txt=await r.text();let v;try{v=JSON.parse(txt)}catch{v=txt}
+    if(v==="__clear__")clearTerm();else tPrint(String(v),"tl-o");
+  }catch(e){tPrint("Error: "+e,"tl-e")}
+  $("termBody").scrollTop=99999;
 }
-function termPrint(text,cls="tout"){const b=document.getElementById("termBody");const d=document.createElement("div");d.className="term-line "+cls;d.textContent=text;b.appendChild(d);b.scrollTop=99999;}
-function clearTerm(){document.getElementById("termBody").innerHTML=`<div class="term-line tok">Screen cleared.</div>`;}
+function tPrint(t,c="tl-o"){const b=$("termBody");const d=document.createElement("div");d.style.cssText="margin:1px 0;white-space:pre-wrap;word-break:break-all";d.className=c;d.textContent=t;b.appendChild(d);b.scrollTop=99999}
+function clearTerm(){$("termBody").innerHTML=`<div style="color:#4ec9b0">Screen cleared.</div>`}
 
-/* ── TABS ── */
+// ── TABS ──
 function switchTab(tab){
-  document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("act"));
-  document.querySelectorAll(".main-tab").forEach(t=>t.classList.remove("act"));
-  document.getElementById("tc-"+tab).classList.add("act");
-  document.getElementById("tab-"+tab).classList.add("act");
-  if(tab==="drive"&&!document.getElementById("driveGrid").children.length){loadDrive();loadStorage();}
+  document.querySelectorAll(".tpane").forEach(t=>t.classList.remove("act"));
+  document.querySelectorAll(".mtab").forEach(t=>t.classList.remove("act"));
+  $("tp-"+tab).classList.add("act");
+  $("tab-"+tab).classList.add("act");
+  if(tab==="drive"&&!$("driveGrid").children.length)loadDrive();
   if(tab==="audit"&&!allAudit.length)loadAudit();
+  if(tab==="tokens"&&!allCounters.length)loadCounters();
+  if(tab==="tickets"&&!allTickets.length)loadTickets();
   if(tab==="dash")loadDashboard();
-}
-function switchMTab(idx,el){
-  document.querySelectorAll(".tab-bar .tab").forEach((t,i)=>t.classList.toggle("act",i===idx));
-  document.querySelectorAll(".tab-body").forEach((t,i)=>t.classList.toggle("act",i===idx));
+  if(tab!=="users")selEmail=null;
+  if(tab!=="tokens")selCtrId=null;
+  if(tab!=="tickets")selTickId=null;
 }
 
-/* ── HELPERS ── */
-function openModal(id){document.getElementById(id).classList.add("show");}
-function closeModal(id){document.getElementById(id).classList.remove("show");}
-function spin(on){document.getElementById("spinner").classList.toggle("show",on);}
-function toast(msg,dur=2800){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),dur);}
-function toggleEye(id,btn){const i=document.getElementById(id);i.type=i.type==="password"?"text":"password";btn.textContent=i.type==="password"?"👁":"🙈";}
-function esc(s){return(s||"").replace(/'/g,"\\'");}
+// ── MODAL TABS ──
+function switchMTab(idx,clicked){
+  const bar=clicked?clicked.parentElement:document.querySelector(".tabbar");
+  bar.querySelectorAll(".mtab2").forEach((t,i)=>t.classList.toggle("act",i===idx));
+  const modal=bar.closest(".mw");
+  if(modal)modal.querySelectorAll(".tbody2").forEach((b,i)=>b.classList.toggle("act",i===idx));
+}
+
+// ── ABOUT ──
+function showAbout(){toast("Active Directory Console v3.0  ·  aman5z.in  ·  All rights reserved",3500)}
 </script>
 </body>
 </html>
