@@ -47,6 +47,21 @@ JsBarcode (Barcode generation)
 
 QRCode.js (QR Code generation)
 
+<img width="1919" height="1079" alt="Screenshot 2026-03-06 130429" src="https://github.com/user-attachments/assets/5f312292-072c-4599-8a2e-237c15df28fd" />
+<img width="1919" height="1079" alt="Screenshot 2026-03-06 130415" src="https://github.com/user-attachments/assets/92fadc78-1399-473c-a138-858d72dbdf0b" />
+<img width="1919" height="883" alt="Screenshot 2026-03-06 130308" src="https://github.com/user-attachments/assets/980388af-3d21-42c0-957c-4d3d90dc56f5" />
+<img width="1538" height="780" alt="Screenshot 2026-03-06 131618" src="https://github.com/user-attachments/assets/49c1ef0f-3f9c-499c-b327-2d4c760280a5" />
+<img width="1919" height="1079" alt="Screenshot 2026-03-06 130724" src="https://github.com/user-attachments/assets/dbe73b34-72bd-439d-bec4-44472a4afc03" />
+<img width="1919" height="1079" alt="Screenshot 2026-03-06 130636" src="https://github.com/user-attachments/assets/7df32731-fa06-45e8-9da7-a3513abd549e" />
+<img width="1919" height="1079" alt="Screenshot 2026-03-06 130629" src="https://github.com/user-attachments/assets/6a532060-17d5-4603-8bb1-1be5477ed63d" />
+<img width="1919" height="1079" alt="Screenshot 2026-03-06 130612" src="https://github.com/user-attachments/assets/3c26276f-2904-4911-8432-cfafb1c6a725" />
+<img width="1919" height="1079" alt="Screenshot 2026-03-06 130602" src="https://github.com/user-attachments/assets/ed95e8df-1ed4-4dcc-844d-a8dfc2a3a07f" />
+<img width="1919" height="1079" alt="Screenshot 2026-03-06 130505" src="https://github.com/user-attachments/assets/f36cf67d-137e-415e-a136-0415850ba824" />
+<img width="1919" height="1079" alt="Screenshot 2026-03-06 130455" src="https://github.com/user-attachments/assets/6ded872d-53e9-4807-bd57-d586fd59c66e" />
+<img width="1919" height="1079" alt="Screenshot 2026-03-06 130440" src="https://github.com/user-attachments/assets/d2a2bad6-c8bb-4c49-8d14-e2d466c6b892" />
+
+
+
 🚀 Installation & Usage
 Because the frontend is a standalone HTML file, setup is incredibly simple:
 
