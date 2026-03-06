@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FortiGate — FG-100F — Enterprise Firewall</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#ee3124;--red-d:#c0251b;--red-l:#ff4a3d;
+  --nav:#1a1f2e;--nav-h:#232a3d;--nav-sel:#ee3124;
+  --sub-nav:#252d42;
+  --hdr:#0d1117;
+  --bg:#f0f2f5;--card:#fff;--bdr:#dde1e7;
+  --txt:#1a1f2e;--sub:#6b7280;--sub2:#9ca3af;
+  --sel:#1d4ed8;--sel-l:#eff6ff;
+  --grn:#16a34a;--grn-l:#dcfce7;
+  --amber:#d97706;--amber-l:#fef3c7;
+  --red2:#dc2626;--red2-l:#fee2e2;
+  --teal:#0891b2;--teal-l:#e0f2fe;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);font-size:13px;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* ── HEADER ── */
+.hdr{background:var(--hdr);color:#fff;height:46px;display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0;border-bottom:1px solid #0a0d14;position:relative;z-index:100}
+.hdr-logo{display:flex;align-items:center;gap:8px;min-width:200px}
+.hdr-logo svg{width:28px;height:28px}
+.hdr-logo-text{display:flex;flex-direction:column;line-height:1}
+.hdr-logo-text span:first-child{font-size:14px;font-weight:700;color:#fff;letter-spacing:.3px}
+.hdr-logo-text span:last-child{font-size:9px;color:#9ca3af;letter-spacing:.8px;text-transform:uppercase}
+.hdr-device{background:#1d2433;border:1px solid #2d3748;padding:3px 10px;border-radius:3px;font-size:11px;color:#cbd5e1;display:flex;align-items:center;gap:5px}
+.hdr-device::before{content:"";width:6px;height:6px;background:var(--grn);border-radius:50%;box-shadow:0 0 6px var(--grn)}
+.hdr-spacer{flex:1}
+.hdr-btns{display:flex;align-items:center;gap:4px}
+.hdr-btn{background:none;border:none;color:#9ca3af;cursor:pointer;padding:5px 8px;border-radius:3px;font-size:11px;display:flex;align-items:center;gap:4px;transition:all .15s}
+.hdr-btn:hover{background:#1d2433;color:#fff}
+.hdr-alert{background:#7c1d1d;border:1px solid #991b1b;color:#fca5a5;padding:3px 10px;border-radius:3px;font-size:10px;display:flex;align-items:center;gap:4px;cursor:pointer}
+.hdr-user{background:#1d2433;border:1px solid #2d3748;padding:4px 10px;border-radius:3px;font-size:11px;color:#e2e8f0;display:flex;align-items:center;gap:6px;cursor:pointer}
+.hdr-user:hover{border-color:#4b5563}
+.hdr-avatar{width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff}
+
+/* ── LAYOUT ── */
+.layout{display:flex;flex:1;overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sidebar{width:220px;background:var(--nav);overflow-y:auto;flex-shrink:0;border-right:1px solid #0d1117;display:flex;flex-direction:column}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:#2d3748;border-radius:2px}
+.sb-section{padding:12px 0 4px}
+.sb-section-label{font-size:9px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#4b5563;padding:0 14px 6px}
+.sb-item{display:flex;align-items:center;gap:8px;padding:7px 14px;cursor:pointer;color:#9ca3af;font-size:12px;font-weight:500;transition:all .15s;border-left:2px solid transparent;position:relative}
+.sb-item:hover{background:var(--nav-h);color:#e2e8f0}
+.sb-item.act{background:var(--nav-h);color:#fff;border-left-color:var(--red)}
+.sb-item .sbi{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.sb-item .badge{margin-left:auto;background:#dc2626;color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;font-weight:600}
+.sb-sub{padding-left:0;background:var(--sub-nav)}
+.sb-sub .sb-item{padding-left:40px;font-size:11px;color:#6b7280}
+.sb-sub .sb-item:hover{color:#9ca3af}
+.sb-sub .sb-item.act{color:#fff;border-left-color:var(--red)}
+.sb-parent{cursor:pointer;display:flex;align-items:center;gap:8px;padding:7px 14px;color:#9ca3af;font-size:12px;font-weight:500;transition:all .15s;border-left:2px solid transparent}
+.sb-parent:hover{background:var(--nav-h);color:#e2e8f0}
+.sb-parent .sbi{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.sb-parent .arrow{margin-left:auto;font-size:9px;transition:transform .2s}
+.sb-parent.open .arrow{transform:rotate(90deg)}
+.sb-sub.hidden{display:none}
+
+/* ── CONTENT ── */
+.content{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.content::-webkit-scrollbar{width:6px}
+.content::-webkit-scrollbar-track{background:var(--bg)}
+.content::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px}
+
+/* ── PAGE ── */
+.page{display:none;flex-direction:column;flex:1}
+.page.act{display:flex}
+.page-hdr{background:#fff;border-bottom:1px solid var(--bdr);padding:12px 20px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.page-hdr h1{font-size:16px;font-weight:600;color:var(--txt)}
+.page-hdr .breadcrumb{font-size:11px;color:var(--sub);display:flex;align-items:center;gap:4px}
+.page-hdr .breadcrumb span:not(:last-child)::after{content:" ›";color:var(--sub2)}
+.page-body{padding:16px 20px;flex:1;overflow-y:auto}
+
+/* ── DASHBOARD ── */
+.dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.stat-widget{background:var(--card);border:1px solid var(--bdr);border-radius:4px;padding:14px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.stat-widget::before{content:"";position:absolute;top:0;left:0;right:0;height:3px}
+.stat-widget.blue::before{background:var(--sel)}
+.stat-widget.green::before{background:var(--grn)}
+.stat-widget.red::before{background:var(--red)}
+.stat-widget.amber::before{background:var(--amber)}
+.stat-widget.teal::before{background:var(--teal)}
+.sw-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--sub);margin-bottom:8px}
+.sw-val{font-size:26px;font-weight:700;color:var(--txt);line-height:1;margin-bottom:4px}
+.sw-sub{font-size:10px;color:var(--sub)}
+.sw-bar{height:5px;background:#e5e7eb;border-radius:2px;margin-top:8px;overflow:hidden}
+.sw-fill{height:100%;border-radius:2px;transition:width .5s}
+.sw-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:28px;opacity:.12}
+.dash-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.dash-row-3{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:16px}
+.widget{background:var(--card);border:1px solid var(--bdr);border-radius:4px;box-shadow:var(--shadow)}
+.widget-hdr{padding:10px 14px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between}
+.widget-hdr h3{font-size:12px;font-weight:600;color:var(--txt)}
+.widget-hdr .wh-badge{font-size:10px;color:var(--sub);background:var(--bg);border:1px solid var(--bdr);padding:2px 7px;border-radius:10px}
+.widget-body{padding:12px 14px}
+
+/* ── TABLES ── */
+.tbl-wrap{background:var(--card);border:1px solid var(--bdr);border-radius:4px;box-shadow:var(--shadow);overflow:hidden}
+.tbl-toolbar{padding:8px 12px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:6px;background:#fafbfc}
+.tbl-toolbar input{padding:4px 8px;border:1px solid var(--bdr);border-radius:3px;font-size:11px;background:#fff;color:var(--txt);width:200px}
+.tbl-toolbar input:focus{outline:none;border-color:var(--sel)}
+.btn{padding:4px 12px;border-radius:3px;font-size:11px;cursor:pointer;font-weight:500;display:inline-flex;align-items:center;gap:4px;border:1px solid transparent;transition:all .15s;font-family:inherit}
+.btn-pri{background:var(--red);color:#fff;border-color:var(--red-d)}
+.btn-pri:hover{background:var(--red-d)}
+.btn-sec{background:#fff;color:var(--txt);border-color:var(--bdr)}
+.btn-sec:hover{background:var(--bg);border-color:#9ca3af}
+.btn-grn{background:var(--grn);color:#fff;border-color:#15803d}
+.btn-grn:hover{filter:brightness(.9)}
+.btn-danger{background:#fff;color:var(--red2);border-color:#fca5a5}
+.btn-danger:hover{background:var(--red2-l)}
+.btn-sm{padding:3px 8px;font-size:10px}
+.tbl-spacer{flex:1}
+table{width:100%;border-collapse:collapse}
+thead th{background:#f8fafc;border-bottom:2px solid var(--bdr);padding:7px 10px;text-align:left;font-size:11px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;position:sticky;top:0;z-index:2}
+thead th input[type="checkbox"]{accent-color:var(--sel)}
+tbody tr{border-bottom:1px solid #f1f5f9;transition:background .1s}
+tbody tr:hover{background:#f8fafc}
+tbody tr.sel-row{background:#eff6ff}
+td{padding:7px 10px;font-size:12px;color:var(--txt);vertical-align:middle}
+td input[type="checkbox"]{accent-color:var(--sel)}
+.tbl-footer{padding:6px 12px;background:#fafbfc;border-top:1px solid var(--bdr);font-size:10px;color:var(--sub);display:flex;align-items:center;justify-content:space-between}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:600;letter-spacing:.2px}
+.b-accept{background:#dcfce7;color:#15803d;border:1px solid #bbf7d0}
+.b-deny{background:#fee2e2;color:#b91c1c;border:1px solid #fecaca}
+.b-up{background:#dcfce7;color:#15803d}
+.b-down{background:#fee2e2;color:#b91c1c}
+.b-warn{background:#fef3c7;color:#b45309}
+.b-info{background:#e0f2fe;color:#0369a1}
+.b-gray{background:#f3f4f6;color:#4b5563;border:1px solid #e5e7eb}
+.b-teal{background:#e0f2fe;color:#0891b2}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot-grn{background:var(--grn)}
+.dot-red{background:var(--red2)}
+.dot-amber{background:var(--amber)}
+.dot-gray{background:#9ca3af}
+.dot-pulse{animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ── POLICY ROW ── */
+.policy-seq{width:32px;height:32px;background:#f1f5f9;border:1px solid var(--bdr);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--sub);cursor:grab;flex-shrink:0}
+.policy-name{font-weight:500}
+.policy-action-btn{width:60px;text-align:center}
+.iface-chip{background:#f1f5f9;border:1px solid var(--bdr);padding:2px 7px;border-radius:10px;font-size:10px;color:var(--txt);font-weight:500;display:inline-flex;align-items:center;gap:3px}
+.addr-chip{background:#e0f2fe;border:1px solid #bae6fd;padding:2px 6px;border-radius:3px;font-size:10px;color:#0369a1;font-weight:500;display:inline-block;margin:1px}
+
+/* ── GAUGE ── */
+.gauge-wrap{display:flex;align-items:center;gap:10px}
+.gauge{width:60px;height:60px;position:relative;flex-shrink:0}
+.gauge svg{transform:rotate(-90deg)}
+.gauge circle{fill:none;stroke:#e5e7eb;stroke-width:6}
+.gauge .gauge-fill{stroke-dasharray:0 157;transition:stroke-dasharray .8s ease}
+.gauge-val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--txt)}
+.gauge-info h4{font-size:13px;font-weight:600;margin-bottom:2px}
+.gauge-info p{font-size:10px;color:var(--sub)}
+
+/* ── INTERFACES ── */
+.iface-card{background:var(--card);border:1px solid var(--bdr);border-radius:4px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
+.iface-card:hover{border-color:#93c5fd;box-shadow:var(--shadow-md)}
+.iface-icon{width:36px;height:36px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.iface-wan{background:#fef3c7}
+.iface-lan{background:#dcfce7}
+.iface-dmz{background:#f3e8ff}
+.iface-mgmt{background:#e0f2fe}
+.iface-info h4{font-size:12px;font-weight:600;margin-bottom:2px}
+.iface-info p{font-size:10px;color:var(--sub);font-family:'JetBrains Mono',monospace}
+.iface-stats{margin-left:auto;text-align:right;font-size:10px;color:var(--sub)}
+.iface-stats .sp{font-weight:600;color:var(--txt);font-size:11px}
+
+/* ── FORM / MODAL ── */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;align-items:flex-start;justify-content:center;padding:60px 20px;overflow-y:auto}
+.modal-ov.show{display:flex}
+.modal{background:#fff;border-radius:4px;width:580px;max-width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);border:1px solid var(--bdr)}
+.modal-hdr{background:var(--hdr);color:#fff;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-radius:4px 4px 0 0}
+.modal-hdr h3{font-size:13px;font-weight:600}
+.modal-close{background:none;border:none;color:#9ca3af;cursor:pointer;font-size:16px;padding:0 2px;line-height:1}
+.modal-close:hover{color:#fff}
+.modal-body{padding:18px}
+.modal-footer{padding:10px 18px;background:#f8fafc;border-top:1px solid var(--bdr);display:flex;justify-content:flex-end;gap:6px;border-radius:0 0 4px 4px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-row.full{grid-template-columns:1fr}
+.fg{margin-bottom:12px}
+.fg label{display:block;font-size:11px;font-weight:500;color:var(--sub);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
+.fg input,.fg select,.fg textarea{width:100%;padding:5px 8px;border:1px solid var(--bdr);border-radius:3px;font-size:12px;background:#fff;color:var(--txt);font-family:inherit}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--sel);box-shadow:0 0 0 2px rgba(29,78,216,.1)}
+.fg-toggle{display:flex;align-items:center;gap:8px}
+.toggle{width:36px;height:20px;background:#d1d5db;border-radius:10px;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--grn)}
+.toggle::after{content:"";position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.toggle.on::after{left:19px}
+.fg-help{font-size:10px;color:var(--sub);margin-top:3px}
+
+/* ── LOG TABLE ── */
+.log-sev-high{color:var(--red2);font-weight:600}
+.log-sev-med{color:var(--amber);font-weight:600}
+.log-sev-low{color:var(--grn);font-weight:600}
+.log-sev-info{color:var(--sel);font-weight:600}
+.mono{font-family:'JetBrains Mono',monospace;font-size:10px}
+
+/* ── SPARKLINE ── */
+.spark{height:32px;width:80px}
+
+/* ── THREAT MAP ── */
+.threat-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f1f5f9}
+.threat-item:last-child{border-bottom:none}
+.threat-country{font-weight:500;font-size:11px;flex:1}
+.threat-count{font-size:10px;color:var(--sub);white-space:nowrap}
+.threat-bar-wrap{width:60px;background:#f1f5f9;height:4px;border-radius:2px;overflow:hidden}
+.threat-bar-fill{height:100%;background:var(--red);border-radius:2px}
+
+/* ── STATUS BAR ── */
+.statusbar{background:var(--hdr);color:#6b7280;padding:3px 16px;font-size:10px;display:flex;gap:16px;align-items:center;flex-shrink:0;border-top:1px solid #0a0d14}
+.statusbar span{display:flex;align-items:center;gap:4px;white-space:nowrap}
+.sb-green{color:var(--grn)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:32px;right:24px;background:var(--hdr);color:#fff;padding:8px 16px;border-radius:4px;font-size:12px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:5000;border-left:3px solid var(--grn);max-width:320px}
+.toast.show{opacity:1}
+.toast.err{border-left-color:var(--red)}
+.toast.warn{border-left-color:var(--amber)}
+
+/* ── VPN ── */
+.vpn-card{background:var(--card);border:1px solid var(--bdr);border-radius:4px;padding:14px;box-shadow:var(--shadow)}
+.vpn-card .vc-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.vpn-card .vc-name{font-weight:600;font-size:13px}
+.vc-detail{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:11px}
+.vc-detail dt{color:var(--sub);font-weight:500}
+.vc-detail dd{color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:10px}
+
+/* ── PROGRESS ── */
+.progress{height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;margin-top:4px}
+.progress-fill{height:100%;border-radius:3px;transition:width .5s}
+
+/* ── GRID ── */
+.iface-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+.route-priority{background:#f8fafc;border:1px solid var(--bdr);padding:2px 7px;border-radius:3px;font-size:10px;font-family:'JetBrains Mono',monospace;font-weight:600}
+.sec-profile{background:var(--card);border:1px solid var(--bdr);border-radius:4px;padding:14px;box-shadow:var(--shadow)}
+.sp-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--bdr)}
+.sp-icon{width:36px;height:36px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.sp-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0;font-size:11px}
+
+/* ── SECTION TABS ── */
+.stabs{display:flex;gap:2px;padding:0;margin-bottom:14px;border-bottom:2px solid var(--bdr)}
+.stab{padding:7px 14px;font-size:12px;font-weight:500;cursor:pointer;color:var(--sub);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
+.stab:hover{color:var(--txt)}
+.stab.act{color:var(--red);border-bottom-color:var(--red);font-weight:600}
+.stab-content{display:none}.stab-content.act{display:block}
+
+/* scrollbar in modal */
+.modal-body::-webkit-scrollbar{width:4px}
+.modal-body::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:2px}
+
+/* Responsive tweak */
+@media(max-width:1200px){.dash-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-logo">
+    <svg viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="3" fill="#ee3124"/>
+      <path d="M8 10h16v2H8zM8 15h16v2H8zM8 20h10v2H8z" fill="#fff"/>
+    </svg>
+    <div class="hdr-logo-text">
+      <span>FortiGate</span>
+      <span>FG-100F  v7.4.3</span>
+    </div>
+  </div>
+  <div class="hdr-device"><span>aman5z-FW01</span></div>
+  <div class="hdr-spacer"></div>
+  <div class="hdr-btns">
+    <div class="hdr-alert" onclick="toast('⚠️ 3 security events require attention','warn')">⚠️ 3 Alerts</div>
+    <button class="hdr-btn" onclick="toast('Backup configuration saved')">💾 Backup</button>
+    <button class="hdr-btn" onclick="toast('Refreshing system data...')">🔄</button>
+    <div class="hdr-user" onclick="toast('admin — Super Administrator')">
+      <div class="hdr-avatar">A</div>
+      admin
+    </div>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-section">
+    <div class="sb-section-label">Monitor</div>
+    <div class="sb-item act" onclick="nav('dashboard',this)"><span class="sbi">📊</span> Dashboard</div>
+    <div class="sb-item" onclick="nav('logs',this)"><span class="sbi">📋</span> Log &amp; Report <span class="badge">3</span></div>
+  </div>
+  <div class="sb-section">
+    <div class="sb-section-label">Network</div>
+    <div class="sb-parent open" onclick="toggleSub(this)"><span class="sbi">🌐</span> Network <span class="arrow">▶</span></div>
+    <div class="sb-sub">
+      <div class="sb-item" onclick="nav('interfaces',this)">Interfaces</div>
+      <div class="sb-item" onclick="nav('routing',this)">Static Routes</div>
+      <div class="sb-item" onclick="nav('dns',this)">DNS</div>
+      <div class="sb-item" onclick="nav('dhcp',this)">DHCP Server</div>
+    </div>
+    <div class="sb-parent open" onclick="toggleSub(this)"><span class="sbi">🛡️</span> Policy &amp; Objects <span class="arrow">▶</span></div>
+    <div class="sb-sub">
+      <div class="sb-item" onclick="nav('policies',this)">Firewall Policy</div>
+      <div class="sb-item" onclick="nav('addresses',this)">Addresses</div>
+      <div class="sb-item" onclick="nav('services',this)">Services</div>
+      <div class="sb-item" onclick="nav('schedules',this)">Schedules</div>
+    </div>
+  </div>
+  <div class="sb-section">
+    <div class="sb-section-label">Security</div>
+    <div class="sb-parent open" onclick="toggleSub(this)"><span class="sbi">🔒</span> Security Profiles <span class="arrow">▶</span></div>
+    <div class="sb-sub">
+      <div class="sb-item" onclick="nav('av',this)">AntiVirus</div>
+      <div class="sb-item" onclick="nav('webfilter',this)">Web Filter</div>
+      <div class="sb-item" onclick="nav('ips',this)">IPS</div>
+      <div class="sb-item" onclick="nav('appcontrol',this)">Application Control</div>
+    </div>
+  </div>
+  <div class="sb-section">
+    <div class="sb-section-label">VPN</div>
+    <div class="sb-parent open" onclick="toggleSub(this)"><span class="sbi">🔐</span> VPN <span class="arrow">▶</span></div>
+    <div class="sb-sub">
+      <div class="sb-item" onclick="nav('ipsec',this)">IPsec Tunnels</div>
+      <div class="sb-item" onclick="nav('sslvpn',this)">SSL-VPN</div>
+    </div>
+  </div>
+  <div class="sb-section">
+    <div class="sb-section-label">System</div>
+    <div class="sb-parent open" onclick="toggleSub(this)"><span class="sbi">⚙️</span> System <span class="arrow">▶</span></div>
+    <div class="sb-sub">
+      <div class="sb-item" onclick="nav('admins',this)">Administrators</div>
+      <div class="sb-item" onclick="nav('firmware',this)">Firmware &amp; License</div>
+      <div class="sb-item" onclick="nav('settings',this)">Settings</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- ══════════════ DASHBOARD ══════════════ -->
+<div class="page act" id="page-dashboard">
+  <div class="page-hdr">
+    <div>
+      <div class="breadcrumb"><span>Dashboard</span></div>
+      <h1>System Dashboard</h1>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:6px">
+      <button class="btn btn-sec btn-sm" onclick="toast('Dashboard widgets refreshed')">🔄 Refresh</button>
+      <button class="btn btn-sec btn-sm" onclick="toast('Customizing layout...')">⊞ Customize</button>
+    </div>
+  </div>
+  <div class="page-body">
+    <!-- STAT WIDGETS -->
+    <div class="dash-grid">
+      <div class="stat-widget blue">
+        <div class="sw-icon">💻</div>
+        <div class="sw-label">CPU Usage</div>
+        <div class="sw-val" id="cpu-val">23%</div>
+        <div class="sw-sub">4 cores · FG-100F</div>
+        <div class="sw-bar"><div class="sw-fill" id="cpu-bar" style="width:23%;background:#1d4ed8"></div></div>
+      </div>
+      <div class="stat-widget green">
+        <div class="sw-icon">🧠</div>
+        <div class="sw-label">Memory</div>
+        <div class="sw-val" id="mem-val">4.1 GB</div>
+        <div class="sw-sub">of 8 GB (51%)</div>
+        <div class="sw-bar"><div class="sw-fill" id="mem-bar" style="width:51%;background:var(--grn)"></div></div>
+      </div>
+      <div class="stat-widget teal">
+        <div class="sw-icon">🔗</div>
+        <div class="sw-label">Active Sessions</div>
+        <div class="sw-val" id="sess-val">12,847</div>
+        <div class="sw-sub">Max: 2,000,000</div>
+        <div class="sw-bar"><div class="sw-fill" style="width:1%;background:var(--teal)"></div></div>
+      </div>
+      <div class="stat-widget amber">
+        <div class="sw-icon">⏱️</div>
+        <div class="sw-label">System Uptime</div>
+        <div class="sw-val">47d 13h</div>
+        <div class="sw-sub">Last boot: 22 Jan 2026</div>
+      </div>
+    </div>
+    <div class="dash-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="stat-widget">
+        <div class="sw-label">WAN Throughput ↓</div>
+        <div class="sw-val" style="font-size:20px;color:var(--grn)" id="wan-dl">248 Mbps</div>
+        <div class="sw-sub">Peak today: 892 Mbps</div>
+      </div>
+      <div class="stat-widget">
+        <div class="sw-label">WAN Throughput ↑</div>
+        <div class="sw-val" style="font-size:20px;color:var(--teal)" id="wan-ul">87 Mbps</div>
+        <div class="sw-sub">Peak today: 214 Mbps</div>
+      </div>
+      <div class="stat-widget red">
+        <div class="sw-label">Threats Blocked (24h)</div>
+        <div class="sw-val" style="font-size:20px">3,481</div>
+        <div class="sw-sub">↑ 12% vs yesterday</div>
+      </div>
+      <div class="stat-widget">
+        <div class="sw-label">Policy Hits (24h)</div>
+        <div class="sw-val" style="font-size:20px">284,193</div>
+        <div class="sw-sub">94.2% allowed</div>
+      </div>
+    </div>
+    <!-- BOTTOM WIDGETS -->
+    <div class="dash-row-3">
+      <div class="widget">
+        <div class="widget-hdr"><h3>🌐 Interface Status</h3><span class="wh-badge">5 interfaces</span></div>
+        <div class="widget-body">
+          <table><thead><tr><th>Interface</th><th>IP Address</th><th>Speed</th><th>Status</th><th>Rx/Tx</th></tr></thead>
+          <tbody>
+            <tr><td><span class="iface-chip">🌍 WAN1</span></td><td class="mono">203.0.113.1/24</td><td>1 Gbps</td><td><span class="badge b-up"><span class="dot dot-grn dot-pulse"></span> UP</span></td><td class="mono" style="color:var(--sub)">248M / 87M</td></tr>
+            <tr><td><span class="iface-chip">🌍 WAN2</span></td><td class="mono">198.51.100.5/24</td><td>1 Gbps</td><td><span class="badge b-up"><span class="dot dot-grn"></span> UP</span></td><td class="mono" style="color:var(--sub)">12M / 3M</td></tr>
+            <tr><td><span class="iface-chip">🏠 LAN</span></td><td class="mono">192.168.1.1/24</td><td>1 Gbps</td><td><span class="badge b-up"><span class="dot dot-grn dot-pulse"></span> UP</span></td><td class="mono" style="color:var(--sub)">522M / 310M</td></tr>
+            <tr><td><span class="iface-chip">🔒 DMZ</span></td><td class="mono">10.10.10.1/24</td><td>1 Gbps</td><td><span class="badge b-up"><span class="dot dot-grn"></span> UP</span></td><td class="mono" style="color:var(--sub)">44M / 28M</td></tr>
+            <tr><td><span class="iface-chip">⚙️ MGMT</span></td><td class="mono">10.0.0.1/24</td><td>100 Mbps</td><td><span class="badge b-up"><span class="dot dot-grn"></span> UP</span></td><td class="mono" style="color:var(--sub)">1M / 0.5M</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+      <div class="widget">
+        <div class="widget-hdr"><h3>🌍 Top Threat Sources</h3><span class="wh-badge">Last 24h</span></div>
+        <div class="widget-body">
+          <div class="threat-item"><span>🇨🇳</span><span class="threat-country">China</span><div class="threat-bar-wrap"><div class="threat-bar-fill" style="width:85%"></div></div><span class="threat-count">1,240</span></div>
+          <div class="threat-item"><span>🇷🇺</span><span class="threat-country">Russia</span><div class="threat-bar-wrap"><div class="threat-bar-fill" style="width:62%"></div></div><span class="threat-count">908</span></div>
+          <div class="threat-item"><span>🇰🇵</span><span class="threat-country">North Korea</span><div class="threat-bar-wrap"><div class="threat-bar-fill" style="width:48%"></div></div><span class="threat-count">704</span></div>
+          <div class="threat-item"><span>🇮🇷</span><span class="threat-country">Iran</span><div class="threat-bar-wrap"><div class="threat-bar-fill" style="width:34%"></div></div><span class="threat-count">498</span></div>
+          <div class="threat-item"><span>🇧🇷</span><span class="threat-country">Brazil</span><div class="threat-bar-wrap"><div class="threat-bar-fill" style="width:22%"></div></div><span class="threat-count">131</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="dash-row">
+      <div class="widget">
+        <div class="widget-hdr"><h3>⚡ Recent Events</h3><span class="wh-badge" style="cursor:pointer;color:var(--sel)" onclick="nav('logs',document.querySelector('[onclick*=logs]'))">View All</span></div>
+        <div class="widget-body" style="padding:0">
+          <table><thead><tr><th>Time</th><th>Severity</th><th>Type</th><th>Message</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">14:32:01</td><td><span class="log-sev-high">HIGH</span></td><td>IPS</td><td>SQL injection attempt from 185.220.101.8</td></tr>
+            <tr><td class="mono">14:29:44</td><td><span class="log-sev-med">MED</span></td><td>WebFilter</td><td>Malware URL blocked for user 192.168.1.45</td></tr>
+            <tr><td class="mono">14:28:11</td><td><span class="log-sev-low">LOW</span></td><td>Policy</td><td>Policy #12 allowed outbound HTTPS x 847</td></tr>
+            <tr><td class="mono">14:25:58</td><td><span class="log-sev-info">INFO</span></td><td>System</td><td>Admin 'admin' logged in from 10.0.0.5</td></tr>
+            <tr><td class="mono">14:22:30</td><td><span class="log-sev-high">HIGH</span></td><td>AV</td><td>Trojan.Emotet detected in SMTP traffic</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+      <div class="widget">
+        <div class="widget-hdr"><h3>📈 Resource Trend (1h)</h3></div>
+        <div class="widget-body">
+          <div style="display:grid;gap:10px">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span style="font-weight:500">CPU</span><span id="cpu-live" style="color:var(--sel);font-weight:600">23%</span></div>
+              <div class="progress"><div class="progress-fill" id="cpu-prog" style="width:23%;background:#1d4ed8"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span style="font-weight:500">Memory</span><span style="color:var(--grn);font-weight:600">51%</span></div>
+              <div class="progress"><div class="progress-fill" style="width:51%;background:var(--grn)"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span style="font-weight:500">Disk</span><span style="color:var(--amber);font-weight:600">68%</span></div>
+              <div class="progress"><div class="progress-fill" style="width:68%;background:var(--amber)"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span style="font-weight:500">Sessions</span><span style="color:var(--teal);font-weight:600">0.6%</span></div>
+              <div class="progress"><div class="progress-fill" style="width:0.6%;background:var(--teal)"></div></div>
+            </div>
+          </div>
+          <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--bdr);display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px">
+            <div><div style="color:var(--sub)">Hostname</div><div style="font-weight:600">aman5z-FW01</div></div>
+            <div><div style="color:var(--sub)">Serial</div><div class="mono" style="font-weight:600">FG100F-BNTF22001234</div></div>
+            <div><div style="color:var(--sub)">Firmware</div><div style="font-weight:600">v7.4.3 build2573</div></div>
+            <div><div style="color:var(--sub)">License</div><div style="font-weight:600;color:var(--grn)">✓ Valid</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ FIREWALL POLICIES ══════════════ -->
+<div class="page" id="page-policies">
+  <div class="page-hdr">
+    <div>
+      <div class="breadcrumb"><span>Policy &amp; Objects</span><span>Firewall Policy</span></div>
+      <h1>Firewall Policy</h1>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:6px">
+      <button class="btn btn-sec btn-sm" onclick="toast('Policies exported to CSV')">📥 Export</button>
+      <button class="btn btn-pri btn-sm" onclick="openPolicyModal()">+ Create New</button>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="tbl-wrap">
+      <div class="tbl-toolbar">
+        <input type="text" id="policy-search" placeholder="🔍 Search policies..." oninput="filterPolicies(this.value)">
+        <select class="btn btn-sec btn-sm" id="policy-filter" onchange="filterPolicies(document.getElementById('policy-search').value)" style="padding:4px 8px;font-size:11px">
+          <option value="">All Interfaces</option>
+          <option value="WAN1">WAN1</option>
+          <option value="LAN">LAN</option>
+          <option value="DMZ">DMZ</option>
+        </select>
+        <div class="tbl-spacer"></div>
+        <button class="btn btn-sec btn-sm" onclick="toast('Columns customized')">⊞ Columns</button>
+      </div>
+      <table id="policy-table">
+        <thead><tr>
+          <th><input type="checkbox" onclick="checkAll(this,'pol-chk')"></th>
+          <th>#</th>
+          <th>Name</th>
+          <th>From / To</th>
+          <th>Source</th>
+          <th>Destination</th>
+          <th>Service</th>
+          <th>Action</th>
+          <th>NAT</th>
+          <th>Security</th>
+          <th>Bytes</th>
+          <th>Status</th>
+          <th>Edit</th>
+        </tr></thead>
+        <tbody id="policy-tbody"></tbody>
+      </table>
+      <div class="tbl-footer"><span id="policy-count">Loading...</span><span>Sorted by Sequence</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ INTERFACES ══════════════ -->
+<div class="page" id="page-interfaces">
+  <div class="page-hdr">
+    <div>
+      <div class="breadcrumb"><span>Network</span><span>Interfaces</span></div>
+      <h1>Network Interfaces</h1>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:6px">
+      <button class="btn btn-pri btn-sm" onclick="openIfaceModal()">+ Create New</button>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="iface-grid" id="iface-grid"></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Type</th><th>IP / Mask</th><th>Speed</th><th>MTU</th><th>VLAN</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="iface-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ROUTING ══════════════ -->
+<div class="page" id="page-routing">
+  <div class="page-hdr">
+    <div>
+      <div class="breadcrumb"><span>Network</span><span>Static Routes</span></div>
+      <h1>Static Routes</h1>
+    </div>
+    <button class="btn btn-pri btn-sm" style="margin-left:auto" onclick="openRouteModal()">+ Create New</button>
+  </div>
+  <div class="page-body">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th><input type="checkbox"></th><th>Destination</th><th>Gateway</th><th>Interface</th><th>Distance</th><th>Priority</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="route-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ DNS ══════════════ -->
+<div class="page" id="page-dns">
+  <div class="page-hdr">
+    <div><div class="breadcrumb"><span>Network</span><span>DNS</span></div><h1>DNS Settings</h1></div>
+  </div>
+  <div class="page-body">
+    <div class="widget" style="max-width:520px">
+      <div class="widget-hdr"><h3>DNS Configuration</h3></div>
+      <div class="widget-body">
+        <div class="fg"><label>Primary DNS Server</label><input type="text" value="8.8.8.8"></div>
+        <div class="fg"><label>Secondary DNS Server</label><input type="text" value="8.8.4.4"></div>
+        <div class="fg"><label>Local Domain Name</label><input type="text" value="aman5z.in"></div>
+        <div class="fg"><label>DNS Cache TTL (seconds)</label><input type="number" value="1800"></div>
+        <div class="fg-toggle"><div class="toggle on" onclick="this.classList.toggle('on')"></div><span style="font-size:12px">Enable DNS over TLS</span></div>
+        <div style="margin-top:14px"><button class="btn btn-pri" onclick="toast('✓ DNS settings saved')">Apply</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ DHCP ══════════════ -->
+<div class="page" id="page-dhcp">
+  <div class="page-hdr">
+    <div><div class="breadcrumb"><span>Network</span><span>DHCP</span></div><h1>DHCP Server</h1></div>
+    <button class="btn btn-pri btn-sm" style="margin-left:auto" onclick="toast('DHCP scope creation form...')">+ Add Scope</button>
+  </div>
+  <div class="page-body">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Interface</th><th>Range Start</th><th>Range End</th><th>Gateway</th><th>Lease Time</th><th>Leases</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><span class="iface-chip">🏠 LAN</span></td><td class="mono">192.168.1.100</td><td class="mono">192.168.1.254</td><td class="mono">192.168.1.1</td><td>24h</td><td>87 / 155</td><td><span class="badge b-up">Active</span></td></tr>
+          <tr><td><span class="iface-chip">🔒 DMZ</span></td><td class="mono">10.10.10.100</td><td class="mono">10.10.10.200</td><td class="mono">10.10.10.1</td><td>8h</td><td>12 / 101</td><td><span class="badge b-up">Active</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ADDRESSES ══════════════ -->
+<div class="page" id="page-addresses">
+  <div class="page-hdr">
+    <div><div class="breadcrumb"><span>Policy &amp; Objects</span><span>Addresses</span></div><h1>Address Objects</h1></div>
+    <button class="btn btn-pri btn-sm" style="margin-left:auto" onclick="toast('Creating new address object...')">+ Create New</button>
+  </div>
+  <div class="page-body">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Type</th><th>Subnet / Range</th><th>Interface</th><th>Used In</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:500">all</td><td><span class="badge b-gray">Subnet</span></td><td class="mono">0.0.0.0/0</td><td>—</td><td>8 policies</td></tr>
+          <tr><td style="font-weight:500">LAN_Network</td><td><span class="badge b-gray">Subnet</span></td><td class="mono">192.168.1.0/24</td><td>LAN</td><td>5 policies</td></tr>
+          <tr><td style="font-weight:500">DMZ_Network</td><td><span class="badge b-gray">Subnet</span></td><td class="mono">10.10.10.0/24</td><td>DMZ</td><td>3 policies</td></tr>
+          <tr><td style="font-weight:500">Webserver</td><td><span class="badge b-info">IP/Host</span></td><td class="mono">10.10.10.20/32</td><td>DMZ</td><td>2 policies</td></tr>
+          <tr><td style="font-weight:500">Admin_PC</td><td><span class="badge b-info">IP/Host</span></td><td class="mono">192.168.1.10/32</td><td>LAN</td><td>1 policy</td></tr>
+          <tr><td style="font-weight:500">Block_List</td><td><span class="badge b-warn">IP Range</span></td><td class="mono">185.220.0.0–185.220.255.255</td><td>—</td><td>1 policy</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SERVICES ══════════════ -->
+<div class="page" id="page-services">
+  <div class="page-hdr">
+    <div><div class="breadcrumb"><span>Policy &amp; Objects</span><span>Services</span></div><h1>Service Objects</h1></div>
+    <button class="btn btn-pri btn-sm" style="margin-left:auto" onclick="toast('Creating service object...')">+ Create New</button>
+  </div>
+  <div class="page-body">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Protocol</th><th>Port(s)</th><th>Category</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:500">HTTP</td><td>TCP</td><td class="mono">80</td><td><span class="badge b-teal">Web</span></td></tr>
+          <tr><td style="font-weight:500">HTTPS</td><td>TCP</td><td class="mono">443</td><td><span class="badge b-teal">Web</span></td></tr>
+          <tr><td style="font-weight:500">DNS</td><td>UDP/TCP</td><td class="mono">53</td><td><span class="badge b-info">Network</span></td></tr>
+          <tr><td style="font-weight:500">SSH</td><td>TCP</td><td class="mono">22</td><td><span class="badge b-warn">Remote</span></td></tr>
+          <tr><td style="font-weight:500">RDP</td><td>TCP</td><td class="mono">3389</td><td><span class="badge b-warn">Remote</span></td></tr>
+          <tr><td style="font-weight:500">SMTP</td><td>TCP</td><td class="mono">25, 465, 587</td><td><span class="badge b-gray">Email</span></td></tr>
+          <tr><td style="font-weight:500">ALL</td><td>ANY</td><td class="mono">1–65535</td><td><span class="badge b-gray">General</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SCHEDULES ══════════════ -->
+<div class="page" id="page-schedules">
+  <div class="page-hdr">
+    <div><div class="breadcrumb"><span>Policy &amp; Objects</span><span>Schedules</span></div><h1>Schedules</h1></div>
+  </div>
+  <div class="page-body">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Type</th><th>Days</th><th>Time</th></tr></thead>
+        <tbody>
+          <tr><td>always</td><td><span class="badge b-gray">Recurring</span></td><td>All</td><td>00:00–24:00</td></tr>
+          <tr><td>Business_Hours</td><td><span class="badge b-info">Recurring</span></td><td>Mon–Fri</td><td>08:00–18:00</td></tr>
+          <tr><td>After_Hours</td><td><span class="badge b-warn">Recurring</span></td><td>Mon–Fri</td><td>18:00–08:00</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ANTIVIRUS ══════════════ -->
+<div class="page" id="page-av">
+  <div class="page-hdr">
+    <div><div class="breadcrumb"><span>Security Profiles</span><span>AntiVirus</span></div><h1>AntiVirus Profiles</h1></div>
+    <button class="btn btn-pri btn-sm" style="margin-left:auto" onclick="toast('Creating new AV profile...')">+ Create New</button>
+  </div>
+  <div class="page-body">
+    <div class="sp-grid">
+      <div class="sec-profile">
+        <div class="sp-hdr">
+          <div class="sp-icon" style="background:#fee2e2">🦠</div>
+          <div><div style="font-weight:600;font-size:13px">default</div><div style="font-size:10px;color:var(--sub)">Used in 4 policies</div></div>
+        </div>
+        <div class="sp-toggle-row"><span>Scan HTTP</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="sp-toggle-row"><span>Scan SMTP</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="sp-toggle-row"><span>Scan FTP</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="sp-toggle-row"><span>Block Ransomware</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div style="margin-top:10px"><button class="btn btn-sec btn-sm" onclick="toast('Editing AV profile...')">✏️ Edit</button></div>
+      </div>
+      <div class="sec-profile">
+        <div class="sp-hdr">
+          <div class="sp-icon" style="background:#fee2e2">🦠</div>
+          <div><div style="font-weight:600;font-size:13px">strict</div><div style="font-size:10px;color:var(--sub)">Used in 1 policy</div></div>
+        </div>
+        <div class="sp-toggle-row"><span>Scan HTTP</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="sp-toggle-row"><span>Scan SSL/TLS</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="sp-toggle-row"><span>Sandbox Analysis</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="sp-toggle-row"><span>Block Grayware</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div style="margin-top:10px"><button class="btn btn-sec btn-sm" onclick="toast('Editing AV profile...')">✏️ Edit</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ WEB FILTER ══════════════ -->
+<div class="page" id="page-webfilter">
+  <div class="page-hdr">
+    <div><div class="breadcrumb"><span>Security Profiles</span><span>Web Filter</span></div><h1>Web Filter Profiles</h1></div>
+    <button class="btn btn-pri btn-sm" style="margin-left:auto" onclick="toast('Creating web filter profile...')">+ Create New</button>
+  </div>
+  <div class="page-body">
+    <div class="sp-grid">
+      <div class="sec-profile">
+        <div class="sp-hdr">
+          <div class="sp-icon" style="background:#e0f2fe">🌐</div>
+          <div><div style="font-weight:600;font-size:13px">default</div><div style="font-size:10px;color:var(--sub)">FortiGuard category filter</div></div>
+        </div>
+        <div class="sp-toggle-row"><span>Block Malicious URLs</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="sp-toggle-row"><span>Safe Search</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="sp-toggle-row"><span>Block Gambling</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="sp-toggle-row"><span>Block Adult Content</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div style="margin-top:10px"><button class="btn btn-sec btn-sm" onclick="toast('Editing web filter...')">✏️ Edit</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ IPS ══════════════ -->
+<div class="page" id="page-ips">
+  <div class="page-hdr">
+    <div><div class="breadcrumb"><span>Security Profiles</span><span>IPS</span></div><h1>IPS Profiles</h1></div>
+    <button class="btn btn-pri btn-sm" style="margin-left:auto" onclick="toast('Creating IPS profile...')">+ Create New</button>
+  </div>
+  <div class="page-body">
+    <div class="sp-grid">
+      <div class="sec-profile">
+        <div class="sp-hdr">
+          <div class="sp-icon" style="background:#fef3c7">🛡️</div>
+          <div><div style="font-weight:600;font-size:13px">default</div><div style="font-size:10px;color:var(--sub)">7,849 active signatures</div></div>
+        </div>
+        <div class="sp-toggle-row"><span>Block Critical Exploits</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="sp-toggle-row"><span>Detect SQL Injection</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="sp-toggle-row"><span>Detect XSS</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="sp-toggle-row"><span>Botnet C&C Block</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div style="margin-top:10px"><button class="btn btn-sec btn-sm" onclick="toast('Editing IPS profile...')">✏️ Edit</button></div>
+      </div>
+      <div class="sec-profile">
+        <div class="sp-hdr">
+          <div class="sp-icon" style="background:#fef3c7">🛡️</div>
+          <div><div style="font-weight:600;font-size:13px">protect_client</div><div style="font-size:10px;color:var(--sub)">2 policies</div></div>
+        </div>
+        <div class="sp-toggle-row"><span>Client-Side Exploits</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="sp-toggle-row"><span>Browser Exploits</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="sp-toggle-row"><span>Phishing Detection</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div style="margin-top:10px"><button class="btn btn-sec btn-sm" onclick="toast('Editing IPS profile...')">✏️ Edit</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ APP CONTROL ══════════════ -->
+<div class="page" id="page-appcontrol">
+  <div class="page-hdr">
+    <div><div class="breadcrumb"><span>Security Profiles</span><span>Application Control</span></div><h1>Application Control</h1></div>
+  </div>
+  <div class="page-body">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Application</th><th>Category</th><th>Action</th><th>Sessions Blocked</th></tr></thead>
+        <tbody>
+          <tr><td>BitTorrent</td><td>P2P</td><td><span class="badge b-deny">BLOCK</span></td><td>1,240</td></tr>
+          <tr><td>TikTok</td><td>Social Media</td><td><span class="badge b-warn">MONITOR</span></td><td>—</td></tr>
+          <tr><td>TeamViewer</td><td>Remote Access</td><td><span class="badge b-deny">BLOCK</span></td><td>83</td></tr>
+          <tr><td>WhatsApp</td><td>Messaging</td><td><span class="badge b-accept">ALLOW</span></td><td>—</td></tr>
+          <tr><td>Zoom</td><td>Video Conf</td><td><span class="badge b-accept">ALLOW</span></td><td>—</td></tr>
+          <tr><td>Tor</td><td>Anonymizer</td><td><span class="badge b-deny">BLOCK</span></td><td>47</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ IPSEC VPN ══════════════ -->
+<div class="page" id="page-ipsec">
+  <div class="page-hdr">
+    <div><div class="breadcrumb"><span>VPN</span><span>IPsec Tunnels</span></div><h1>IPsec VPN Tunnels</h1></div>
+    <button class="btn btn-pri btn-sm" style="margin-left:auto" onclick="toast('IPsec wizard launching...')">+ Create New (Wizard)</button>
+  </div>
+  <div class="page-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div class="vpn-card">
+        <div class="vc-hdr">
+          <span class="badge b-up"><span class="dot dot-grn dot-pulse"></span> UP</span>
+          <span class="vc-name">Branch-Dubai</span>
+          <button class="btn btn-danger btn-sm" style="margin-left:auto" onclick="toast('Tunnel Branch-Dubai brought down')">⏹ Down</button>
+        </div>
+        <dl class="vc-detail">
+          <dt>Remote IP</dt><dd>203.0.114.5</dd>
+          <dt>Local Subnet</dt><dd>192.168.1.0/24</dd>
+          <dt>Remote Subnet</dt><dd>192.168.10.0/24</dd>
+          <dt>Phase1</dt><dd>AES256-SHA256</dd>
+          <dt>Phase2</dt><dd>AES256-SHA256</dd>
+          <dt>DH Group</dt><dd>Group 14 (2048-bit)</dd>
+          <dt>Uptime</dt><dd>12d 04h 32m</dd>
+          <dt>Bytes In/Out</dt><dd>14.2 GB / 8.1 GB</dd>
+        </dl>
+      </div>
+      <div class="vpn-card">
+        <div class="vc-hdr">
+          <span class="badge b-down"><span class="dot dot-red"></span> DOWN</span>
+          <span class="vc-name">HQ-London</span>
+          <button class="btn btn-grn btn-sm" style="margin-left:auto" onclick="toast('Bringing up tunnel HQ-London...')">▶ Bring Up</button>
+        </div>
+        <dl class="vc-detail">
+          <dt>Remote IP</dt><dd>185.76.44.12</dd>
+          <dt>Local Subnet</dt><dd>192.168.1.0/24</dd>
+          <dt>Remote Subnet</dt><dd>10.1.0.0/16</dd>
+          <dt>Phase1</dt><dd>AES256-SHA512</dd>
+          <dt>Phase2</dt><dd>AES256-SHA256</dd>
+          <dt>DH Group</dt><dd>Group 20 (ECC)</dd>
+          <dt>Last Down</dt><dd>2026-03-06 18:22</dd>
+          <dt>Reason</dt><dd>Dead Peer Detection</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SSL VPN ══════════════ -->
+<div class="page" id="page-sslvpn">
+  <div class="page-hdr">
+    <div><div class="breadcrumb"><span>VPN</span><span>SSL-VPN</span></div><h1>SSL-VPN</h1></div>
+  </div>
+  <div class="page-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+      <div class="widget">
+        <div class="widget-hdr"><h3>SSL-VPN Settings</h3></div>
+        <div class="widget-body">
+          <div class="fg-toggle" style="margin-bottom:10px"><div class="toggle on" onclick="this.classList.toggle('on')"></div><span style="font-size:12px;font-weight:500">Enable SSL-VPN</span></div>
+          <div class="fg"><label>Listen on Interface</label><select><option>WAN1</option><option>WAN2</option></select></div>
+          <div class="fg"><label>Listen on Port</label><input type="number" value="10443"></div>
+          <div class="fg"><label>Authentication</label><select><option>Local Users</option><option>LDAP</option><option>RADIUS</option></select></div>
+          <div class="fg"><label>Tunnel Mode IP Pool</label><input type="text" value="10.212.134.200–10.212.134.220"></div>
+          <button class="btn btn-pri" onclick="toast('✓ SSL-VPN settings saved')">Apply</button>
+        </div>
+      </div>
+      <div class="widget">
+        <div class="widget-hdr"><h3>Active SSL-VPN Sessions</h3><span class="wh-badge">2 connected</span></div>
+        <div class="widget-body" style="padding:0">
+          <table><thead><tr><th>User</th><th>Source IP</th><th>Tunnel IP</th><th>Duration</th><th>Bytes</th></tr></thead>
+          <tbody>
+            <tr><td>ahmed.ali</td><td class="mono">41.128.0.5</td><td class="mono">10.212.134.200</td><td>1h 22m</td><td>220 MB</td></tr>
+            <tr><td>sara.k</td><td class="mono">105.20.0.10</td><td class="mono">10.212.134.201</td><td>34m</td><td>48 MB</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ LOGS ══════════════ -->
+<div class="page" id="page-logs">
+  <div class="page-hdr">
+    <div><div class="breadcrumb"><span>Log &amp; Report</span></div><h1>Log Viewer</h1></div>
+    <div style="margin-left:auto;display:flex;gap:6px">
+      <button class="btn btn-sec btn-sm" onclick="toast('Logs exported to CSV')">📥 Export</button>
+      <button class="btn btn-sec btn-sm" onclick="toast('Logs cleared')">🗑️ Clear</button>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="stabs">
+      <div class="stab act" onclick="switchLogTab('traffic',this)">Traffic</div>
+      <div class="stab" onclick="switchLogTab('threat',this)">Threat</div>
+      <div class="stab" onclick="switchLogTab('event',this)">Event</div>
+    </div>
+    <div class="stab-content act" id="log-traffic">
+      <div class="tbl-wrap">
+        <div class="tbl-toolbar">
+          <input type="text" placeholder="🔍 Filter logs...">
+          <select class="btn btn-sec btn-sm" style="padding:4px 8px;font-size:11px"><option>Last 1 Hour</option><option>Last 24 Hours</option><option>Last 7 Days</option></select>
+          <div class="tbl-spacer"></div>
+          <button class="btn btn-sec btn-sm" onclick="toast('Logs refreshed')">🔄 Refresh</button>
+        </div>
+        <table><thead><tr><th>Time</th><th>Source IP</th><th>Dest IP</th><th>Service</th><th>Policy</th><th>Action</th><th>Bytes</th></tr></thead>
+        <tbody id="log-traffic-tbody"></tbody></table>
+      </div>
+    </div>
+    <div class="stab-content" id="log-threat">
+      <div class="tbl-wrap">
+        <table><thead><tr><th>Time</th><th>Severity</th><th>Type</th><th>Source</th><th>Destination</th><th>Signature</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">14:32:01</td><td><span class="log-sev-high">CRITICAL</span></td><td>IPS</td><td class="mono">185.220.101.8</td><td class="mono">10.10.10.20</td><td>SQL.Injection.Attempt</td><td><span class="badge b-deny">BLOCKED</span></td></tr>
+          <tr><td class="mono">14:29:44</td><td><span class="log-sev-high">HIGH</span></td><td>WebFilter</td><td class="mono">192.168.1.45</td><td>malware-c2.ru</td><td>Malicious.URL</td><td><span class="badge b-deny">BLOCKED</span></td></tr>
+          <tr><td class="mono">14:22:30</td><td><span class="log-sev-high">HIGH</span></td><td>AV</td><td class="mono">192.168.1.31</td><td class="mono">203.0.113.1</td><td>Trojan.Emotet.Gen</td><td><span class="badge b-deny">BLOCKED</span></td></tr>
+          <tr><td class="mono">13:58:11</td><td><span class="log-sev-med">MEDIUM</span></td><td>IPS</td><td class="mono">45.33.32.156</td><td class="mono">10.10.10.80</td><td>Port.Scan.Detected</td><td><span class="badge b-warn">MONITOR</span></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+    <div class="stab-content" id="log-event">
+      <div class="tbl-wrap">
+        <table><thead><tr><th>Time</th><th>Level</th><th>Category</th><th>Message</th><th>User</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">14:25:58</td><td><span class="log-sev-info">INFO</span></td><td>Admin</td><td>Administrator login successful</td><td>admin</td></tr>
+          <tr><td class="mono">14:10:02</td><td><span class="log-sev-info">INFO</span></td><td>System</td><td>FortiGuard signatures updated (v18.752)</td><td>system</td></tr>
+          <tr><td class="mono">13:30:00</td><td><span class="log-sev-low">NOTICE</span></td><td>VPN</td><td>IPsec tunnel HQ-London went DOWN (DPD)</td><td>system</td></tr>
+          <tr><td class="mono">12:00:00</td><td><span class="log-sev-info">INFO</span></td><td>System</td><td>Scheduled backup completed successfully</td><td>system</td></tr>
+          <tr><td class="mono">09:44:11</td><td><span class="log-sev-med">WARNING</span></td><td>HA</td><td>FGCP heartbeat timeout — check sync cable</td><td>system</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ADMINS ══════════════ -->
+<div class="page" id="page-admins">
+  <div class="page-hdr">
+    <div><div class="breadcrumb"><span>System</span><span>Administrators</span></div><h1>Administrator Accounts</h1></div>
+    <button class="btn btn-pri btn-sm" style="margin-left:auto" onclick="toast('Creating administrator account...')">+ Create New</button>
+  </div>
+  <div class="page-body">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Username</th><th>Profile</th><th>Trusted Hosts</th><th>Two-Factor</th><th>Last Login</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600">admin</td><td><span class="badge b-deny">super_admin</span></td><td class="mono">10.0.0.0/24</td><td><span class="badge b-accept">✓ TOTP</span></td><td class="mono">2026-03-07 14:25</td><td><span class="badge b-up">Active</span></td><td><button class="btn btn-sec btn-sm" onclick="toast('Edit admin disabled for security')">Edit</button></td></tr>
+          <tr><td>noc-user</td><td><span class="badge b-warn">read-only</span></td><td class="mono">192.168.1.0/24</td><td><span class="badge b-gray">Disabled</span></td><td class="mono">2026-03-06 22:10</td><td><span class="badge b-up">Active</span></td><td><button class="btn btn-sec btn-sm" onclick="toast('Editing noc-user...')">Edit</button></td></tr>
+          <tr><td>helpdesk</td><td><span class="badge b-info">helpdesk_admin</span></td><td class="mono">any</td><td><span class="badge b-accept">✓ Email</span></td><td class="mono">2026-03-05 09:14</td><td><span class="badge b-up">Active</span></td><td><button class="btn btn-sec btn-sm" onclick="toast('Editing helpdesk...')">Edit</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ FIRMWARE ══════════════ -->
+<div class="page" id="page-firmware">
+  <div class="page-hdr">
+    <div><div class="breadcrumb"><span>System</span><span>Firmware</span></div><h1>Firmware &amp; License</h1></div>
+  </div>
+  <div class="page-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="widget">
+        <div class="widget-hdr"><h3>Firmware Status</h3></div>
+        <div class="widget-body">
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:12px;margin-bottom:14px">
+            <span style="color:var(--sub)">Current Version</span><span style="font-weight:600">FortiOS v7.4.3 build2573</span>
+            <span style="color:var(--sub)">Model</span><span style="font-weight:600">FG-100F</span>
+            <span style="color:var(--sub)">Serial</span><span class="mono">FG100F-BNTF22001234</span>
+            <span style="color:var(--sub)">Latest Available</span><span style="font-weight:600;color:var(--grn)">v7.4.4 (Current)</span>
+          </div>
+          <button class="btn btn-sec btn-sm" onclick="toast('Checking for firmware updates...')">🔄 Check for Updates</button>
+          <button class="btn btn-sec btn-sm" onclick="toast('Backup firmware selected')">📤 Upload Firmware</button>
+        </div>
+      </div>
+      <div class="widget">
+        <div class="widget-hdr"><h3>License Status</h3></div>
+        <div class="widget-body">
+          <table><thead><tr><th>Service</th><th>Expiry</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>FortiGuard AV</td><td>2027-01-15</td><td><span class="badge b-accept">✓ Valid</span></td></tr>
+            <tr><td>FortiGuard Web Filter</td><td>2027-01-15</td><td><span class="badge b-accept">✓ Valid</span></td></tr>
+            <tr><td>FortiGuard IPS</td><td>2027-01-15</td><td><span class="badge b-accept">✓ Valid</span></td></tr>
+            <tr><td>FortiGuard AppCtrl</td><td>2027-01-15</td><td><span class="badge b-accept">✓ Valid</span></td></tr>
+            <tr><td>FortiCare Premium</td><td>2027-01-15</td><td><span class="badge b-accept">✓ Valid</span></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SETTINGS ══════════════ -->
+<div class="page" id="page-settings">
+  <div class="page-hdr">
+    <div><div class="breadcrumb"><span>System</span><span>Settings</span></div><h1>System Settings</h1></div>
+  </div>
+  <div class="page-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="widget">
+        <div class="widget-hdr"><h3>General Settings</h3></div>
+        <div class="widget-body">
+          <div class="fg"><label>Hostname</label><input type="text" value="aman5z-FW01"></div>
+          <div class="fg"><label>Timezone</label><select><option>Asia/Dubai (GMT+4)</option><option>UTC</option><option>America/New_York</option></select></div>
+          <div class="fg"><label>Admin Login Timeout (min)</label><input type="number" value="30"></div>
+          <div class="fg"><label>HTTPS Admin Port</label><input type="number" value="443"></div>
+          <div class="fg-toggle" style="margin-bottom:8px"><div class="toggle on" onclick="this.classList.toggle('on')"></div><span style="font-size:12px">Enable NTP Synchronization</span></div>
+          <div class="fg"><label>NTP Server</label><input type="text" value="pool.ntp.org"></div>
+          <button class="btn btn-pri" style="margin-top:6px" onclick="toast('✓ Settings saved successfully')">Apply</button>
+        </div>
+      </div>
+      <div class="widget">
+        <div class="widget-hdr"><h3>HA / VDOM Settings</h3></div>
+        <div class="widget-body">
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:12px;margin-bottom:14px">
+            <span style="color:var(--sub)">Operation Mode</span><span style="font-weight:600">NAT/Route</span>
+            <span style="color:var(--sub)">HA Status</span><span style="font-weight:600;color:var(--amber)">Standalone</span>
+            <span style="color:var(--sub)">VDOM Mode</span><span style="font-weight:600">Disabled</span>
+            <span style="color:var(--sub)">Inspection Mode</span><span style="font-weight:600">Flow</span>
+          </div>
+          <button class="btn btn-sec btn-sm" onclick="toast('HA configuration wizard...')">Configure HA</button>
+          <button class="btn btn-sec btn-sm" onclick="toast('⚠️ Factory reset requires physical confirmation')">🔄 Factory Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /layout -->
+
+<!-- ══ STATUS BAR ══ -->
+<div class="statusbar">
+  <span><span class="dot dot-grn dot-pulse"></span> <span class="sb-green">System: Healthy</span></span>
+  <span>⚡ FortiOS v7.4.3</span>
+  <span>📡 WAN1: 248↓ 87↑ Mbps</span>
+  <span>🔗 Sessions: <span id="sb-sess">12,847</span></span>
+  <span>🦠 AV DB: v18.752 (Today)</span>
+  <span>🕐 <span id="sb-time"></span></span>
+  <span style="margin-left:auto;color:#4b5563">FG100F-BNTF22001234</span>
+</div>
+
+<!-- ══ POLICY MODAL ══ -->
+<div class="modal-ov" id="policy-modal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3>🛡️ New Firewall Policy</h3>
+      <button class="modal-close" onclick="closePolicyModal()">✕</button>
+    </div>
+    <div class="modal-body" style="max-height:70vh;overflow-y:auto">
+      <div class="form-row">
+        <div class="fg"><label>Policy Name</label><input type="text" id="pol-name" placeholder="e.g. LAN_to_WAN_HTTPS"></div>
+        <div class="fg"><label>Sequence Position</label><select id="pol-seq"><option>At Top</option><option>At Bottom</option><option>After Policy #1</option><option>After Policy #2</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>Incoming Interface</label><select id="pol-src-iface"><option>LAN</option><option>WAN1</option><option>WAN2</option><option>DMZ</option><option>any</option></select></div>
+        <div class="fg"><label>Outgoing Interface</label><select id="pol-dst-iface"><option>WAN1</option><option>LAN</option><option>WAN2</option><option>DMZ</option><option>any</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>Source Address</label><select id="pol-src"><option>all</option><option>LAN_Network</option><option>192.168.1.0/24</option><option>Admin_PC</option></select></div>
+        <div class="fg"><label>Destination Address</label><select id="pol-dst"><option>all</option><option>Webserver</option><option>DMZ_Network</option><option>LAN_Network</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>Service</label><select id="pol-svc"><option>ALL</option><option>HTTP</option><option>HTTPS</option><option>DNS</option><option>SSH</option><option>RDP</option></select></div>
+        <div class="fg"><label>Schedule</label><select id="pol-sched"><option>always</option><option>Business_Hours</option><option>After_Hours</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>Action</label><select id="pol-action"><option value="ACCEPT">ACCEPT</option><option value="DENY">DENY</option></select></div>
+        <div class="fg"><label>Log Traffic</label><select id="pol-log"><option>All Sessions</option><option>Security Events Only</option><option>Disabled</option></select></div>
+      </div>
+      <div style="background:#f8fafc;border:1px solid var(--bdr);border-radius:3px;padding:12px;margin-bottom:12px">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--sub);margin-bottom:8px">Security Profiles</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px">
+          <div class="fg-toggle"><div class="toggle on" id="pol-av-tog" onclick="this.classList.toggle('on')"></div><span>AntiVirus: default</span></div>
+          <div class="fg-toggle"><div class="toggle on" id="pol-wf-tog" onclick="this.classList.toggle('on')"></div><span>Web Filter: default</span></div>
+          <div class="fg-toggle"><div class="toggle on" id="pol-ips-tog" onclick="this.classList.toggle('on')"></div><span>IPS: default</span></div>
+          <div class="fg-toggle"><div class="toggle on" id="pol-app-tog" onclick="this.classList.toggle('on')"></div><span>App Control</span></div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="fg-toggle"><div class="toggle on" id="pol-nat-tog" onclick="this.classList.toggle('on')"></div><span style="font-size:12px">Enable NAT (Source IP)</span></div>
+        <div class="fg-toggle"><div class="toggle on" id="pol-ena-tog" onclick="this.classList.toggle('on')"></div><span style="font-size:12px">Enable Policy</span></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-sec" onclick="closePolicyModal()">Cancel</button>
+      <button class="btn btn-pri" onclick="savePolicy()">✓ OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ INTERFACE MODAL ══ -->
+<div class="modal-ov" id="iface-modal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3>🌐 Edit Interface</h3>
+      <button class="modal-close" onclick="closeIfaceModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="fg"><label>Name</label><input type="text" id="if-name" placeholder="e.g. LAN"></div>
+        <div class="fg"><label>Type</label><select id="if-type"><option>Physical</option><option>VLAN</option><option>Loopback</option><option>Aggregate</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>IP Address</label><input type="text" id="if-ip" placeholder="192.168.1.1"></div>
+        <div class="fg"><label>Netmask</label><input type="text" id="if-mask" placeholder="255.255.255.0"></div>
+      </div>
+      <div class="fg"><label>Role</label><select id="if-role"><option>LAN</option><option>WAN</option><option>DMZ</option><option>Management</option><option>Undefined</option></select></div>
+      <div class="fg-toggle" style="margin-bottom:8px"><div class="toggle on" onclick="this.classList.toggle('on')"></div><span style="font-size:12px">Enable DHCP Server</span></div>
+      <div class="fg-toggle"><div class="toggle on" onclick="this.classList.toggle('on')"></div><span style="font-size:12px">Allow Administrative Access (HTTPS/SSH)</span></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-sec" onclick="closeIfaceModal()">Cancel</button>
+      <button class="btn btn-pri" onclick="saveIface()">✓ OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ROUTE MODAL ══ -->
+<div class="modal-ov" id="route-modal">
+  <div class="modal" style="width:440px">
+    <div class="modal-hdr">
+      <h3>🗺️ New Static Route</h3>
+      <button class="modal-close" onclick="closeRouteModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="fg"><label>Destination Network</label><input type="text" id="rt-dst" placeholder="0.0.0.0/0"></div>
+      <div class="fg"><label>Gateway</label><input type="text" id="rt-gw" placeholder="203.0.113.254"></div>
+      <div class="form-row">
+        <div class="fg"><label>Interface</label><select id="rt-iface"><option>WAN1</option><option>WAN2</option><option>LAN</option><option>DMZ</option></select></div>
+        <div class="fg"><label>Administrative Distance</label><input type="number" id="rt-dist" value="10"></div>
+      </div>
+      <div class="fg"><label>Priority</label><input type="number" id="rt-pri" value="0"></div>
+      <div class="fg"><label>Comment</label><input type="text" id="rt-comment" placeholder="Optional description"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-sec" onclick="closeRouteModal()">Cancel</button>
+      <button class="btn btn-pri" onclick="saveRoute()">✓ OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────
+const policies = [
+  {id:1,name:"LAN_to_WAN",srcIface:"LAN",dstIface:"WAN1",src:"LAN_Network",dst:"all",svc:"ALL",action:"ACCEPT",nat:true,av:true,wf:true,ips:true,bytes:"14.2 GB",enabled:true},
+  {id:2,name:"DMZ_to_WAN",srcIface:"DMZ",dstIface:"WAN1",src:"DMZ_Network",dst:"all",svc:"HTTPS,HTTP",action:"ACCEPT",nat:true,av:false,wf:false,ips:true,bytes:"3.1 GB",enabled:true},
+  {id:3,name:"WAN_to_DMZ_Web",srcIface:"WAN1",dstIface:"DMZ",src:"all",dst:"Webserver",svc:"HTTPS",action:"ACCEPT",nat:false,av:true,wf:false,ips:true,bytes:"8.8 GB",enabled:true},
+  {id:4,name:"Block_TorNodes",srcIface:"LAN",dstIface:"WAN1",src:"all",dst:"Block_List",svc:"ALL",action:"DENY",nat:false,av:false,wf:false,ips:false,bytes:"0 B",enabled:true},
+  {id:5,name:"Admin_SSH_WAN",srcIface:"WAN1",dstIface:"LAN",src:"Admin_PC",dst:"LAN_Network",svc:"SSH",action:"ACCEPT",nat:false,av:false,wf:false,ips:true,bytes:"22 MB",enabled:true},
+  {id:6,name:"Block_After_Hours_RDP",srcIface:"LAN",dstIface:"WAN1",src:"all",dst:"all",svc:"RDP",action:"DENY",nat:false,av:false,wf:false,ips:false,bytes:"0 B",enabled:false},
+  {id:7,name:"Implicit_Deny",srcIface:"any",dstIface:"any",src:"all",dst:"all",svc:"ALL",action:"DENY",nat:false,av:false,wf:false,ips:false,bytes:"2.4 MB",enabled:true},
+];
+
+const interfaces = [
+  {name:"WAN1",alias:"Internet Primary",type:"Physical",role:"WAN",ip:"203.0.113.1",mask:"255.255.255.0",status:"up",speed:"1000 Mbps",mtu:1500,vlan:"—"},
+  {name:"WAN2",alias:"Internet Backup",type:"Physical",role:"WAN",ip:"198.51.100.5",mask:"255.255.255.0",status:"up",speed:"1000 Mbps",mtu:1500,vlan:"—"},
+  {name:"LAN",alias:"Internal Network",type:"Physical",role:"LAN",ip:"192.168.1.1",mask:"255.255.255.0",status:"up",speed:"1000 Mbps",mtu:1500,vlan:"—"},
+  {name:"DMZ",alias:"Server Zone",type:"Physical",role:"DMZ",ip:"10.10.10.1",mask:"255.255.255.0",status:"up",speed:"1000 Mbps",mtu:1500,vlan:"—"},
+  {name:"MGMT",alias:"Management",type:"Physical",role:"Management",ip:"10.0.0.1",mask:"255.255.255.0",status:"up",speed:"100 Mbps",mtu:1500,vlan:"—"},
+];
+
+const routes = [
+  {dst:"0.0.0.0/0",gw:"203.0.113.254",iface:"WAN1",dist:10,pri:0,status:"active",comment:"Default route - Primary ISP"},
+  {dst:"0.0.0.0/0",gw:"198.51.100.254",iface:"WAN2",dist:20,pri:0,status:"active",comment:"Default route - Backup ISP"},
+  {dst:"192.168.1.0/24",gw:"0.0.0.0",iface:"LAN",dist:0,pri:0,status:"active",comment:"Connected - LAN"},
+  {dst:"10.10.10.0/24",gw:"0.0.0.0",iface:"DMZ",dist:0,pri:0,status:"active",comment:"Connected - DMZ"},
+  {dst:"10.0.0.0/24",gw:"0.0.0.0",iface:"MGMT",dist:0,pri:0,status:"active",comment:"Connected - Management"},
+];
+
+const trafficLogs = [
+  {time:"14:32:44",src:"192.168.1.52",dst:"142.250.200.78",svc:"HTTPS",policy:"LAN_to_WAN",action:"ACCEPT",bytes:"1.2 MB"},
+  {time:"14:32:43",src:"192.168.1.45",dst:"malware-c2.ru",svc:"HTTP",policy:"LAN_to_WAN",action:"DENY",bytes:"0 B"},
+  {time:"14:32:41",src:"10.10.10.20",dst:"203.0.113.1",svc:"HTTPS",policy:"DMZ_to_WAN",action:"ACCEPT",bytes:"500 KB"},
+  {time:"14:32:38",src:"203.0.113.88",dst:"10.10.10.20",svc:"HTTPS",policy:"WAN_to_DMZ_Web",action:"ACCEPT",bytes:"3.4 MB"},
+  {time:"14:32:35",src:"192.168.1.10",dst:"8.8.8.8",svc:"DNS",policy:"LAN_to_WAN",action:"ACCEPT",bytes:"2 KB"},
+  {time:"14:32:30",src:"185.220.101.8",dst:"10.10.10.20",svc:"HTTP",policy:"WAN_to_DMZ_Web",action:"DENY",bytes:"0 B"},
+  {time:"14:32:28",src:"192.168.1.71",dst:"52.96.0.1",svc:"SMTP",policy:"LAN_to_WAN",action:"ACCEPT",bytes:"48 KB"},
+  {time:"14:32:25",src:"192.168.1.100",dst:"216.58.209.142",svc:"HTTPS",policy:"LAN_to_WAN",action:"ACCEPT",bytes:"220 KB"},
+];
+
+// ─── RENDER ─────────────────────────────────────────────
+function renderPolicies(filter="",ifaceFilter=""){
+  const tbody=document.getElementById("policy-tbody");
+  const fl=filter.toLowerCase();
+  const filtered=policies.filter(p=>{
+    const match=!fl||(p.name.toLowerCase().includes(fl)||p.src.toLowerCase().includes(fl)||p.dst.toLowerCase().includes(fl)||p.svc.toLowerCase().includes(fl));
+    const im=!ifaceFilter||(p.srcIface===ifaceFilter||p.dstIface===ifaceFilter);
+    return match&&im;
+  });
+  tbody.innerHTML=filtered.map(p=>`
+    <tr id="pol-row-${p.id}" class="${p.enabled?'':''}">
+      <td><input type="checkbox" class="pol-chk"></td>
+      <td><div class="policy-seq" title="Drag to reorder">${p.id}</div></td>
+      <td>
+        <div class="policy-name" style="${p.enabled?'':'text-decoration:line-through;color:var(--sub2)'}">${p.name}</div>
+        ${p.enabled?'':`<div style="font-size:9px;color:var(--sub2)">DISABLED</div>`}
+      </td>
+      <td>
+        <span class="iface-chip">${p.srcIface}</span>
+        <span style="color:var(--sub2);font-size:10px;margin:0 3px">→</span>
+        <span class="iface-chip">${p.dstIface}</span>
+      </td>
+      <td><span class="addr-chip">${p.src}</span></td>
+      <td><span class="addr-chip">${p.dst}</span></td>
+      <td style="font-size:11px;font-family:'JetBrains Mono',monospace">${p.svc}</td>
+      <td>
+        <span class="badge ${p.action==='ACCEPT'?'b-accept':'b-deny'}">${p.action}</span>
+      </td>
+      <td>
+        ${p.nat?`<span class="badge b-info">NAT</span>`:`<span style="color:var(--sub2);font-size:10px">—</span>`}
+      </td>
+      <td style="font-size:10px">
+        ${p.av?'<span title="AntiVirus">🦠</span>':''} 
+        ${p.wf?'<span title="Web Filter">🌐</span>':''} 
+        ${p.ips?'<span title="IPS">🛡️</span>':''}
+      </td>
+      <td style="font-size:10px;color:var(--sub);font-family:'JetBrains Mono',monospace">${p.bytes}</td>
+      <td>
+        <div class="toggle ${p.enabled?'on':''}" onclick="togglePolicy(${p.id},this)" title="${p.enabled?'Enabled - click to disable':'Disabled - click to enable'}"></div>
+      </td>
+      <td>
+        <div style="display:flex;gap:3px">
+          <button class="btn btn-sec btn-sm" onclick="editPolicy(${p.id})">✏️</button>
+          <button class="btn btn-danger btn-sm" onclick="deletePolicy(${p.id})">🗑️</button>
+        </div>
+      </td>
+    </tr>`).join("");
+  document.getElementById("policy-count").textContent=`${filtered.length} of ${policies.length} policies`;
+}
+
+function filterPolicies(val){
+  const f=document.getElementById("policy-filter").value;
+  renderPolicies(val,f);
+}
+
+function togglePolicy(id,el){
+  const p=policies.find(x=>x.id===id);
+  if(p){p.enabled=!p.enabled;el.classList.toggle("on",p.enabled);toast(p.enabled?`Policy "${p.name}" enabled`:`Policy "${p.name}" disabled`);}
+  renderPolicies();
+}
+function editPolicy(id){
+  const p=policies.find(x=>x.id===id);
+  if(!p) return;
+  document.getElementById("pol-name").value=p.name;
+  document.getElementById("pol-action").value=p.action;
+  openPolicyModal();
+  toast(`Editing policy: ${p.name}`);
+}
+function deletePolicy(id){
+  const p=policies.find(x=>x.id===id);
+  if(!p) return;
+  if(id===7){toast('⚠️ Cannot delete implicit deny policy','err');return;}
+  const idx=policies.findIndex(x=>x.id===id);
+  policies.splice(idx,1);
+  renderPolicies();
+  toast(`🗑️ Policy "${p.name}" deleted`,'warn');
+}
+
+function renderInterfaces(){
+  const roleIco={WAN:"🌍",LAN:"🏠",DMZ:"🔒",Management:"⚙️"};
+  const roleBg={WAN:"iface-wan",LAN:"iface-lan",DMZ:"iface-dmz",Management:"iface-mgmt"};
+  const grid=document.getElementById("iface-grid");
+  grid.innerHTML=interfaces.map(i=>`
+    <div class="iface-card" onclick="openIfaceModalEdit('${i.name}')">
+      <div class="iface-icon ${roleBg[i.role]||'iface-lan'}">${roleIco[i.role]||'🔌'}</div>
+      <div class="iface-info">
+        <h4>${i.name} — <span style="color:var(--sub);font-size:10px">${i.alias}</span></h4>
+        <p>${i.ip}/${cidr(i.mask)}</p>
+        <p style="margin-top:2px;font-family:inherit;font-size:10px;color:var(--sub)">${i.role} · ${i.speed}</p>
+      </div>
+      <div class="iface-stats">
+        <span class="badge ${i.status==='up'?'b-up':'b-down'}">${i.status.toUpperCase()}</span>
+        <div style="margin-top:4px">MTU: ${i.mtu}</div>
+      </div>
+    </div>`).join("");
+  const tbody=document.getElementById("iface-tbody");
+  tbody.innerHTML=interfaces.map(i=>`
+    <tr>
+      <td><strong>${i.name}</strong><div style="font-size:10px;color:var(--sub)">${i.alias}</div></td>
+      <td><span class="badge b-gray">${i.type}</span></td>
+      <td class="mono">${i.ip}/${cidr(i.mask)}</td>
+      <td>${i.speed}</td>
+      <td>${i.mtu}</td>
+      <td>${i.vlan}</td>
+      <td><span class="badge ${i.status==='up'?'b-up':'b-down'}">${i.status.toUpperCase()}</span></td>
+      <td><div style="display:flex;gap:3px">
+        <button class="btn btn-sec btn-sm" onclick="openIfaceModalEdit('${i.name}')">✏️ Edit</button>
+      </div></td>
+    </tr>`).join("");
+}
+
+function renderRoutes(){
+  const tbody=document.getElementById("route-tbody");
+  tbody.innerHTML=routes.map(r=>`
+    <tr>
+      <td><input type="checkbox"></td>
+      <td class="mono" style="font-weight:500">${r.dst}</td>
+      <td class="mono">${r.gw||"Connected"}</td>
+      <td><span class="iface-chip">${r.iface}</span></td>
+      <td><span class="route-priority">${r.dist}</span></td>
+      <td><span class="route-priority">${r.pri}</span></td>
+      <td><span class="badge ${r.status==='active'?'b-up':'b-down'}">${r.status}</span></td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteRoute('${r.dst}','${r.iface}')">🗑️</button></td>
+    </tr>`).join("");
+}
+
+function renderTrafficLogs(){
+  const tbody=document.getElementById("log-traffic-tbody");
+  tbody.innerHTML=trafficLogs.map(l=>`
+    <tr>
+      <td class="mono">${l.time}</td>
+      <td class="mono">${l.src}</td>
+      <td class="mono">${l.dst}</td>
+      <td>${l.svc}</td>
+      <td style="font-size:10px">${l.policy}</td>
+      <td><span class="badge ${l.action==='ACCEPT'?'b-accept':'b-deny'}">${l.action}</span></td>
+      <td class="mono" style="color:var(--sub)">${l.bytes}</td>
+    </tr>`).join("");
+}
+
+// ─── MODALS ──────────────────────────────────────────────
+function openPolicyModal(){ document.getElementById("policy-modal").classList.add("show"); }
+function closePolicyModal(){ document.getElementById("policy-modal").classList.remove("show"); }
+function savePolicy(){
+  const name=document.getElementById("pol-name").value.trim();
+  if(!name){toast("Policy name is required","err");return;}
+  const action=document.getElementById("pol-action").value;
+  const nat=document.getElementById("pol-nat-tog").classList.contains("on");
+  const ena=document.getElementById("pol-ena-tog").classList.contains("on");
+  const newId=policies.length?Math.max(...policies.map(p=>p.id))+1:1;
+  policies.splice(policies.length-1,0,{
+    id:newId,name,
+    srcIface:document.getElementById("pol-src-iface").value,
+    dstIface:document.getElementById("pol-dst-iface").value,
+    src:document.getElementById("pol-src").value,
+    dst:document.getElementById("pol-dst").value,
+    svc:document.getElementById("pol-svc").value,
+    action,nat,
+    av:document.getElementById("pol-av-tog").classList.contains("on"),
+    wf:document.getElementById("pol-wf-tog").classList.contains("on"),
+    ips:document.getElementById("pol-ips-tog").classList.contains("on"),
+    bytes:"0 B",enabled:ena
+  });
+  closePolicyModal();
+  renderPolicies();
+  toast(`✓ Policy "${name}" created`);
+  document.getElementById("pol-name").value="";
+}
+
+function openIfaceModal(){ document.getElementById("iface-modal").classList.add("show"); }
+function openIfaceModalEdit(name){
+  const iface=interfaces.find(i=>i.name===name);
+  if(iface){
+    document.getElementById("if-name").value=iface.name;
+    document.getElementById("if-ip").value=iface.ip;
+    document.getElementById("if-mask").value=iface.mask;
+    document.getElementById("if-role").value=iface.role;
+  }
+  openIfaceModal();
+  toast(`Editing interface: ${name}`);
+}
+function closeIfaceModal(){ document.getElementById("iface-modal").classList.remove("show"); }
+function saveIface(){
+  const name=document.getElementById("if-name").value.trim();
+  const ip=document.getElementById("if-ip").value.trim();
+  if(!name||!ip){toast("Name and IP required","err");return;}
+  const existing=interfaces.findIndex(i=>i.name===name);
+  const obj={name,alias:name,type:document.getElementById("if-type").value,role:document.getElementById("if-role").value,ip,mask:document.getElementById("if-mask").value||"255.255.255.0",status:"up",speed:"1000 Mbps",mtu:1500,vlan:"—"};
+  if(existing>=0) interfaces[existing]=obj;
+  else interfaces.push(obj);
+  closeIfaceModal();
+  renderInterfaces();
+  toast(`✓ Interface "${name}" saved`);
+}
+
+function openRouteModal(){ document.getElementById("route-modal").classList.add("show"); }
+function closeRouteModal(){ document.getElementById("route-modal").classList.remove("show"); }
+function saveRoute(){
+  const dst=document.getElementById("rt-dst").value.trim();
+  const gw=document.getElementById("rt-gw").value.trim();
+  if(!dst||!gw){toast("Destination and gateway required","err");return;}
+  routes.push({
+    dst,gw,iface:document.getElementById("rt-iface").value,
+    dist:parseInt(document.getElementById("rt-dist").value)||10,
+    pri:parseInt(document.getElementById("rt-pri").value)||0,
+    status:"active",comment:document.getElementById("rt-comment").value
+  });
+  closeRouteModal();
+  renderRoutes();
+  toast(`✓ Route to ${dst} added`);
+}
+function deleteRoute(dst,iface){
+  const idx=routes.findIndex(r=>r.dst===dst&&r.iface===iface);
+  if(idx>=0){routes.splice(idx,1);renderRoutes();toast(`🗑️ Route ${dst} deleted`,'warn');}
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────
+function nav(pageId, el){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("act"));
+  document.querySelectorAll(".sb-item").forEach(i=>i.classList.remove("act"));
+  const page=document.getElementById("page-"+pageId);
+  if(page) page.classList.add("act");
+  if(el) el.classList.add("act");
+}
+
+function toggleSub(el){
+  el.classList.toggle("open");
+  const sub=el.nextElementSibling;
+  if(sub&&sub.classList.contains("sb-sub")){
+    sub.classList.toggle("hidden");
+  }
+}
+
+function switchLogTab(tab,el){
+  document.querySelectorAll(".stab").forEach(t=>t.classList.remove("act"));
+  document.querySelectorAll(".stab-content").forEach(c=>c.classList.remove("act"));
+  el.classList.add("act");
+  document.getElementById("log-"+tab).classList.add("act");
+}
+
+function checkAll(masterCb, cls){
+  document.querySelectorAll("."+cls).forEach(cb=>cb.checked=masterCb.checked);
+}
+
+// ─── HELPERS ─────────────────────────────────────────────
+function cidr(mask){
+  if(!mask) return 24;
+  const parts=mask.split(".");
+  let bits=0;
+  for(const p of parts){
+    let b=parseInt(p);
+    while(b>0){bits+=b&1;b>>=1;}
+  }
+  return bits;
+}
+
+// ─── TOAST ───────────────────────────────────────────────
+function toast(msg,type=""){
+  const el=document.getElementById("toast");
+  el.textContent=msg;
+  el.className="toast show"+(type?" "+type:"");
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>el.classList.remove("show"),3000);
+}
+
+// ─── CLOCK ───────────────────────────────────────────────
+setInterval(()=>{
+  const n=new Date();
+  const pad=x=>String(x).padStart(2,"0");
+  document.getElementById("sb-time").textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())} ${n.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})}`;
+},1000);
+
+// ─── LIVE STATS SIMULATION ───────────────────────────────
+setInterval(()=>{
+  const cpu=Math.floor(15+Math.random()*35);
+  const dl=Math.floor(180+Math.random()*150);
+  const ul=Math.floor(60+Math.random()*80);
+  const sess=12000+Math.floor(Math.random()*2000);
+  document.getElementById("cpu-val").textContent=cpu+"%";
+  document.getElementById("cpu-bar").style.width=cpu+"%";
+  document.getElementById("cpu-prog").style.width=cpu+"%";
+  document.getElementById("cpu-live").textContent=cpu+"%";
+  document.getElementById("wan-dl").textContent=dl+" Mbps";
+  document.getElementById("wan-ul").textContent=ul+" Mbps";
+  document.getElementById("sess-val").textContent=sess.toLocaleString();
+  document.getElementById("sb-sess").textContent=sess.toLocaleString();
+},3000);
+
+// ─── CLOSE MODALS ON BG CLICK ────────────────────────────
+document.querySelectorAll(".modal-ov").forEach(ov=>{
+  ov.addEventListener("click",e=>{ if(e.target===ov) ov.classList.remove("show"); });
+});
+
+// ─── INIT ────────────────────────────────────────────────
+renderPolicies();
+renderInterfaces();
+renderRoutes();
+renderTrafficLogs();
+
+// Initial toast
+setTimeout(()=>toast("✓ FortiGate FG-100F connected — FortiOS v7.4.3"),600);
+</script>
+</body>
+</html>

@@ -1,0 +1,2006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cisco IOS — Router </title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;
+  --term:#0d0d0d;
+  --term-b:#111;
+  --hdr:#111827;
+  --hdr-b:#1f2937;
+  --cisco-blue:#1ba1e2;
+  --cisco-dark:#003087;
+  --green:#00ff41;
+  --green-dim:#00c030;
+  --amber:#ffb300;
+  --red:#ff4444;
+  --cyan:#00d4ff;
+  --white:#e8edf2;
+  --sub:#6b7280;
+  --bdr:#1f2937;
+  --panel:#111827;
+  --panel-b:#1f2937;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── HEADER ── */
+.hdr{background:var(--hdr);border-bottom:1px solid var(--bdr);padding:0 16px;height:48px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.hdr-logo{display:flex;align-items:center;gap:10px}
+.cisco-logo{display:flex;align-items:flex-end;gap:2px;height:22px}
+.cisco-logo .bar{width:4px;background:var(--cisco-blue);border-radius:1px}
+.cisco-logo .bar:nth-child(1){height:8px}
+.cisco-logo .bar:nth-child(2){height:14px}
+.cisco-logo .bar:nth-child(3){height:20px}
+.cisco-logo .bar:nth-child(4){height:22px}
+.cisco-logo .bar:nth-child(5){height:20px}
+.cisco-logo .bar:nth-child(6){height:14px}
+.cisco-logo .bar:nth-child(7){height:8px}
+.hdr-title{font-size:13px;font-weight:600;color:var(--white)}
+.hdr-sub{font-size:10px;color:var(--sub);margin-top:1px}
+.hdr-sep{width:1px;height:24px;background:var(--bdr)}
+.hdr-device{display:flex;align-items:center;gap:6px;background:var(--hdr-b);border:1px solid var(--bdr);padding:4px 10px;border-radius:3px;font-size:11px;font-family:'JetBrains Mono',monospace}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hdr-spacer{flex:1}
+.hdr-tabs{display:flex;gap:2px}
+.htab{padding:5px 12px;font-size:11px;color:var(--sub);cursor:pointer;border-radius:3px;transition:all .15s;font-weight:500}
+.htab:hover{background:var(--hdr-b);color:var(--white)}
+.htab.act{background:rgba(27,161,226,.15);color:var(--cisco-blue);border:1px solid rgba(27,161,226,.3)}
+.hdr-mode{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--amber);background:rgba(255,179,0,.1);border:1px solid rgba(255,179,0,.2);padding:3px 10px;border-radius:3px}
+
+/* ── LAYOUT ── */
+.layout{display:flex;flex:1;overflow:hidden}
+
+/* ── SIDE PANEL ── */
+.side{width:240px;background:var(--panel);border-right:1px solid var(--bdr);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.side::-webkit-scrollbar{width:3px}
+.side::-webkit-scrollbar-thumb{background:var(--bdr)}
+.side-sec{border-bottom:1px solid var(--bdr);padding:10px}
+.side-sec h3{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--sub);margin-bottom:8px}
+.side-item{display:flex;justify-content:space-between;align-items:center;padding:3px 0;font-size:11px}
+.side-label{color:var(--sub);font-size:10px}
+.side-val{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--white)}
+.side-val.green{color:var(--green)}
+.side-val.red{color:var(--red)}
+.side-val.amber{color:var(--amber)}
+.iface-row{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:2px;cursor:pointer;transition:background .1s;margin-bottom:1px}
+.iface-row:hover{background:var(--hdr-b)}
+.iface-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.iface-dot.up{background:var(--green);box-shadow:0 0 5px var(--green)}
+.iface-dot.down{background:var(--red)}
+.iface-dot.admin-down{background:#4b5563}
+.iface-name{font-family:'JetBrains Mono',monospace;font-size:10px;flex:1}
+.iface-ip{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--sub)}
+.cmd-chip{display:inline-block;background:var(--hdr-b);border:1px solid var(--bdr);padding:2px 7px;border-radius:2px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--cyan);cursor:pointer;margin:2px;transition:all .15s}
+.cmd-chip:hover{background:rgba(0,212,255,.1);border-color:var(--cyan)}
+
+/* ── TERMINAL ── */
+.terminal-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.term-tabs{background:var(--hdr);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 12px;gap:2px;flex-shrink:0}
+.term-tab{display:flex;align-items:center;gap:6px;padding:8px 12px;font-size:11px;color:var(--sub);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;font-family:'JetBrains Mono',monospace}
+.term-tab:hover{color:var(--white)}
+.term-tab.act{color:var(--green);border-bottom-color:var(--green)}
+.term-tab-dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green)}
+.term-tab-x{margin-left:4px;color:var(--sub);font-size:12px;line-height:1}
+.term-tab-x:hover{color:var(--red)}
+.new-tab-btn{margin-left:4px;color:var(--sub);font-size:14px;padding:4px 8px;cursor:pointer;border-radius:2px;transition:all .15s}
+.new-tab-btn:hover{background:var(--hdr-b);color:var(--white)}
+.term-area{flex:1;background:var(--term);overflow-y:auto;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.65;position:relative}
+.term-area::-webkit-scrollbar{width:5px}
+.term-area::-webkit-scrollbar-thumb{background:#1f2937;border-radius:2px}
+.term-line{white-space:pre-wrap;word-break:break-all;display:block}
+.term-line.prompt{color:var(--green)}
+.term-line.output{color:var(--white)}
+.term-line.error{color:var(--red)}
+.term-line.warn{color:var(--amber)}
+.term-line.info{color:var(--cyan)}
+.term-line.comment{color:#4b5563}
+.term-line.highlight{color:var(--green)}
+.term-line.dim{color:#374151}
+.term-input-row{display:flex;align-items:center;padding:6px 14px;background:var(--term-b);border-top:1px solid var(--bdr);flex-shrink:0;gap:0}
+.term-prompt-label{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--green);white-space:nowrap;flex-shrink:0}
+.term-input{flex:1;background:transparent;border:none;outline:none;color:var(--white);font-family:'JetBrains Mono',monospace;font-size:12.5px;padding:0 4px;caret-color:var(--green)}
+.term-input::placeholder{color:#374151}
+
+/* ── STATUS BAR ── */
+.statusbar{background:#080808;border-top:1px solid #1a1a1a;padding:3px 14px;font-size:10px;font-family:'JetBrains Mono',monospace;display:flex;gap:16px;align-items:center;flex-shrink:0;color:#374151}
+.statusbar .sb-item{display:flex;align-items:center;gap:4px;color:#4b5563}
+.statusbar .sb-item.green{color:var(--green-dim)}
+.statusbar .sb-item.amber{color:var(--amber)}
+
+/* ── TOPOLOGY ── */
+.topology{flex:1;background:#080c14;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.topo-node{position:absolute;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all .2s}
+.topo-node:hover .topo-box{border-color:var(--cisco-blue);box-shadow:0 0 16px rgba(27,161,226,.3)}
+.topo-box{width:60px;height:44px;border:1px solid #1f2937;border-radius:4px;background:#111827;display:flex;align-items:center;justify-content:center;font-size:22px;transition:all .2s}
+.topo-label{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--sub);text-align:center}
+.topo-label .tlabel{color:var(--white);font-weight:600}
+.topo-label .tmodel{color:#4b5563;font-size:9px}
+.topo-link{position:absolute;background:#1f2937;transform-origin:left center}
+.topo-link.active{background:#00ff41;box-shadow:0 0 4px rgba(0,255,65,.4)}
+.topo-link.inactive{background:#dc2626}
+.topo-ip{position:absolute;font-size:9px;font-family:'JetBrains Mono',monospace;color:#374151;background:rgba(0,0,0,.7);padding:1px 4px;border-radius:2px;pointer-events:none}
+
+/* ── SHOW PANELS ── */
+.info-panel{flex:1;background:var(--bg);overflow-y:auto;padding:16px}
+.info-panel::-webkit-scrollbar{width:5px}
+.info-panel::-webkit-scrollbar-thumb{background:var(--bdr)}
+.ip-card{background:var(--panel);border:1px solid var(--bdr);border-radius:4px;margin-bottom:12px;overflow:hidden}
+.ip-card-hdr{background:var(--hdr-b);padding:7px 12px;display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600}
+.ip-card-body{padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.8}
+.ipc-row{display:grid;grid-template-columns:200px 1fr;gap:4px;padding:1px 0}
+.ipc-key{color:var(--sub)}
+.ipc-val{color:var(--white)}
+.ipc-val.green{color:var(--green)}
+.ipc-val.red{color:var(--red)}
+.ipc-val.amber{color:var(--amber)}
+.ipc-section{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--cisco-blue);margin:10px 0 4px;padding-top:8px;border-top:1px solid var(--bdr)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-logo">
+    <div class="cisco-logo">
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+    <div>
+      <div class="hdr-title">Cisco IOS </div>
+      <div class="hdr-sub">Cisco 2921 ISR · IOS 15.7(3)M</div>
+    </div>
+  </div>
+  <div class="hdr-sep"></div>
+  <div class="hdr-device"><div class="status-dot"></div><span>Router: aman5z-R1</span></div>
+  <div class="hdr-spacer"></div>
+  <div class="hdr-tabs">
+    <div class="htab act" onclick="switchView('terminal',this)">⬛ Terminal</div>
+    <div class="htab" onclick="switchView('topology',this)">🗺️ Topology</div>
+    <div class="htab" onclick="switchView('interfaces',this)">🌐 Interfaces</div>
+    <div class="htab" onclick="switchView('routing',this)">🗺️ Routing Table</div>
+  </div>
+  <div class="hdr-sep"></div>
+  <div class="hdr-mode" id="hdr-mode">User EXEC</div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+<!-- SIDE PANEL -->
+<div class="side">
+  <div class="side-sec">
+    <h3>Device Info</h3>
+    <div class="side-item"><span class="side-label">Hostname</span><span class="side-val">aman5z-R1</span></div>
+    <div class="side-item"><span class="side-label">Model</span><span class="side-val">Cisco 2921</span></div>
+    <div class="side-item"><span class="side-label">IOS</span><span class="side-val">15.7(3)M</span></div>
+    <div class="side-item"><span class="side-label">Uptime</span><span class="side-val" id="uptime-display">2d 14h 22m</span></div>
+    <div class="side-item"><span class="side-label">CPU</span><span class="side-val amber" id="cpu-val">4%</span></div>
+    <div class="side-item"><span class="side-label">Memory</span><span class="side-val">187/512 MB</span></div>
+  </div>
+  <div class="side-sec">
+    <h3>Interfaces</h3>
+    <div id="side-ifaces"></div>
+  </div>
+  <div class="side-sec">
+    <h3>Quick Commands</h3>
+    <div style="line-height:1.8">
+      <div class="cmd-chip" onclick="injectCmd('show version')">show version</div>
+      <div class="cmd-chip" onclick="injectCmd('show ip interface brief')">sh ip int br</div>
+      <div class="cmd-chip" onclick="injectCmd('show running-config')">sh run</div>
+      <div class="cmd-chip" onclick="injectCmd('show ip route')">sh ip route</div>
+      <div class="cmd-chip" onclick="injectCmd('show interfaces')">sh interfaces</div>
+      <div class="cmd-chip" onclick="injectCmd('show arp')">show arp</div>
+      <div class="cmd-chip" onclick="injectCmd('show cdp neighbors')">sh cdp neigh</div>
+      <div class="cmd-chip" onclick="injectCmd('show ip ospf neighbor')">sh ospf neigh</div>
+      <div class="cmd-chip" onclick="injectCmd('ping 8.8.8.8')">ping 8.8.8.8</div>
+      <div class="cmd-chip" onclick="injectCmd('traceroute 8.8.8.8')">traceroute</div>
+      <div class="cmd-chip" onclick="injectCmd('show crypto isakmp sa')">show VPN SA</div>
+      <div class="cmd-chip" onclick="injectCmd('show vlan brief')">show vlan</div>
+    </div>
+  </div>
+  <div class="side-sec">
+    <h3>Mode Reference</h3>
+    <div style="font-size:10px;font-family:'JetBrains Mono',monospace;line-height:2;color:var(--sub)">
+      <div><span style="color:var(--green)">Router&gt;</span> User EXEC</div>
+      <div><span style="color:var(--green)">Router#</span> Privileged EXEC</div>
+      <div><span style="color:var(--amber)">Router(config)#</span> Global Config</div>
+      <div><span style="color:var(--amber)">Router(config-if)#</span> Interface</div>
+      <div><span style="color:var(--amber)">Router(config-router)#</span> Routing</div>
+      <div><span style="color:var(--amber)">Router(config-line)#</span> Line</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN AREA -->
+<div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+
+  <!-- TERMINAL VIEW -->
+  <div id="view-terminal" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+    <div class="term-tabs">
+      <div class="term-tab act"><div class="term-tab-dot"></div> aman5z-R1 <span class="term-tab-x">×</span></div>
+      <div class="new-tab-btn" onclick="addTab()" title="New Terminal">+</div>
+      <div style="margin-left:auto;font-size:10px;color:var(--sub);font-family:'JetBrains Mono',monospace" id="cmd-counter">Commands: 0</div>
+    </div>
+    <div class="term-area" id="term-output" onclick="focusInput()"></div>
+    <div class="term-input-row">
+      <span class="term-prompt-label" id="prompt-label">aman5z-R1&gt;</span>
+      <input class="term-input" id="term-input" type="text" spellcheck="false" autocomplete="off"
+        placeholder="type command or ? for help"
+        onkeydown="handleKey(event)"
+        oninput="handleTabComplete(event)">
+    </div>
+  </div>
+
+  <!-- TOPOLOGY VIEW -->
+  <div id="view-topology" style="flex:1;display:none;position:relative">
+    <div class="topology" id="topology-canvas"></div>
+  </div>
+
+  <!-- INTERFACES VIEW -->
+  <div id="view-interfaces" style="flex:1;display:none">
+    <div class="info-panel" id="iface-panel"></div>
+  </div>
+
+  <!-- ROUTING VIEW -->
+  <div id="view-routing" style="flex:1;display:none">
+    <div class="info-panel" id="route-panel"></div>
+  </div>
+
+</div>
+</div>
+
+<!-- STATUS BAR -->
+<div class="statusbar">
+  <span class="sb-item green"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green);display:inline-block"></span> Connected</span>
+  <span class="sb-item" id="sb-mode">Mode: User EXEC</span>
+  <span class="sb-item" id="sb-iface">Interface: —</span>
+  <span class="sb-item">IOS: 15.7(3)M</span>
+  <span class="sb-item amber">⚠ Console Line 0</span>
+  <span style="margin-left:auto" class="sb-item" id="sb-time"></span>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  DEVICE STATE
+// ═══════════════════════════════════════════════════════
+const device = {
+  hostname: "aman5z-R1",
+  model: "Cisco 2921",
+  ios: "15.7(3)M",
+  serial: "FTX1234X001",
+  uptime_seconds: 228120,
+  enable_password: "cisco",
+  passwords: { console: "cisco", vty: "cisco" },
+  banner: `
+*************************************************************
+*  Authorized Access Only — aman5z Enterprise Network      *
+*  Unauthorized access is prohibited and monitored.        *
+*  Contact: admin@aman5z.in                                *
+*************************************************************`,
+  interfaces: {
+    "GigabitEthernet0/0": { description:"WAN - ISP Link", ip:"203.0.113.1", mask:"255.255.255.0", status:"up", protocol:"up", duplex:"full", speed:"1000Mbps", mtu:1500, mac:"aabb.cc00.0001", inPkts:9482711, outPkts:4821003, inBytes:12487341120, outBytes:6219048448, encap:"ARPA" },
+    "GigabitEthernet0/1": { description:"LAN - Internal", ip:"192.168.1.1", mask:"255.255.255.0", status:"up", protocol:"up", duplex:"full", speed:"1000Mbps", mtu:1500, mac:"aabb.cc00.0002", inPkts:48271003, outPkts:51823004, inBytes:61273411200, outBytes:65219048448, encap:"ARPA" },
+    "GigabitEthernet0/2": { description:"DMZ - Server Zone", ip:"10.10.10.1", mask:"255.255.255.0", status:"up", protocol:"up", duplex:"full", speed:"1000Mbps", mtu:1500, mac:"aabb.cc00.0003", inPkts:1827300, outPkts:2194801, inBytes:2341120000, outBytes:3048448000, encap:"ARPA" },
+    "Serial0/0/0":        { description:"MPLS to Branch-Dubai", ip:"172.16.0.1", mask:"255.255.255.252", status:"up", protocol:"up", duplex:"N/A", speed:"2Mbps", mtu:1500, mac:"N/A", inPkts:482001, outPkts:491200, inBytes:524288000, outBytes:512000000, encap:"HDLC" },
+    "Serial0/0/1":        { description:"", ip:"unassigned", mask:"", status:"administratively down", protocol:"down", duplex:"N/A", speed:"1Mbps", mtu:1500, mac:"N/A", inPkts:0, outPkts:0, inBytes:0, outBytes:0, encap:"HDLC" },
+    "Loopback0":          { description:"Router ID", ip:"1.1.1.1", mask:"255.255.255.255", status:"up", protocol:"up", duplex:"N/A", speed:"8000Mbps", mtu:65535, mac:"N/A", inPkts:100, outPkts:100, inBytes:8200, outBytes:8200, encap:"Loopback" },
+  },
+  vlans: {
+    1:  {name:"default",    status:"active", ports:["Fa0/1","Fa0/2","Fa0/3","Fa0/4"]},
+    10: {name:"MANAGEMENT", status:"active", ports:["Fa0/10","Fa0/11"]},
+    20: {name:"SERVERS",    status:"active", ports:["Fa0/20","Fa0/21","Fa0/22"]},
+    30: {name:"GUEST",      status:"active", ports:["Fa0/30","Fa0/31"]},
+    99: {name:"NATIVE",     status:"active", ports:["Fa0/24"]},
+  },
+  routes: [
+    {code:"C", network:"203.0.113.0/24",  via:"",           iface:"GigabitEthernet0/0", ad:0,  metric:0, age:"",      desc:"directly connected"},
+    {code:"L", network:"203.0.113.1/32",  via:"",           iface:"GigabitEthernet0/0", ad:0,  metric:0, age:"",      desc:"local"},
+    {code:"C", network:"192.168.1.0/24",  via:"",           iface:"GigabitEthernet0/1", ad:0,  metric:0, age:"",      desc:"directly connected"},
+    {code:"L", network:"192.168.1.1/32",  via:"",           iface:"GigabitEthernet0/1", ad:0,  metric:0, age:"",      desc:"local"},
+    {code:"C", network:"10.10.10.0/24",   via:"",           iface:"GigabitEthernet0/2", ad:0,  metric:0, age:"",      desc:"directly connected"},
+    {code:"L", network:"10.10.10.1/32",   via:"",           iface:"GigabitEthernet0/2", ad:0,  metric:0, age:"",      desc:"local"},
+    {code:"C", network:"172.16.0.0/30",   via:"",           iface:"Serial0/0/0",         ad:0,  metric:0, age:"",      desc:"directly connected"},
+    {code:"S", network:"0.0.0.0/0",       via:"203.0.113.254", iface:"GigabitEthernet0/0", ad:1, metric:0, age:"",   desc:"default route"},
+    {code:"S", network:"10.20.0.0/24",    via:"172.16.0.2", iface:"Serial0/0/0",         ad:1,  metric:0, age:"",      desc:""},
+    {code:"O", network:"10.30.0.0/24",    via:"172.16.0.2", iface:"Serial0/0/0",         ad:110,metric:2, age:"01:22:14",desc:"OSPF"},
+    {code:"O", network:"10.40.0.0/24",    via:"172.16.0.2", iface:"Serial0/0/0",         ad:110,metric:3, age:"00:44:05",desc:"OSPF"},
+  ],
+  arp: [
+    {ip:"192.168.1.10", mac:"0050.7966.6800", iface:"GigabitEthernet0/1", age:7},
+    {ip:"192.168.1.20", mac:"0050.7966.6801", iface:"GigabitEthernet0/1", age:2},
+    {ip:"192.168.1.254",mac:"aabb.cc11.0001", iface:"GigabitEthernet0/1", age:0},
+    {ip:"10.10.10.20",  mac:"0050.7966.6802", iface:"GigabitEthernet0/2", age:5},
+    {ip:"203.0.113.254",mac:"aabb.cc22.0001", iface:"GigabitEthernet0/0", age:0},
+    {ip:"172.16.0.2",   mac:"aabb.cc33.0001", iface:"Serial0/0/0",        age:0},
+  ],
+  ospf: {
+    process: 1, routerId: "1.1.1.1", areas: ["0"],
+    neighbors: [
+      {id:"2.2.2.2", pri:1, state:"FULL/DR",    deadtime:"00:00:36", addr:"172.16.0.2", iface:"Serial0/0/0"},
+      {id:"3.3.3.3", pri:1, state:"FULL/BDR",   deadtime:"00:00:31", addr:"10.10.10.20",iface:"GigabitEthernet0/2"},
+    ]
+  },
+  bgp: {
+    asn: 65001,
+    neighbors: [
+      {addr:"203.0.113.254", remoteAs:65000, state:"Established", upDown:"2d14h", prefixRx:142832, prefixTx:1},
+    ]
+  },
+  cdp: [
+    {device:"aman5z-SW1",localIface:"GigabitEthernet0/1", holdtime:137, capability:"S I", platform:"WS-C2960",remoteIface:"GigabitEthernet0/1"},
+    {device:"aman5z-R2", localIface:"Serial0/0/0",         holdtime:158, capability:"R S",  platform:"Cisco 2921", remoteIface:"Serial0/0/0"},
+  ],
+  access_lists: {
+    "10": {type:"Standard",entries:[
+      {seq:10,action:"permit",src:"192.168.1.0 0.0.0.255"},
+      {seq:20,action:"deny",  src:"any"},
+    ]},
+    "101": {type:"Extended",entries:[
+      {seq:10,action:"permit",proto:"tcp",src:"192.168.1.0 0.0.0.255",dst:"any",port:"eq 80"},
+      {seq:20,action:"permit",proto:"tcp",src:"192.168.1.0 0.0.0.255",dst:"any",port:"eq 443"},
+      {seq:30,action:"permit",proto:"icmp",src:"any",dst:"any",port:""},
+      {seq:40,action:"deny",  proto:"ip", src:"any",dst:"any",port:""},
+    ]}
+  },
+  vpn: [
+    {peer:"203.0.114.5", state:"QM_IDLE",   conn:"1", txPkts:48291, rxPkts:51029, encap:"AES-256", hash:"SHA-256"},
+    {peer:"185.76.44.12", state:"MM_NO_STATE",conn:"0",txPkts:0,    rxPkts:0,    encap:"AES-128", hash:"SHA-1"},
+  ]
+};
+
+// ═══════════════════════════════════════════════════════
+//  TERMINAL STATE
+// ═══════════════════════════════════════════════════════
+let mode = "user";       // user | enable | config | config-if | config-router | config-line | config-vlan
+let currentIface = "";
+let currentLine = "";
+let currentRouter = "";
+let cmdHistory = [];
+let historyIdx = -1;
+let cmdCount = 0;
+let partialCmd = "";
+
+const ENABLE_PW = "cisco";
+
+function getPrompt() {
+  const h = device.hostname;
+  switch(mode) {
+    case "user":          return h + ">";
+    case "enable":        return h + "#";
+    case "config":        return h + "(config)#";
+    case "config-if":     return h + "(config-if)#";
+    case "config-router": return h + "(config-router)#";
+    case "config-line":   return h + "(config-line)#";
+    case "config-vlan":   return h + "(config-vlan)#";
+    default:              return h + "#";
+  }
+}
+
+function updatePrompt() {
+  document.getElementById("prompt-label").textContent = getPrompt();
+  const modeLabels = {
+    user:"User EXEC", enable:"Privileged EXEC", config:"Global Config",
+    "config-if":"Interface Config (" + currentIface + ")",
+    "config-router":"Router Config",
+    "config-line":"Line Config (" + currentLine + ")",
+    "config-vlan":"VLAN Config"
+  };
+  const ml = modeLabels[mode] || mode;
+  document.getElementById("hdr-mode").textContent = ml;
+  document.getElementById("sb-mode").textContent = "Mode: " + ml;
+  if(currentIface) document.getElementById("sb-iface").textContent = "Interface: " + currentIface;
+}
+
+// ═══════════════════════════════════════════════════════
+//  OUTPUT HELPERS
+// ═══════════════════════════════════════════════════════
+function print(text, cls="output") {
+  const area = document.getElementById("term-output");
+  const lines = text.split("\n");
+  lines.forEach(line => {
+    const div = document.createElement("div");
+    div.className = "term-line " + cls;
+    div.textContent = line;
+    area.appendChild(div);
+  });
+  area.scrollTop = area.scrollHeight;
+}
+
+function printPromptLine(cmd) {
+  print(getPrompt() + " " + cmd, "prompt");
+}
+
+function printBlank() { print(""); }
+
+function formatBytes(b) {
+  if(b >= 1073741824) return (b/1073741824).toFixed(2) + " GB";
+  if(b >= 1048576) return (b/1048576).toFixed(1) + " MB";
+  if(b >= 1024) return (b/1024).toFixed(1) + " KB";
+  return b + " B";
+}
+
+function pad(s, n, right=false) {
+  s = String(s);
+  if(right) return s.padEnd(n);
+  return s.padStart(n);
+}
+
+// ═══════════════════════════════════════════════════════
+//  COMMAND PROCESSOR
+// ═══════════════════════════════════════════════════════
+function processCommand(raw) {
+  const cmd = raw.trim();
+  if(!cmd) { print(""); return; }
+  printPromptLine(cmd);
+  cmdHistory.unshift(cmd);
+  if(cmdHistory.length > 100) cmdHistory.pop();
+  historyIdx = -1;
+  cmdCount++;
+  document.getElementById("cmd-counter").textContent = "Commands: " + cmdCount;
+
+  // normalize
+  const c = cmd.toLowerCase().replace(/\s+/g," ");
+  const parts = c.split(" ");
+  const p0 = parts[0], p1 = parts[1]||"", p2 = parts[2]||"", p3 = parts[3]||"", p4 = parts[4]||"";
+
+  // ── MODE TRANSITIONS ──
+  if(c === "enable" || c === "en") {
+    if(mode !== "user") { print("Already in privileged mode.","warn"); return; }
+    mode = "enable"; updatePrompt();
+    print(""); return;
+  }
+  if(c === "disable") {
+    mode = "user"; currentIface = ""; updatePrompt();
+    print(""); return;
+  }
+  if(c === "configure terminal" || c === "conf t") {
+    if(mode !== "enable") { print("% Command not available in current mode","error"); return; }
+    mode = "config"; updatePrompt();
+    print("Enter configuration commands, one per line.  End with CNTL/Z.");
+    return;
+  }
+  if(c === "end" || c === "exit" || c === "^z") {
+    if(mode === "config-if" || mode === "config-router" || mode === "config-line" || mode === "config-vlan") {
+      if(c === "exit") { mode = "config"; currentIface = ""; currentLine = ""; }
+      else             { mode = "enable"; currentIface = ""; currentLine = ""; }
+      updatePrompt(); print(""); return;
+    }
+    if(mode === "config") {
+      mode = c === "exit" ? "enable" : "enable";
+      updatePrompt();
+      print(mode==="user"?"":"");
+      return;
+    }
+    if(mode === "enable") { mode = "user"; updatePrompt(); return; }
+    return;
+  }
+
+  // ── ? HELP ──
+  if(cmd === "?" || c === "?") { printHelp(); return; }
+
+  // ── EXEC COMMANDS (user & enable) ──
+  if(mode === "user" || mode === "enable") {
+    if(handleExec(c, parts, p0, p1, p2, p3)) return;
+  }
+
+  // ── CONFIG COMMANDS ──
+  if(mode === "config") {
+    if(handleConfig(c, parts, p0, p1, p2, p3, p4)) return;
+  }
+  if(mode === "config-if") {
+    if(handleConfigIf(c, parts, p0, p1, p2, p3)) return;
+  }
+  if(mode === "config-router") {
+    if(handleConfigRouter(c, parts, p0, p1, p2, p3)) return;
+  }
+  if(mode === "config-line") {
+    if(handleConfigLine(c, parts, p0, p1, p2, p3)) return;
+  }
+  if(mode === "config-vlan") {
+    if(handleConfigVlan(c, parts, p0, p1, p2, p3)) return;
+  }
+
+  // ── FALLBACK ──
+  print(`% Invalid input detected at '^' marker.\n\n    ${cmd}\n          ^`, "error");
+}
+
+// ═══════════════════════════════════════════════════════
+//  EXEC COMMANDS
+// ═══════════════════════════════════════════════════════
+function handleExec(c, parts, p0, p1, p2, p3) {
+
+  // SHOW commands
+  if(p0 === "show" || p0 === "sh") {
+    const sub = parts.slice(1).join(" ");
+
+    // show version
+    if(sub === "version" || sub === "ver") {
+      showVersion(); return true;
+    }
+    // show ip interface brief
+    if(sub === "ip interface brief" || sub === "ip int br" || sub === "ip int brief") {
+      showIpIntBrief(); return true;
+    }
+    // show interfaces
+    if(sub === "interfaces" || sub === "int") {
+      showInterfaces(); return true;
+    }
+    // show interface <name>
+    if(p1 === "interface" || p1 === "int") {
+      const ifname = resolveIface(parts.slice(2).join(" "));
+      if(ifname) { showInterface(ifname); return true; }
+    }
+    // show ip route
+    if(sub === "ip route" || sub === "ip rou" || sub === "ip ro") {
+      showIpRoute(); return true;
+    }
+    // show running-config
+    if(sub === "running-config" || sub === "run" || sub === "running") {
+      if(mode !== "enable") { print("% Requires privileged EXEC","error"); return true; }
+      showRunningConfig(); return true;
+    }
+    // show startup-config
+    if(sub === "startup-config" || sub === "start") {
+      if(mode !== "enable") { print("% Requires privileged EXEC","error"); return true; }
+      showRunningConfig(true); return true;
+    }
+    // show arp
+    if(sub === "arp") { showArp(); return true; }
+    // show ip arp
+    if(sub === "ip arp" || sub === "ip arp") { showArp(); return true; }
+    // show cdp neighbors
+    if(sub === "cdp neighbors" || sub === "cdp nei" || sub === "cdp neighbors detail") {
+      showCdpNeighbors(sub.includes("detail")); return true;
+    }
+    // show ip ospf neighbor
+    if(sub === "ip ospf neighbor" || sub === "ip ospf nei") { showOspfNeighbors(); return true; }
+    // show ip bgp summary
+    if(sub === "ip bgp summary") { showBgpSummary(); return true; }
+    // show ip bgp
+    if(sub === "ip bgp") { showBgpTable(); return true; }
+    // show crypto isakmp sa
+    if(sub === "crypto isakmp sa") { showIsakmpSa(); return true; }
+    // show crypto ipsec sa
+    if(sub === "crypto ipsec sa") { showIpsecSa(); return true; }
+    // show access-lists
+    if(sub === "access-lists" || sub === "access-list" || sub === "ip access-lists") {
+      showAccessLists(); return true;
+    }
+    // show vlan brief
+    if(sub === "vlan brief" || sub === "vlan") { showVlan(); return true; }
+    // show ip protocols
+    if(sub === "ip protocols") { showIpProtocols(); return true; }
+    // show ip ospf
+    if(sub === "ip ospf") { showOspf(); return true; }
+    // show flash
+    if(sub === "flash" || sub === "flash:") { showFlash(); return true; }
+    // show clock
+    if(sub === "clock") {
+      const n=new Date();
+      print(n.toLocaleTimeString("en-GB",{hour12:false}) + " UTC " + n.toLocaleDateString("en-GB",{weekday:"short",day:"2-digit",month:"short",year:"numeric"}));
+      return true;
+    }
+    // show users
+    if(sub === "users") {
+      printBlank();
+      print("    Line       User       Host(s)              Idle       Location");
+      print("   0 con 0   admin      idle                 00:00:01");
+      print("*  1 vty 0   noc        idle                 00:14:22   192.168.1.10");
+      printBlank();
+      return true;
+    }
+    // show processes cpu
+    if(sub === "processes cpu" || sub === "proc cpu") {
+      showCpu(); return true;
+    }
+    // show memory statistics
+    if(sub === "memory statistics" || sub === "memory stat") {
+      showMemory(); return true;
+    }
+    // show ip nat translations
+    if(sub === "ip nat translations" || sub === "ip nat trans") {
+      showNat(); return true;
+    }
+    // show ip ssh
+    if(sub === "ip ssh") {
+      printBlank();
+      print("SSH Enabled - version 2.0");
+      print("Authentication timeout: 120 secs; Authentication retries: 3");
+      printBlank(); return true;
+    }
+    // show logging
+    if(sub === "logging") { showLogging(); return true; }
+    // show controllers
+    if(sub.startsWith("controllers")) {
+      print("Serial0/0/0 is up"); print("  Encapsulation HDLC");
+      print("  V.35 DTE cable attached, no clock"); return true;
+    }
+    // show ip dhcp binding
+    if(sub === "ip dhcp binding") {
+      printBlank();
+      print("IP address       Client-ID/ Hardware addr   Lease expiration        Type");
+      print("192.168.1.100    0050.7966.6810              Mar 08 2026 08:00:00   Automatic");
+      print("192.168.1.101    0050.7966.6811              Mar 08 2026 09:12:00   Automatic");
+      printBlank(); return true;
+    }
+    // show spanning-tree
+    if(sub === "spanning-tree" || sub === "spanning-tree summary") {
+      showStp(); return true;
+    }
+    print(`% Unknown command: show ${sub}`,"error"); return true;
+  }
+
+  // PING
+  if(p0 === "ping") {
+    if(!p1) { print("% Incomplete command","error"); return true; }
+    doPing(p1); return true;
+  }
+
+  // TRACEROUTE
+  if(p0 === "traceroute" || p0 === "trace") {
+    if(!p1) { print("% Incomplete command","error"); return true; }
+    doTraceroute(p1); return true;
+  }
+
+  // COPY
+  if(p0 === "copy") {
+    if(c === "copy running-config startup-config" || c === "copy run start" || c === "wr" || c === "write memory" || c === "write") {
+      print("Building configuration...\n[OK]"); return true;
+    }
+    if(c === "copy startup-config running-config") {
+      print("Destination filename [running-config]? ");
+      print("2427 bytes copied in 0.822 secs (2953 bytes/sec)"); return true;
+    }
+    print("% Unrecognized command","error"); return true;
+  }
+
+  // CLEAR
+  if(p0 === "clear") {
+    if(c === "clear ip route *") { print("Route table cleared.","warn"); return true; }
+    if(c === "clear arp") { print("ARP cache cleared."); return true; }
+    if(c === "clear counters") { print("Clear \"show interface\" counters on all interfaces [confirm]\nAll interface counters cleared.","warn"); return true; }
+    if(c === "clear line 0") { print("% Line 0 will be cleared. [confirm]\nLine cleared.","warn"); return true; }
+    print("% Unrecognized clear command","error"); return true;
+  }
+
+  // RELOAD
+  if(p0 === "reload") {
+    if(mode !== "enable") { print("% Requires privileged EXEC","error"); return true; }
+    print("Proceed with reload? [confirm]");
+    print("\nSystem configuration has been modified. Save? [yes/no]: ");
+    print("Broadcasting console message to 1 line(s)...\n\nSystem is restarting...","warn");
+    setTimeout(()=>{
+      document.getElementById("term-output").innerHTML = "";
+      printBootSequence();
+    }, 1500);
+    return true;
+  }
+
+  // TELNET / SSH
+  if(p0 === "telnet" || p0 === "ssh") {
+    const host = p0 === "ssh" ? p2 : p1;
+    if(!host) { print("% Incomplete command","error"); return true; }
+    print(`Trying ${host} ...`);
+    setTimeout(()=>{
+      print(`% Connection refused by remote host`,"error");
+    }, 800);
+    return true;
+  }
+
+  // DEBUG
+  if(p0 === "debug") {
+    if(mode !== "enable") { print("% Requires privileged EXEC","error"); return true; }
+    print(`*Mar  7 14:32:01.000: %DEBUG: ${parts.slice(1).join(" ")} debugging is on`,"warn");
+    return true;
+  }
+  if(p0 === "undebug" || c === "no debug all" || c === "undebug all" || c === "u all") {
+    print("All possible debugging has been turned off"); return true;
+  }
+
+  // TERMINAL
+  if(p0 === "terminal") {
+    if(p1 === "length") { print(""); return true; }
+    if(p1 === "monitor") { print("% Console monitoring enabled","info"); return true; }
+    return true;
+  }
+
+  // LOGOUT / QUIT
+  if(c === "logout" || c === "quit" || c === "exit" || c === "lo") {
+    mode = "user"; updatePrompt();
+    print("\naman5z-R1 con0 is now available\n\nPress RETURN to get started.","info");
+    return true;
+  }
+
+  return false;
+}
+
+// ═══════════════════════════════════════════════════════
+//  CONFIG COMMANDS
+// ═══════════════════════════════════════════════════════
+function handleConfig(c, parts, p0, p1, p2, p3, p4) {
+
+  // hostname
+  if(p0 === "hostname") {
+    if(p1) { device.hostname = p1; updatePrompt(); print(""); return true; }
+    print("% Incomplete command","error"); return true;
+  }
+
+  // interface
+  if(p0 === "interface" || p0 === "int") {
+    const ifname = resolveIface(parts.slice(1).join(" "));
+    if(ifname) {
+      currentIface = ifname;
+      mode = "config-if";
+      updatePrompt(); print(""); return true;
+    }
+    print("% Invalid interface name","error"); return true;
+  }
+
+  // ip route
+  if(p0 === "ip" && p1 === "route") {
+    if(!p2) { print("% Incomplete command","error"); return true; }
+    const net = p2 + (p3 ? "/" + cidrFromMask(p3) : "");
+    device.routes.push({code:"S", network:p2 + (p3&&p4?"/"+cidrFromMask(p3):""), via:p4||p3||"", iface:"GigabitEthernet0/0", ad:1, metric:0, age:"", desc:""});
+    print(""); return true;
+  }
+  // no ip route
+  if(p0 === "no" && p1 === "ip" && p2 === "route") {
+    print(""); return true;
+  }
+
+  // router ospf
+  if(p0 === "router" && p1 === "ospf") {
+    mode = "config-router"; currentRouter = "ospf";
+    updatePrompt(); print(""); return true;
+  }
+  // router bgp
+  if(p0 === "router" && p1 === "bgp") {
+    mode = "config-router"; currentRouter = "bgp";
+    updatePrompt(); print(""); return true;
+  }
+  // router rip
+  if(p0 === "router" && p1 === "rip") {
+    mode = "config-router"; currentRouter = "rip";
+    updatePrompt(); print(""); return true;
+  }
+  // router eigrp
+  if(p0 === "router" && p1 === "eigrp") {
+    mode = "config-router"; currentRouter = "eigrp";
+    updatePrompt(); print(""); return true;
+  }
+
+  // line
+  if(p0 === "line") {
+    mode = "config-line"; currentLine = parts.slice(1).join(" ");
+    updatePrompt(); print(""); return true;
+  }
+
+  // vlan
+  if(p0 === "vlan") {
+    const vid = parseInt(p1);
+    if(isNaN(vid)) { print("% Invalid VLAN ID","error"); return true; }
+    if(!device.vlans[vid]) device.vlans[vid] = {name:"VLAN"+vid, status:"active", ports:[]};
+    mode = "config-vlan"; currentLine = p1;
+    updatePrompt(); print(""); return true;
+  }
+
+  // enable secret / password
+  if(p0 === "enable" && p1 === "secret") {
+    device.enable_password = p2 || ""; print(""); return true;
+  }
+  if(p0 === "enable" && p1 === "password") {
+    device.enable_password = p2 || ""; print(""); return true;
+  }
+
+  // service password-encryption
+  if(p0 === "service" && p1 === "password-encryption") {
+    print(""); return true;
+  }
+
+  // no service password-encryption
+  if(p0 === "no" && p1 === "service") {
+    print(""); return true;
+  }
+
+  // banner motd
+  if(p0 === "banner") {
+    print("Enter TEXT message.  End with the character '^'.");
+    print("(Banner set)"); return true;
+  }
+
+  // ip domain-name
+  if(p0 === "ip" && p1 === "domain-name") {
+    print(""); return true;
+  }
+
+  // crypto key generate rsa
+  if(p0 === "crypto" && p1 === "key") {
+    print("The name for the keys will be: aman5z-R1.aman5z.in");
+    print("Choose the size of the key modulus in the range of 360 to 4096 for your\n  General Purpose Keys. Choosing a key modulus greater than 512 may take\n  a few minutes.\n\nHow many bits in the modulus [512]: ");
+    print("% Generating 2048 bit RSA keys, keys will be non-exportable...\n[OK] (elapsed time was 1 seconds)","info"); return true;
+  }
+
+  // ip access-list
+  if(p0 === "ip" && p1 === "access-list") {
+    print(""); return true;
+  }
+  if(p0 === "access-list") {
+    print(""); return true;
+  }
+
+  // ntp server
+  if(p0 === "ntp" && p1 === "server") {
+    print(""); return true;
+  }
+
+  // logging
+  if(p0 === "logging") {
+    print(""); return true;
+  }
+
+  // snmp-server
+  if(p0 === "snmp-server") {
+    print(""); return true;
+  }
+
+  // username
+  if(p0 === "username") {
+    print(""); return true;
+  }
+
+  // aaa
+  if(p0 === "aaa") {
+    print(""); return true;
+  }
+
+  // ip dhcp pool
+  if(p0 === "ip" && p1 === "dhcp") {
+    print(""); return true;
+  }
+
+  // no ip ...
+  if(p0 === "no") {
+    print(""); return true;
+  }
+
+  // do (execute exec commands from config mode)
+  if(p0 === "do") {
+    const doCmd = parts.slice(1).join(" ");
+    const savedMode = mode;
+    mode = "enable";
+    processCommand(doCmd);
+    mode = savedMode;
+    return true;
+  }
+
+  return false;
+}
+
+function handleConfigIf(c, parts, p0, p1, p2, p3) {
+  const iface = device.interfaces[currentIface];
+
+  if(p0 === "ip" && p1 === "address") {
+    if(p2 && p3) {
+      if(iface) { iface.ip = p2; iface.mask = p3; }
+      print(""); return true;
+    }
+    print("% Incomplete command","error"); return true;
+  }
+
+  if(p0 === "no" && p1 === "ip" && p2 === "address") {
+    if(iface) iface.ip = "unassigned";
+    print(""); return true;
+  }
+
+  if(p0 === "no" && p1 === "shutdown") {
+    if(iface) { iface.status = "up"; iface.protocol = "up"; }
+    print(`%LINK-5-CHANGED: Interface ${currentIface}, changed state to up`,"info");
+    print(`%LINEPROTO-5-UPDOWN: Line protocol on Interface ${currentIface}, changed state to up`,"info");
+    updateSideIfaces(); return true;
+  }
+
+  if(p0 === "shutdown" || (p0 === "no" && p1 === "no" && p2 === "shutdown")) {
+    if(p0 === "shutdown") {
+      if(iface) { iface.status = "administratively down"; iface.protocol = "down"; }
+      print(`%LINK-5-CHANGED: Interface ${currentIface}, changed state to administratively down`,"warn");
+      print(`%LINEPROTO-5-UPDOWN: Line protocol on Interface ${currentIface}, changed state to down`,"warn");
+      updateSideIfaces();
+    }
+    return true;
+  }
+
+  if(p0 === "description") {
+    if(iface) iface.description = parts.slice(1).join(" ");
+    print(""); return true;
+  }
+
+  if(p0 === "duplex") {
+    if(iface) iface.duplex = p1;
+    print(""); return true;
+  }
+
+  if(p0 === "speed") {
+    if(iface) iface.speed = p1 + "Mbps";
+    print(""); return true;
+  }
+
+  if(p0 === "mtu") {
+    if(iface) iface.mtu = parseInt(p1)||1500;
+    print(""); return true;
+  }
+
+  if(p0 === "ip" && p1 === "nat") {
+    print(""); return true;
+  }
+  if(p0 === "ip" && p1 === "access-group") {
+    print(""); return true;
+  }
+  if(p0 === "ip" && p1 === "ospf") {
+    print(""); return true;
+  }
+  if(p0 === "ip" && p1 === "helper-address") {
+    print(""); return true;
+  }
+  if(p0 === "bandwidth") {
+    print(""); return true;
+  }
+  if(p0 === "encapsulation") {
+    if(iface) iface.encap = p1.toUpperCase();
+    print(""); return true;
+  }
+  if(p0 === "no") {
+    print(""); return true;
+  }
+  if(p0 === "do") {
+    const doCmd = parts.slice(1).join(" ");
+    const savedMode = mode;
+    mode = "enable";
+    processCommand(doCmd);
+    mode = savedMode;
+    return true;
+  }
+
+  return false;
+}
+
+function handleConfigRouter(c, parts, p0, p1, p2, p3) {
+  const valid = ["network","area","neighbor","redistribute","default-information","passive-interface",
+    "no","distance","router-id","version","auto-summary","no auto-summary","timers","maximum-paths","do"];
+  if(p0 === "do") {
+    const doCmd = parts.slice(1).join(" ");
+    const savedMode = mode; mode = "enable";
+    processCommand(doCmd); mode = savedMode;
+    return true;
+  }
+  print(""); return true;
+}
+
+function handleConfigLine(c, parts, p0, p1, p2, p3) {
+  if(p0 === "do") {
+    const doCmd = parts.slice(1).join(" ");
+    const savedMode = mode; mode = "enable";
+    processCommand(doCmd); mode = savedMode;
+    return true;
+  }
+  // password, login, exec-timeout, transport input, etc.
+  if(["password","login","exec-timeout","transport","stopbits","databits","parity","speed","flowcontrol","no"].includes(p0)) {
+    print(""); return true;
+  }
+  return false;
+}
+
+function handleConfigVlan(c, parts, p0, p1, p2, p3) {
+  if(p0 === "name") {
+    const vid = parseInt(currentLine);
+    if(device.vlans[vid]) device.vlans[vid].name = p1.toUpperCase();
+    print(""); return true;
+  }
+  if(p0 === "state") {
+    print(""); return true;
+  }
+  if(p0 === "do") {
+    const doCmd = parts.slice(1).join(" ");
+    const savedMode = mode; mode = "enable";
+    processCommand(doCmd); mode = savedMode;
+    return true;
+  }
+  print(""); return true;
+}
+
+// ═══════════════════════════════════════════════════════
+//  SHOW COMMANDS OUTPUT
+// ═══════════════════════════════════════════════════════
+function showVersion() {
+  printBlank();
+  print(`Cisco IOS Software, Version 15.7(3)M, RELEASE SOFTWARE (fc2)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2019 by Cisco Systems, Inc.
+Compiled Wed 01-Aug-18 15:26 by prod_rel_team`);
+  printBlank();
+  print(`ROM: System Bootstrap, Version 15.0(1r)M16, RELEASE SOFTWARE (fc1)`);
+  printBlank();
+  print(`${device.hostname} uptime is ${formatUptime(device.uptime_seconds)}`);
+  print(`System returned to ROM by power-on`);
+  print(`System image file is "flash0:c2900-universalk9-mz.SPA.157-3.M.bin"`);
+  printBlank();
+  print(`Last reload type: Normal Reload`);
+  printBlank();
+  print(`Cisco CISCO2921/K9 (revision 1.0) with 512MB/46MB memory.`);
+  print(`Processor board ID ${device.serial}`);
+  print(`4 Gigabit Ethernet interfaces`);
+  print(`2 Serial(sync/async) interfaces`);
+  print(`DRAM configuration is 64 bits wide with parity enabled.`);
+  print(`255K bytes of non-volatile configuration memory.`);
+  print(`250880K bytes of ATA System CompactFlash 0 (Read/Write)`);
+  printBlank();
+  print(`License Info:
+License UDI:
+-------------------------------------------------
+Device#   PID                   SN
+-------------------------------------------------
+*0        CISCO2921/K9          ${device.serial}
+
+Technology Package License Information for Module:'c2900'
+
+----------------------------------------------------------------------
+Technology    Technology-package                  Technology-package
+              Current       Type                  Next reboot
+----------------------------------------------------------------------
+ipbase        ipbasek9      Permanent             ipbasek9
+security      securityk9    EvalRightToUse        securityk9
+uc            None          None                  None
+data          datak9        Permanent             datak9`);
+  printBlank();
+  print(`Configuration register is 0x2102`);
+  printBlank();
+}
+
+function showIpIntBrief() {
+  printBlank();
+  print(pad("Interface",26,true) + "  " + pad("IP-Address",16,true) + "  " + pad("OK?",4,true) + " " + pad("Method",8,true) + " " + pad("Status",24,true) + " " + pad("Protocol",10,true));
+  for(const [name, iface] of Object.entries(device.interfaces)) {
+    const ip = iface.ip || "unassigned";
+    const ok = ip !== "unassigned" ? "YES" : "NO ";
+    const method = ip !== "unassigned" ? "manual" : "unset ";
+    print(pad(name,26,true) + "  " + pad(ip,16,true) + "  " + ok + "  " + pad(method,8,true) + " " + pad(iface.status,24,true) + " " + iface.protocol);
+  }
+  printBlank();
+}
+
+function showInterfaces() {
+  for(const [name, iface] of Object.entries(device.interfaces)) {
+    showInterface(name);
+  }
+}
+
+function showInterface(name) {
+  const iface = device.interfaces[name];
+  if(!iface) { print(`% ${name}: incorrect interface name`,"error"); return; }
+  printBlank();
+  const updown = iface.status === "up" ? "up" : iface.status;
+  print(`${name} is ${updown}, line protocol is ${iface.protocol}`);
+  if(iface.description) print(`  Description: ${iface.description}`);
+  if(iface.ip && iface.ip !== "unassigned")
+    print(`  Internet address is ${iface.ip}/${cidrFromMask(iface.mask)}`);
+  else
+    print(`  Internet protocol processing disabled`);
+  print(`  MTU ${iface.mtu} bytes, BW 1000000 Kbit/sec, DLY 100 usec`);
+  print(`  reliability 255/255, txload 1/255, rxload 1/255`);
+  print(`  Encapsulation ${iface.encap || "ARPA"}, loopback not set`);
+  if(iface.duplex !== "N/A") {
+    print(`  Full-duplex, ${iface.speed}, media type is RJ45`);
+    print(`  output flow-control is unsupported, input flow-control is unsupported`);
+  }
+  print(`  ARP type: ARPA, ARP Timeout 04:00:00`);
+  if(iface.mac !== "N/A") print(`  Hardware is ISR4451-X-4x1GE, address is ${iface.mac} (bia ${iface.mac})`);
+  print(`  Last input 00:00:00, output 00:00:01, output hang never`);
+  print(`  Last clearing of "show interface" counters never`);
+  print(`  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0`);
+  print(`  5 minute input rate 1000 bits/sec, 2 packets/sec`);
+  print(`  5 minute output rate 1000 bits/sec, 1 packets/sec`);
+  print(`     ${iface.inPkts.toLocaleString()} packets input, ${iface.inBytes.toLocaleString()} bytes, 0 no buffer`);
+  print(`     Received 0 broadcasts (0 IP multicasts)`);
+  print(`     0 runts, 0 giants, 0 throttles`);
+  print(`     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored`);
+  print(`     0 watchdog, 0 multicast, 0 pause input`);
+  print(`     ${iface.outPkts.toLocaleString()} packets output, ${iface.outBytes.toLocaleString()} bytes, 0 underruns`);
+  print(`     0 output errors, 0 collisions, 2 interface resets`);
+  printBlank();
+}
+
+function showIpRoute() {
+  printBlank();
+  print(`Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override, p - overrides from PfR`);
+  printBlank();
+  print(`Gateway of last resort is 203.0.113.254 to network 0.0.0.0`);
+  printBlank();
+  print(`S*    0.0.0.0/0 [1/0] via 203.0.113.254, GigabitEthernet0/0`);
+  printBlank();
+  print(`      1.0.0.0/32 is subnetted, 1 subnets`);
+  print(`C        1.1.1.1 is directly connected, Loopback0`);
+  printBlank();
+  print(`      10.0.0.0/8 is variably subnetted, 4 subnets, 3 masks`);
+  print(`C        10.10.10.0/24 is directly connected, GigabitEthernet0/2`);
+  print(`L        10.10.10.1/32 is directly connected, GigabitEthernet0/2`);
+  print(`S        10.20.0.0/24 [1/0] via 172.16.0.2`);
+  print(`O        10.30.0.0/24 [110/2] via 172.16.0.2, 01:22:14, Serial0/0/0`);
+  print(`O        10.40.0.0/24 [110/3] via 172.16.0.2, 00:44:05, Serial0/0/0`);
+  printBlank();
+  print(`      172.16.0.0/30 is subnetted, 1 subnets`);
+  print(`C        172.16.0.0/30 is directly connected, Serial0/0/0`);
+  printBlank();
+  print(`      192.168.1.0/24 is variably subnetted, 2 subnets, 2 masks`);
+  print(`C        192.168.1.0/24 is directly connected, GigabitEthernet0/1`);
+  print(`L        192.168.1.1/32 is directly connected, GigabitEthernet0/1`);
+  printBlank();
+  print(`      203.0.113.0/24 is variably subnetted, 2 subnets, 2 masks`);
+  print(`C        203.0.113.0/24 is directly connected, GigabitEthernet0/0`);
+  print(`L        203.0.113.1/32 is directly connected, GigabitEthernet0/0`);
+  printBlank();
+}
+
+function showRunningConfig(startup=false) {
+  const title = startup ? "startup-config" : "running-config";
+  printBlank();
+  print(`Building configuration...`);
+  printBlank();
+  print(`Current ${title}:`);
+  print(`!`,"comment");
+  print(`! Last configuration change at 14:22:10 UTC Fri Mar 7 2026`);
+  print(`!`,"comment");
+  print(`version 15.7`,"highlight");
+  print(`service timestamps debug datetime msec`);
+  print(`service timestamps log datetime msec`);
+  print(`service password-encryption`);
+  print(`!`,"comment");
+  print(`hostname ${device.hostname}`,"highlight");
+  print(`!`,"comment");
+  print(`boot-start-marker`);
+  print(`boot-end-marker`);
+  print(`!`,"comment");
+  print(`enable secret 5 $1$mERr$hx5rVt7rPNoS4wqbXKX7m0`);
+  print(`!`,"comment");
+  print(`aaa new-model`);
+  print(`!`,"comment");
+  print(`ip domain name aman5z.in`);
+  print(`ip cef`);
+  print(`!`,"comment");
+  for(const [name, iface] of Object.entries(device.interfaces)) {
+    print(`!`,"comment");
+    print(`interface ${name}`,"highlight");
+    if(iface.description) print(` description ${iface.description}`);
+    if(iface.ip && iface.ip !== "unassigned")
+      print(` ip address ${iface.ip} ${iface.mask}`);
+    else
+      print(` no ip address`);
+    if(iface.status === "administratively down") print(` shutdown`);
+    if(iface.duplex !== "N/A") {
+      print(` duplex ${iface.duplex}`);
+      print(` speed ${iface.speed.replace("Mbps","").trim()}`);
+    }
+  }
+  print(`!`,"comment");
+  print(`router ospf 1`,"highlight");
+  print(` router-id 1.1.1.1`);
+  print(` network 192.168.1.0 0.0.0.255 area 0`);
+  print(` network 10.10.10.0 0.0.0.255 area 0`);
+  print(` network 172.16.0.0 0.0.0.3 area 0`);
+  print(`!`,"comment");
+  print(`router bgp 65001`,"highlight");
+  print(` bgp log-neighbor-changes`);
+  print(` neighbor 203.0.113.254 remote-as 65000`);
+  print(`!`,"comment");
+  print(`ip route 0.0.0.0 0.0.0.0 203.0.113.254`);
+  print(`ip route 10.20.0.0 255.255.255.0 172.16.0.2`);
+  print(`!`,"comment");
+  print(`ip access-list extended OUTSIDE-IN`);
+  print(` permit tcp any host 10.10.10.20 eq 80`);
+  print(` permit tcp any host 10.10.10.20 eq 443`);
+  print(` deny   ip any any log`);
+  print(`!`,"comment");
+  print(`line con 0`,"highlight");
+  print(` password 7 14141B180F0B7B7977`);
+  print(` logging synchronous`);
+  print(` login`);
+  print(`line vty 0 4`,"highlight");
+  print(` access-class 10 in`);
+  print(` password 7 14141B180F0B7B7977`);
+  print(` login local`);
+  print(` transport input ssh`);
+  print(`!`,"comment");
+  print(`end`,"highlight");
+  printBlank();
+}
+
+function showArp() {
+  printBlank();
+  print(`Protocol  Address          Age (min)  Hardware Addr   Type   Interface`);
+  for(const entry of device.arp) {
+    print(`Internet  ${pad(entry.ip,15,true)}  ${pad(entry.age,8)}   ${entry.mac}   ARPA   ${entry.iface}`);
+  }
+  printBlank();
+}
+
+function showCdpNeighbors(detail) {
+  printBlank();
+  print(`Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge
+                  S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone,
+                  D - Remote, C - CVTA, M - Two-port Mac Relay`);
+  printBlank();
+  if(!detail) {
+    print(`Device ID        Local Intrfce     Holdtme    Capability  Platform  Port ID`);
+    for(const n of device.cdp) {
+      print(`${pad(n.device,17,true)}${pad(n.localIface,18,true)}${pad(n.holdtime,9)}  ${pad(n.capability,10,true)}${pad(n.platform,10,true)}${n.remoteIface}`);
+    }
+  } else {
+    for(const n of device.cdp) {
+      printBlank();
+      print(`-------------------------`);
+      print(`Device ID: ${n.device}`);
+      print(`  Entry address(es):`);
+      print(`    IP address: 192.168.${Math.floor(Math.random()*254)+1}.1`);
+      print(`  Platform: ${n.platform}, Capabilities: ${n.capability}`);
+      print(`  Interface: ${n.localIface}, Port ID (outgoing port): ${n.remoteIface}`);
+      print(`  Holdtime : ${n.holdtime} sec`);
+      print(`  Version :`);
+      print(`  Cisco IOS Software, Version 15.2(7)E3`);
+      print(`  Advertisement version: 2`);
+    }
+  }
+  printBlank();
+}
+
+function showOspfNeighbors() {
+  printBlank();
+  print(`Neighbor ID     Pri   State           Dead Time   Address         Interface`);
+  for(const n of device.ospf.neighbors) {
+    print(`${pad(n.id,16,true)}${pad(n.pri,5)}  ${pad(n.state,16,true)}${pad(n.deadtime,12)}  ${pad(n.addr,16,true)}${n.iface}`);
+  }
+  printBlank();
+}
+
+function showBgpSummary() {
+  printBlank();
+  print(`BGP router identifier 1.1.1.1, local AS number ${device.bgp.asn}`);
+  print(`BGP table version is 148353, main routing table version 148353`);
+  print(`142832 network entries using 19983680 bytes of memory`);
+  print(`142833 path entries using 11426640 bytes of memory`);
+  printBlank();
+  print(`Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd`);
+  for(const n of device.bgp.neighbors) {
+    print(`${pad(n.addr,16,true)}4    ${pad(n.remoteAs,8)}${pad("148852",8)}${pad("148741",8)}${pad("148353",9)}    0    0 ${pad(n.upDown,9)} ${n.prefixRx.toLocaleString()}`);
+  }
+  printBlank();
+}
+
+function showBgpTable() {
+  printBlank();
+  print(`BGP table version is 148353, local router ID is 1.1.1.1`);
+  print(`Status codes: s suppressed, d damped, h history, * valid, > best, i - internal`);
+  print(`Origin codes: i - IGP, e - EGP, ? - incomplete`);
+  printBlank();
+  print(`   Network          Next Hop            Metric LocPrf Weight Path`);
+  print(`*> 0.0.0.0          203.0.113.254              0             0 65000 i`);
+  print(`*> 8.8.0.0/16       203.0.113.254              0             0 65000 15169 i`);
+  print(`*> 1.0.0.0/8        203.0.113.254              0             0 65000 13335 i`);
+  printBlank();
+  print(`Total number of prefixes 142832`);
+  printBlank();
+}
+
+function showIsakmpSa() {
+  printBlank();
+  print(`IPv4 Crypto ISAKMP SA`);
+  print(`dst             src             state          conn-id status`);
+  for(const v of device.vpn) {
+    print(`${pad(v.peer,16,true)}${pad("203.0.113.1",16,true)}${pad(v.state,15,true)}${pad(v.conn,8)} ACTIVE`);
+  }
+  printBlank();
+}
+
+function showIpsecSa() {
+  printBlank();
+  print(`interface: GigabitEthernet0/0`);
+  print(`    Crypto map tag: VPN_MAP, local addr 203.0.113.1`);
+  printBlank();
+  print(`   local  ident (addr/mask/prot/port): (192.168.1.0/255.255.255.0/0/0)`);
+  print(`   remote ident (addr/mask/prot/port): (10.20.0.0/255.255.255.0/0/0)`);
+  print(`   current_peer 203.0.114.5 port 500`);
+  print(`     PERMIT, flags={origin_is_acl}`);
+  print(`    #pkts encaps: 48291, #pkts encrypt: 48291, #pkts digest: 48291`);
+  print(`    #pkts decaps: 51029, #pkts decrypt: 51029, #pkts verify: 51029`);
+  print(`    #pkts compressed: 0, #pkts decompressed: 0`);
+  print(`    #pkts not compressed: 0, #pkts compr. failed: 0`);
+  printBlank();
+  print(`     inbound esp sas:`);
+  print(`      spi: 0x3A7D8E21(980754977)`);
+  print(`        transform: esp-256-aes esp-sha256-hmac ,`);
+  print(`        in use settings ={Tunnel, }`);
+  printBlank();
+  print(`     outbound esp sas:`);
+  print(`      spi: 0x7C4E2B1F(2085454623)`);
+  print(`        transform: esp-256-aes esp-sha256-hmac ,`);
+  print(`        in use settings ={Tunnel, }`);
+  printBlank();
+}
+
+function showAccessLists() {
+  printBlank();
+  for(const [num, acl] of Object.entries(device.access_lists)) {
+    print(`${acl.type} IP access list ${num}`,"highlight");
+    for(const e of acl.entries) {
+      if(acl.type === "Standard")
+        print(`    ${e.seq} ${e.action} ${e.src} (${Math.floor(Math.random()*10000)} matches)`);
+      else
+        print(`    ${e.seq} ${e.action} ${e.proto} ${e.src} ${e.dst} ${e.port} (${Math.floor(Math.random()*50000)} matches)`);
+    }
+  }
+  printBlank();
+}
+
+function showVlan() {
+  printBlank();
+  print(`VLAN Name                             Status    Ports`);
+  print(`---- -------------------------------- --------- -------------------------------`);
+  for(const [id, vlan] of Object.entries(device.vlans)) {
+    print(`${pad(id,4,false)}  ${pad(vlan.name,32,true)} ${pad(vlan.status,9,true)} ${vlan.ports.join(", ")}`);
+  }
+  printBlank();
+  print(`VLAN Type  SAID       MTU   Parent RingNo BridgeNo Stp  BrdgMode Trans1 Trans2`);
+  print(`---- ----- ---------- ----- ------ ------ -------- ---- -------- ------ ------`);
+  for(const [id] of Object.entries(device.vlans)) {
+    print(`${pad(id,4,false)}  enet  ${pad(100000+parseInt(id),10)} 1500  -      -      -        -    -        0      0`);
+  }
+  printBlank();
+}
+
+function showIpProtocols() {
+  printBlank();
+  print(`*** IP Routing is NSF aware ***`);
+  printBlank();
+  print(`Routing Protocol is "ospf 1"`);
+  print(`  Outgoing update filter list for all interfaces is not set`);
+  print(`  Incoming update filter list for all interfaces is not set`);
+  print(`  Router ID 1.1.1.1`);
+  print(`  Number of areas in this router is 1. 1 normal 0 stub 0 nssa`);
+  print(`  Maximum path: 4`);
+  print(`  Routing for Networks:`);
+  print(`    192.168.1.0 0.0.0.255 area 0`);
+  print(`    10.10.10.0 0.0.0.255 area 0`);
+  print(`    172.16.0.0 0.0.0.3 area 0`);
+  print(`  Routing Information Sources:`);
+  print(`    Gateway         Distance      Last Update`);
+  print(`    2.2.2.2              110      01:22:14`);
+  print(`    3.3.3.3              110      00:44:05`);
+  print(`  Distance: (default is 110)`);
+  printBlank();
+}
+
+function showOspf() {
+  printBlank();
+  print(` Routing Process "ospf 1" with ID 1.1.1.1`);
+  print(` Start time: 00:01:04.380, Time elapsed: 2d14h`);
+  print(` Supports only single TOS(TOS0) routes`);
+  print(` Supports opaque LSA`);
+  print(` Supports Link-local Signaling (LLS)`);
+  print(` Supports area transit capability`);
+  print(` Connected to MPLS VPN Superbackbone`);
+  print(` Event-log enabled, Maximum number of events: 1000, Mode: cyclic`);
+  print(` Router is not originating router-LSAs with maximum metric`);
+  print(` Initial SPF schedule delay 5000 msecs`);
+  print(` Minimum hold time between two consecutive SPFs 10000 msecs`);
+  print(` Maximum wait time between two consecutive SPFs 10000 msecs`);
+  print(` Incremental-SPF disabled`);
+  print(` Minimum LSA interval 5 secs`);
+  print(` Minimum LSA arrival 1000 msecs`);
+  print(` LSA group pacing timer 240 secs`);
+  print(`    Area BACKBONE(0)`);
+  print(`        Number of interfaces in this area is 3`);
+  print(`        Area has no authentication`);
+  print(`        SPF algorithm last executed 00:44:05.012 ago`);
+  print(`        SPF algorithm executed 14 times`);
+  print(`        Area ranges are`);
+  print(`        Number of LSA 8. Checksum Sum 0x04284D`);
+  printBlank();
+}
+
+function showFlash() {
+  printBlank();
+  print(`-#- --length-- -----date/time------ path`);
+  print(`  1   68831748 Mar 01 2024 09:10:12 +00:00 c2900-universalk9-mz.SPA.157-3.M.bin`);
+  print(`  2      28672 Mar 01 2024 09:11:04 +00:00 c2900-universalk9-mz.SPA.157-3.M.bin.pkg`);
+  print(`  3       3096 Oct 15 2023 07:30:00 +00:00 cpconfig-29xx.cfg`);
+  print(`  4       3864 Oct 15 2023 07:30:00 +00:00 cpexpress.tar`);
+  printBlank();
+  print(`256869888 bytes available (72155136 bytes used)`);
+  printBlank();
+}
+
+function showCpu() {
+  printBlank();
+  print(`CPU utilization for five seconds: 4%/0%; one minute: 6%; five minutes: 5%`);
+  printBlank();
+  print(` PID Runtime(ms)     Invoked      uSecs   5Sec   1Min   5Min TTY Process`);
+  print(`   1           4        1050          3  0.00%  0.00%  0.00%   0 Chunk Manager`);
+  print(`   2          16         101        158  0.00%  0.00%  0.00%   0 Load Meter`);
+  print(`   3          0            1          0  0.00%  0.00%  0.00%   0 BGP Scheduler`);
+  print(`  11        1764       12084        146  0.16%  0.14%  0.12%   0 CDP Protocol`);
+  print(`  22      248100      3948211         62  0.00%  0.07%  0.05%   0 IP Input`);
+  print(`  42         480       24198         19  0.00%  0.00%  0.00%   0 OSPF Hello`);
+  printBlank();
+}
+
+function showMemory() {
+  printBlank();
+  print(`                Head    Total(b)     Used(b)     Free(b)   Lowest(b)  Largest(b)`);
+  print(`Processor   65B9FFF0   536870912   196608000   340262912   330100000   329000000`);
+  print(`lsmpi_io    6ABC9F70    6295128     6294296         832         832         832`);
+  printBlank();
+}
+
+function showNat() {
+  printBlank();
+  print(`Pro Inside global      Inside local       Outside local      Outside global`);
+  print(`tcp 203.0.113.1:12345  192.168.1.10:54321 8.8.8.8:53         8.8.8.8:53`);
+  print(`tcp 203.0.113.1:12346  192.168.1.20:43210 142.250.200.78:443 142.250.200.78:443`);
+  print(`udp 203.0.113.1:5353   192.168.1.10:5353  8.8.4.4:53         8.8.4.4:53`);
+  printBlank();
+}
+
+function showLogging() {
+  printBlank();
+  print(`Syslog logging: enabled (0 messages dropped, 0 messages rate-limited,`);
+  print(`                0 flushes, 0 overruns, xml disabled, filtering disabled)`);
+  printBlank();
+  print(`No Active Message Discriminator.`);
+  printBlank();
+  print(`No Inactive Message Discriminator.`);
+  printBlank();
+  print(`    Console logging: level debugging, 412 messages logged, xml disabled,`);
+  print(`                     filtering disabled`);
+  print(`    Monitor logging: level debugging, 0 messages logged, xml disabled,`);
+  print(`                     filtering disabled`);
+  print(`    Buffer logging:  level debugging, 412 messages logged, xml disabled,`);
+  print(`                    filtering disabled`);
+  print(`    Logging Exception size (4096 bytes)`);
+  print(`    Count and timestamp logging messages: disabled`);
+  print(`    Persistent logging: disabled`);
+  printBlank();
+  print(`Log Buffer (8192 bytes):`);
+  print(`*Mar  7 14:32:01.123: %LINK-3-UPDOWN: Interface GigabitEthernet0/0, changed state to up`);
+  print(`*Mar  7 14:25:58.001: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 10.0.0.5]`);
+  print(`*Mar  7 13:30:00.000: %LINK-3-UPDOWN: Interface Serial0/0/1, changed state to down`);
+  printBlank();
+}
+
+function showStp() {
+  printBlank();
+  print(`Switch is in rapid-pvst mode`);
+  print(`Root bridge for: VLAN0010`);
+  printBlank();
+  print(`Name                   Blocking Listening Learning Forwarding STP Active`);
+  print(`---------------------- -------- --------- -------- ---------- ----------`);
+  print(`VLAN0001                     0         0        0          4          4`);
+  print(`VLAN0010                     0         0        0          2          2`);
+  print(`VLAN0020                     1         0        0          2          3`);
+  printBlank();
+}
+
+// ═══════════════════════════════════════════════════════
+//  PING & TRACEROUTE
+// ═══════════════════════════════════════════════════════
+function doPing(target) {
+  printBlank();
+  print(`Type escape sequence to abort.`);
+  print(`Sending 5, 100-byte ICMP Echos to ${target}, timeout is 2 seconds:`);
+  
+  const isReachable = !target.startsWith("192.168.200") && !target.startsWith("10.99");
+  const success = isReachable ? "!" : ".";
+  const successRate = isReachable ? 100 : 0;
+  const rtt = isReachable ? (Math.floor(Math.random()*20)+1) : 0;
+  
+  let result = "";
+  for(let i=0;i<5;i++) result += success;
+  print(result, "highlight");
+  if(isReachable)
+    print(`Success rate is ${successRate} percent (5/5), round-trip min/avg/max = ${rtt}/${rtt+1}/${rtt+3} ms`);
+  else
+    print(`Success rate is 0 percent (0/5)`, "error");
+  printBlank();
+}
+
+function doTraceroute(target) {
+  printBlank();
+  print(`Type escape sequence to abort.`);
+  print(`Tracing the route to ${target}`);
+  print(`VRF info: (vrf in name/id, vrf out name/id)`);
+  printBlank();
+  const hops = [
+    ["203.0.113.254","ISP-Gateway"],
+    ["10.44.0.1","ISP-Core-1"],
+    ["72.14.209.1","Peering-1"],
+    [target.includes("8.8") ? "8.8.8.8" : target,"Destination"],
+  ];
+  hops.forEach((hop,i) => {
+    const ms = 2 + i*8 + Math.floor(Math.random()*5);
+    setTimeout(()=>{
+      print(`  ${i+1}   ${ms} msec  ${ms+1} msec  ${ms} msec`);
+      print(`      ${hop[0]} [AS${65000+i}]  ${hop[1]}`);
+      if(i === hops.length-1) { printBlank(); print(`Trace complete.`); printBlank(); }
+    }, i * 300);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  HELP
+// ═══════════════════════════════════════════════════════
+function printHelp() {
+  if(mode === "user") {
+    print(`\n  connect         Open a terminal connection`);
+    print(`  disable         Turn off privileged commands`);
+    print(`  enable          Turn on privileged commands`);
+    print(`  exit            Exit from the EXEC`);
+    print(`  logout          Exit from the EXEC`);
+    print(`  ping            Send echo messages`);
+    print(`  show            Show running system information`);
+    print(`  telnet          Open a telnet connection`);
+    print(`  traceroute      Trace route to destination`);
+    printBlank();
+  } else if(mode === "enable") {
+    print(`\n  clear           Reset functions`);
+    print(`  clock           Manage the system clock`);
+    print(`  configure       Enter configuration mode`);
+    print(`  copy            Copy from one file to another`);
+    print(`  debug           Debugging functions`);
+    print(`  delete          Delete a file`);
+    print(`  dir             List files on a filesystem`);
+    print(`  disable         Turn off privileged commands`);
+    print(`  enable          Turn on privileged commands`);
+    print(`  erase           Erase a filesystem`);
+    print(`  exit            Exit from the EXEC`);
+    print(`  no              Negate a command or set its defaults`);
+    print(`  ping            Send echo messages`);
+    print(`  reload          Halt and perform a cold restart`);
+    print(`  show            Show running system information`);
+    print(`  ssh             Open a secure shell client connection`);
+    print(`  telnet          Open a telnet connection`);
+    print(`  traceroute      Trace route to destination`);
+    print(`  undebug         Disable debugging functions`);
+    print(`  write           Write running configuration to memory`);
+    printBlank();
+  } else {
+    print(`\n  aaa             Authentication, Authorization and Accounting`);
+    print(`  access-list     Add an access list entry`);
+    print(`  banner          Define a login banner`);
+    print(`  boot            Modify system boot parameters`);
+    print(`  crypto          Encryption module`);
+    print(`  do              To run exec commands in config mode`);
+    print(`  enable          Modify enable password parameters`);
+    print(`  end             Exit from configure mode`);
+    print(`  exit            Exit from this submode`);
+    print(`  hostname        Set system's network name`);
+    print(`  interface       Select an interface to configure`);
+    print(`  ip              Global IP configuration subcommands`);
+    print(`  line            Configure a terminal line`);
+    print(`  logging         Modify message logging facilities`);
+    print(`  no              Negate a command or set its defaults`);
+    print(`  ntp             Configure NTP`);
+    print(`  router          Enable a routing process`);
+    print(`  service         Modify use of network based services`);
+    print(`  snmp-server     Modify SNMP parameters`);
+    print(`  username        Establish User Name Authentication`);
+    print(`  vlan            Vlan commands`);
+    printBlank();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  KEY HANDLER
+// ═══════════════════════════════════════════════════════
+function handleKey(e) {
+  const input = document.getElementById("term-input");
+
+  if(e.key === "Enter") {
+    const val = input.value;
+    input.value = "";
+    partialCmd = "";
+    processCommand(val);
+    return;
+  }
+
+  if(e.key === "ArrowUp") {
+    e.preventDefault();
+    if(historyIdx < cmdHistory.length - 1) {
+      historyIdx++;
+      input.value = cmdHistory[historyIdx];
+    }
+    return;
+  }
+
+  if(e.key === "ArrowDown") {
+    e.preventDefault();
+    if(historyIdx > 0) { historyIdx--; input.value = cmdHistory[historyIdx]; }
+    else { historyIdx = -1; input.value = ""; }
+    return;
+  }
+
+  if(e.ctrlKey && e.key === "c") {
+    print(input.value + "^C","error");
+    input.value = ""; return;
+  }
+
+  if(e.ctrlKey && e.key === "z") {
+    input.value = "^Z";
+    return;
+  }
+
+  if(e.key === "Tab") {
+    e.preventDefault();
+    tabComplete(input.value);
+    return;
+  }
+
+  if(e.key === "?" && e.shiftKey) {
+    e.preventDefault();
+    print(input.value + " ?","output");
+    printContextHelp(input.value.trim());
+    return;
+  }
+}
+
+function handleTabComplete(e) {
+  // handled in keydown
+}
+
+function tabComplete(partial) {
+  const input = document.getElementById("term-input");
+  const c = partial.toLowerCase().trim();
+  const ALL_COMMANDS = [
+    "show version","show ip interface brief","show ip route","show running-config","show startup-config",
+    "show interfaces","show arp","show ip arp","show cdp neighbors","show ip ospf neighbor",
+    "show ip bgp summary","show ip bgp","show crypto isakmp sa","show crypto ipsec sa",
+    "show access-lists","show vlan brief","show ip protocols","show ip ospf","show flash",
+    "show clock","show users","show processes cpu","show memory statistics","show ip nat translations",
+    "show ip ssh","show logging","show spanning-tree","show ip dhcp binding","show controllers",
+    "enable","disable","configure terminal","conf t","end","exit","logout",
+    "ping","traceroute","copy running-config startup-config","write memory","reload",
+    "interface GigabitEthernet0/0","interface GigabitEthernet0/1","interface GigabitEthernet0/2",
+    "interface Serial0/0/0","interface Loopback0",
+    "ip address","ip route","no shutdown","shutdown","description",
+    "router ospf","router bgp","router eigrp","router rip",
+    "hostname","banner motd","line console 0","line vty 0 4",
+    "no ip address","no shutdown","do show"
+  ];
+  const matches = ALL_COMMANDS.filter(cmd => cmd.toLowerCase().startsWith(c));
+  if(matches.length === 1) {
+    input.value = matches[0];
+  } else if(matches.length > 1) {
+    print(partial + "\t<tab>","output");
+    print(matches.map(m=>m.padEnd(40)).join("\n"),"info");
+  }
+}
+
+function printContextHelp(partial) {
+  const showHelp = {
+    "show version":"Display software/hardware version",
+    "show ip interface brief":"Brief interface info",
+    "show ip route":"Routing table",
+    "show running-config":"Current config in RAM",
+    "show interfaces":"Detailed interface stats",
+    "show arp":"ARP table",
+    "show cdp neighbors":"CDP neighbor table",
+    "show ip ospf neighbor":"OSPF neighbor table",
+    "show ip bgp summary":"BGP summary",
+    "show crypto isakmp sa":"IKEv1 phase 1 SA",
+    "show access-lists":"Access control lists",
+    "show vlan brief":"VLAN table",
+    "show ip protocols":"Routing protocols",
+    "show flash":"Flash filesystem",
+    "show clock":"System clock",
+    "show users":"Active users",
+    "show processes cpu":"CPU utilization",
+  };
+  const c = partial.toLowerCase();
+  let found = false;
+  for(const [cmd, desc] of Object.entries(showHelp)) {
+    if(cmd.startsWith(c)) { print(`  ${cmd.padEnd(35)} ${desc}`,"info"); found = true; }
+  }
+  if(!found) print(`  <cr>`, "info");
+  printBlank();
+}
+
+// ═══════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════
+function resolveIface(name) {
+  const n = name.toLowerCase().replace(/\s+/g,"");
+  const map = {
+    "gi0/0":"GigabitEthernet0/0","gi0/1":"GigabitEthernet0/1","gi0/2":"GigabitEthernet0/2",
+    "g0/0":"GigabitEthernet0/0","g0/1":"GigabitEthernet0/1","g0/2":"GigabitEthernet0/2",
+    "gigabitethernet0/0":"GigabitEthernet0/0","gigabitethernet0/1":"GigabitEthernet0/1","gigabitethernet0/2":"GigabitEthernet0/2",
+    "s0/0/0":"Serial0/0/0","s0/0/1":"Serial0/0/1",
+    "serial0/0/0":"Serial0/0/0","serial0/0/1":"Serial0/0/1",
+    "lo0":"Loopback0","loopback0":"Loopback0",
+  };
+  return map[n] || (device.interfaces[name] ? name : null);
+}
+
+function cidrFromMask(mask) {
+  if(!mask) return 24;
+  const parts = mask.split(".");
+  let bits = 0;
+  for(const p of parts) { let b = parseInt(p); while(b > 0) { bits += b & 1; b >>= 1; } }
+  return bits;
+}
+
+function formatUptime(secs) {
+  const d = Math.floor(secs / 86400);
+  const h = Math.floor((secs % 86400) / 3600);
+  const m = Math.floor((secs % 3600) / 60);
+  return `${d} day${d!==1?"s":""}, ${h} hour${h!==1?"s":""}, ${m} minute${m!==1?"s":""}`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  VIEW SWITCHER
+// ═══════════════════════════════════════════════════════
+function switchView(view, el) {
+  document.querySelectorAll(".htab").forEach(t=>t.classList.remove("act"));
+  el.classList.add("act");
+  document.getElementById("view-terminal").style.display = view === "terminal" ? "flex" : "none";
+  document.getElementById("view-topology").style.display = view === "topology" ? "flex" : "none";
+  document.getElementById("view-interfaces").style.display = view === "interfaces" ? "flex" : "none";
+  document.getElementById("view-routing").style.display = view === "routing" ? "flex" : "none";
+  if(view === "topology") renderTopology();
+  if(view === "interfaces") renderIfacePanel();
+  if(view === "routing") renderRoutePanel();
+}
+
+function focusInput() {
+  document.getElementById("term-input").focus();
+}
+
+function injectCmd(cmd) {
+  document.getElementById("term-input").value = cmd;
+  switchView("terminal", document.querySelector(".htab"));
+  document.getElementById("term-input").focus();
+  processCommand(cmd);
+  document.getElementById("term-input").value = "";
+}
+
+function addTab() {
+  const tabs = document.querySelector(".term-tabs");
+  const newTab = document.createElement("div");
+  newTab.className = "term-tab";
+  newTab.innerHTML = `<div class="term-tab-dot"></div> Session ${Math.floor(Math.random()*99)+2} <span class="term-tab-x">×</span>`;
+  tabs.insertBefore(newTab, document.querySelector(".new-tab-btn"));
+  document.querySelectorAll(".term-tab").forEach(t=>t.classList.remove("act"));
+  newTab.classList.add("act");
+  newTab.querySelector(".term-tab-x").onclick = () => newTab.remove();
+  print("\n--- New Terminal Session ---\n","info");
+}
+
+// ═══════════════════════════════════════════════════════
+//  SIDE INTERFACES
+// ═══════════════════════════════════════════════════════
+function updateSideIfaces() {
+  const container = document.getElementById("side-ifaces");
+  container.innerHTML = Object.entries(device.interfaces).map(([name, iface]) => {
+    const cls = iface.status === "up" ? "up" : iface.status.includes("admin") ? "admin-down" : "down";
+    const shortName = name.replace("GigabitEthernet","Gi").replace("Serial","Se").replace("Loopback","Lo");
+    return `<div class="iface-row" onclick="injectCmd('show interface ${name}')">
+      <div class="iface-dot ${cls}"></div>
+      <div>
+        <div class="iface-name">${shortName}</div>
+        <div class="iface-ip">${iface.ip || "unassigned"}</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+// ═══════════════════════════════════════════════════════
+//  TOPOLOGY VIEW
+// ═══════════════════════════════════════════════════════
+function renderTopology() {
+  const canvas = document.getElementById("topology-canvas");
+  canvas.innerHTML = "";
+  
+  const nodes = [
+    {id:"internet", label:"Internet", model:"Cloud", icon:"🌐", x:50, y:25},
+    {id:"r1", label:"aman5z-R1", model:"Cisco 2921", icon:"🔀", x:50, y:50},
+    {id:"sw1", label:"aman5z-SW1", model:"WS-C2960", icon:"🔗", x:50, y:75},
+    {id:"branch", label:"Branch-Dubai", model:"Cisco 2921", icon:"🔀", x:20, y:50},
+    {id:"server", label:"Web Server", model:"Linux", icon:"🖥️", x:80, y:50},
+  ];
+  
+  const links = [
+    {from:"internet",to:"r1",active:true,label:"203.0.113.0/24"},
+    {from:"r1",to:"sw1",active:true,label:"192.168.1.0/24"},
+    {from:"r1",to:"branch",active:true,label:"172.16.0.0/30"},
+    {from:"r1",to:"server",active:true,label:"10.10.10.0/24"},
+  ];
+
+  const W = canvas.offsetWidth || 800;
+  const H = canvas.offsetHeight || 600;
+
+  // Draw links
+  links.forEach(link => {
+    const fn = nodes.find(n=>n.id===link.from);
+    const tn = nodes.find(n=>n.id===link.to);
+    const x1 = fn.x/100*W, y1 = fn.y/100*H;
+    const x2 = tn.x/100*W, y2 = tn.y/100*H;
+    const len = Math.sqrt((x2-x1)**2+(y2-y1)**2);
+    const angle = Math.atan2(y2-y1,x2-x1)*180/Math.PI;
+    const line = document.createElement("div");
+    line.className = "topo-link " + (link.active?"active":"inactive");
+    line.style.cssText = `left:${x1}px;top:${y1}px;width:${len}px;height:2px;transform:rotate(${angle}deg);`;
+    canvas.appendChild(line);
+    // IP label
+    const lbl = document.createElement("div");
+    lbl.className = "topo-ip";
+    lbl.textContent = link.label;
+    lbl.style.cssText = `left:${(x1+x2)/2-30}px;top:${(y1+y2)/2-10}px`;
+    canvas.appendChild(lbl);
+  });
+
+  // Draw nodes
+  nodes.forEach(node => {
+    const el = document.createElement("div");
+    el.className = "topo-node";
+    el.style.cssText = `left:${node.x/100*W-30}px;top:${node.y/100*H-22}px`;
+    el.innerHTML = `<div class="topo-box">${node.icon}</div>
+      <div class="topo-label"><div class="tlabel">${node.label}</div><div class="tmodel">${node.model}</div></div>`;
+    el.onclick = () => injectCmd("show cdp neighbors");
+    canvas.appendChild(el);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  INTERFACE PANEL VIEW
+// ═══════════════════════════════════════════════════════
+function renderIfacePanel() {
+  const panel = document.getElementById("iface-panel");
+  panel.innerHTML = `<h2 style="font-size:14px;font-weight:600;margin-bottom:14px;color:var(--white)">Network Interfaces — ${device.hostname}</h2>`;
+  for(const [name, iface] of Object.entries(device.interfaces)) {
+    const up = iface.status === "up";
+    panel.innerHTML += `
+    <div class="ip-card">
+      <div class="ip-card-hdr">
+        <span style="width:8px;height:8px;border-radius:50%;background:${up?"var(--green)":"var(--red)"};display:inline-block;${up?"box-shadow:0 0 6px var(--green)":""}"></span>
+        <span style="font-family:'JetBrains Mono',monospace">${name}</span>
+        <span style="margin-left:6px;font-size:10px;color:${up?"var(--green)":"var(--red)"};font-weight:400">${iface.status} / ${iface.protocol}</span>
+        ${iface.description ? `<span style="margin-left:8px;font-size:10px;color:var(--sub)">${iface.description}</span>` : ""}
+      </div>
+      <div class="ip-card-body">
+        <div class="ipc-row"><span class="ipc-key">IP Address</span><span class="ipc-val ${iface.ip!=="unassigned"?"green":"amber"}">${iface.ip !== "unassigned" ? iface.ip + "/" + cidrFromMask(iface.mask) : "unassigned"}</span></div>
+        <div class="ipc-row"><span class="ipc-key">MAC Address</span><span class="ipc-val">${iface.mac}</span></div>
+        <div class="ipc-row"><span class="ipc-key">Encapsulation</span><span class="ipc-val">${iface.encap || "ARPA"}</span></div>
+        <div class="ipc-row"><span class="ipc-key">Speed / Duplex</span><span class="ipc-val">${iface.speed} / ${iface.duplex}</span></div>
+        <div class="ipc-row"><span class="ipc-key">MTU</span><span class="ipc-val">${iface.mtu}</span></div>
+        <div class="ipc-row"><span class="ipc-key">Packets In / Out</span><span class="ipc-val">${iface.inPkts.toLocaleString()} / ${iface.outPkts.toLocaleString()}</span></div>
+        <div class="ipc-row"><span class="ipc-key">Bytes In / Out</span><span class="ipc-val">${formatBytes(iface.inBytes)} / ${formatBytes(iface.outBytes)}</span></div>
+      </div>
+    </div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  ROUTING TABLE PANEL VIEW
+// ═══════════════════════════════════════════════════════
+function renderRoutePanel() {
+  const codeColors = {C:"green",L:"green",S:"amber",O:"cyan",B:"info",R:"warn"};
+  const codeNames = {C:"Connected",L:"Local",S:"Static","S*":"Static Default",O:"OSPF",B:"BGP",R:"RIP"};
+  const panel = document.getElementById("route-panel");
+  panel.innerHTML = `<h2 style="font-size:14px;font-weight:600;margin-bottom:14px;color:var(--white)">Routing Table — ${device.hostname}</h2>
+  <div class="ip-card">
+    <div class="ip-card-hdr">📋 IP Routing Table</div>
+    <div class="ip-card-body">
+      <div style="display:grid;grid-template-columns:60px 200px 180px 200px 60px 80px;gap:4px;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--bdr);font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--sub)">
+        <span>Code</span><span>Network</span><span>Via</span><span>Interface</span><span>AD</span><span>Age</span>
+      </div>
+      ${device.routes.map(r => `
+      <div class="ipc-row" style="display:grid;grid-template-columns:60px 200px 180px 200px 60px 80px;gap:4px;padding:3px 0">
+        <span style="color:var(--${codeColors[r.code]||"white"})" title="${codeNames[r.code]||r.code}">${r.code}</span>
+        <span style="color:var(--white);font-family:'JetBrains Mono',monospace">${r.network}</span>
+        <span style="color:var(--sub)">${r.via || "directly connected"}</span>
+        <span style="color:var(--sub)">${r.iface}</span>
+        <span style="color:var(--sub)">${r.ad || "—"}</span>
+        <span style="color:var(--sub)">${r.age || "—"}</span>
+      </div>`).join("")}
+    </div>
+  </div>
+  <div class="ip-card" style="margin-top:12px">
+    <div class="ip-card-hdr">Legend</div>
+    <div class="ip-card-body" style="display:flex;flex-wrap:wrap;gap:10px">
+      ${Object.entries(codeNames).map(([code,name])=>`<span><span style="color:var(--${codeColors[code]||"white"})">${code}</span> = ${name}</span>`).join("")}
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  BOOT SEQUENCE
+// ═══════════════════════════════════════════════════════
+function printBootSequence() {
+  const lines = [
+    {t:"output", l:"System Bootstrap, Version 15.0(1r)M16"},
+    {t:"output", l:"Copyright (c) 1994-2019 by cisco Systems, Inc."},
+    {t:"output", l:""},
+    {t:"output", l:"CISCO2921/K9 platform with 524288 Kbytes of main memory"},
+    {t:"output", l:""},
+    {t:"output", l:"Readonly ROMMON initialized"},
+    {t:"output", l:""},
+    {t:"highlight", l:"Self decompressing the image : ################################## [OK]"},
+    {t:"output", l:""},
+    {t:"info", l:"Cisco IOS Software, Version 15.7(3)M, RELEASE SOFTWARE (fc2)"},
+    {t:"output", l:"Technical Support: http://www.cisco.com/techsupport"},
+    {t:"output", l:""},
+    {t:"output", l:"         Restricted Rights Legend"},
+    {t:"output", l:""},
+    {t:"output", l:"Cisco CISCO2921/K9 (revision 1.0) with 512MB/46MB memory."},
+    {t:"output", l:`Processor board ID ${device.serial}`},
+    {t:"output", l:"4 Gigabit Ethernet interfaces"},
+    {t:"output", l:"2 Serial(sync/async) interfaces"},
+    {t:"output", l:"DRAM configuration is 64 bits wide with parity enabled."},
+    {t:"output", l:"255K bytes of non-volatile configuration memory."},
+    {t:"output", l:"250880K bytes of ATA System CompactFlash 0 (Read/Write)"},
+    {t:"output", l:""},
+    {t:"warn", l:"Press RETURN to get started!"},
+    {t:"output", l:""},
+    {t:"output", l:device.banner.trim()},
+    {t:"output", l:""},
+  ];
+  let delay = 0;
+  lines.forEach(line => {
+    setTimeout(()=>{ print(line.l, line.t); }, delay);
+    delay += 40;
+  });
+  setTimeout(()=>{
+    mode = "user"; updatePrompt();
+  }, delay + 100);
+}
+
+// ═══════════════════════════════════════════════════════
+//  CLOCK & UPTIME
+// ═══════════════════════════════════════════════════════
+setInterval(()=>{
+  const n = new Date();
+  const pad = x => String(x).padStart(2,"0");
+  document.getElementById("sb-time").textContent = pad(n.getHours())+":"+pad(n.getMinutes())+":"+pad(n.getSeconds());
+  device.uptime_seconds++;
+  document.getElementById("uptime-display").textContent = formatUptime(device.uptime_seconds);
+  // fluctuate CPU
+  if(Math.random() < 0.2) {
+    const cpu = Math.floor(2 + Math.random()*18);
+    document.getElementById("cpu-val").textContent = cpu + "%";
+  }
+}, 1000);
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+updateSideIfaces();
+updatePrompt();
+printBootSequence();
+
+// Focus input
+setTimeout(()=>{ document.getElementById("term-input").focus(); }, 2000);
+
+// Close modals on outside click
+document.getElementById("topology-canvas")?.addEventListener("resize", renderTopology);
+</script>
+</body>
+</html>
